@@ -1,0 +1,15 @@
+<!DOTYPE html>
+<html>
+<head>
+    <title>Edit your profile</title>
+</head>
+<body>
+    <h2>Create Profile</h2>
+    <form action="/profile" method="POST" enctype="multipart/form-data">   
+      <input name="name" placeholder="Your Name" required><br>
+      <textarea name="bio" placeholder="Your Bio"></textarea></br>
+      <input type="file" name="photo" accept="image/*" required><br>
+      <button type="submit">Save Profile</button>
+    </form>
+  </body>
+</html>
