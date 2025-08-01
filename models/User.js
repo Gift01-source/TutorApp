@@ -7,9 +7,10 @@ const UserSchema=new mongoose.Schema({
     gender:String,
     age:Number,
     bio:String,
-    photo:String,
-    like:[String],
+    image:String,
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     matches:[String]
 });
 
 module.exports=mongoose.model('User',UserSchema);
+

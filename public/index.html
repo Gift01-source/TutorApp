@@ -1,11 +1,47 @@
-<!DOTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
 <head>
-    <title>SoulSwipe</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoulSwipe - Find Your Match</title>
+  <link rel="stylesheet" href="/css/index.css" />
 </head>
 <body>
-    <h1>Welcome to SoulSwipe dating Website</h1>
-    <a href="/register">Register</a>
-    <a href="/login">Login</a>
+  <button class="toggle-btn" id="theme-toggle" aria-label="Toggle theme">🌓</button>
+
+  <div class="landing-container">
+    <header class="header">
+      <h1>SoulSwipe</h1>
+      <p>Find your perfect match. Fast. Fun. Free.</p>
+      <div class="buttons">
+        <a href="/register" class="btn primary">Get Started</a>
+        <a href="/login" class="btn secondary">Login</a>
+      </div>
+    </header>
+
+    <section class="features">
+      <div class="feature"><h3>💖 Smart Matching</h3><p>Your perfect match based on shared interests!</p></div>
+      <div class="feature"><h3>📍 Nearby Connections</h3><p>Meet people near you instantly.</p></div>
+      <div class="feature"><h3>🔐 Secure & Private</h3><p>Your safety is our top priority.</p></div>
+    </section>
+
+    <footer class="footer">
+      <p>© <%= new Date().getFullYear() %> SoulSwipe. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    const saved = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', saved);
+
+    toggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  </script>
 </body>
 </html>

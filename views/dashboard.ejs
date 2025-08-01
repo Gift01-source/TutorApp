@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SoulSwipe Dashboard</title>
+  <link rel="stylesheet" href="/css/dashboard.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <h1>Welcome to SoulSwipe</h1>
+
+  <form class="search-form" method="GET" action="/dashboard">
+    <input type="text" name="search" placeholder="Search users by name or email..." />
+  </form>
+
+  <div class="user-grid">
+    <% users.forEach(user => { %>
+      <div class="user-card">
+        <img src="/uploads/<%= user.photo %>" alt="<%= user.name %>'s profile picture" />
+        <h2><%= user.name %></h2>
+        <p><%= user.email %></p>
+        <div class="card-buttons">
+          <a href="/like/<%= user._id %>" class="like-btn"><i class="fas fa-heart"></i> Like</a>
+          <a href="/message/<%= user._id %>" class="message-btn"><i class="fas fa-comment"></i> Message</a>
+          <a href="/profile/<%= user._id %>" class="profile-btn"><i class="fas fa-user"></i> View Profile</a>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+</body>
+</html>

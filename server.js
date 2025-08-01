@@ -6,6 +6,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const User = require('./models/User');
+const Message = require('./models/Messages');
 
 const app = express();
 const PORT = 3000;
@@ -13,7 +14,11 @@ const PORT = 3000;
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+app.set("view engine","ejs");
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads',express.static(path.join(__dirname,'uploads')));
+
+
 
 app.use(session({
     secret: 'soulswipe_secret',
@@ -21,46 +26,53 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// MongoDB connection
-mongoose.connect('mongodb+srv://gift:2002@cluster0.i8kqrfw.mongodb.net/TutorApp?retryWrites=true&w=majority')
+// MongoDB Connection
+mongoose.connect('mongodb+srv://gift:2002@cluster0.i8kqrfw.mongodb.net/SoulSwipe?retryWrites=true&w=majority')
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
-// Multer config for image uploads
+// Multer setup for uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, './public/uploads'),
     filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
 });
 const upload = multer({ storage });
 
-// Home page
+// Routes
+
+// Home
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Registration
+// Register
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
 app.post('/register', upload.single('image'), async (req, res) => {
     try {
-        const { username, email, password } = req.body.username;
+        const { name, email, password, gender, age, bio } = req.body;
+
+        if (!email || !password || !name) {
+            return res.status(400).send("Name, email and password are required.");
+        }
+
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).send('Email already registered. Please <a href="/login">login</a>.');
+            return res.status(400).send('Email already registered. Please log in.');
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
-            username,
+            name,
             email,
             password: hashedPassword,
             gender,
             age,
             bio,
-            image: req.file ? '/uploads/${req.file.filename}' :null
+            image: req.file ? req.file.filename : 'default.jpg'
         });
 
         await newUser.save();
@@ -80,7 +92,7 @@ app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).send('Invalid email or user not found.');
+        if (!user) return res.status(400).send('Invalid email.');
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).send('Invalid password.');
@@ -94,37 +106,171 @@ app.post('/login', async (req, res) => {
 });
 
 // Dashboard
-app.get('/dashboard', (req, res) => {
-    if (!req.session.user) return res.redirect('/login');
-    res.send(`
-        <h1>Welcome, ${req.session.user.name}</h1>
-        <p>Email: ${req.session.user.email}</p>
-        <p><a href="/profile">Edit Profile</a></p>
-        <p><a href="/logout">Logout</a></p>
-    `);
+app.get('/dashboard', async (req, res) => {
+  if (!req.session.user) return res.redirect('/login');
+
+  const query = req.query.q || '';
+  const regex = new RegExp(query, 'i');
+
+  try {
+    const users = await User.find({
+      _id: { $ne: req.session.user._id },
+      $or: [
+        { name: regex },
+        { email: regex }
+      ]
+    });
+
+    const me = await User.findById(req.session.user._id);
+    const likedBy = await User.find({ likes: req.session.user._id });
+
+    res.render("dashboard", {
+      user: req.session.user,
+      users,
+      likedBy,
+      query
+    });
+
+  } catch (err) {
+    console.error('Dashboard error:', err);
+    res.status(500).send('Error loading users.');
+  }
 });
 
-// Profile update
-app.get('/profile', (req, res) => {
-    if (!req.session.user) return res.redirect('/login');
-    res.sendFile(path.join(__dirname, 'public', 'profile.html'));
+//Get messages
+// GET message thread with a user
+app.get('/message/:id', async (req, res) => {
+  if (!req.session.user) return res.redirect('/login');
+  const otherUserId = req.params.id;
+  try {
+    const messages = await Message.find({
+      $or: [
+        { sender: req.session.user._id, receiver: otherUserId },
+        { sender: otherUserId, receiver: req.session.user._id }
+      ]
+    }).sort({ timestamp: 1 });
+
+    const otherUser = await User.findById(otherUserId);
+
+    res.render('message', {
+      user: req.session.user,
+      otherUser,
+      messages
+    });
+  } catch (err) {
+    console.error('Error loading messages:', err);
+    res.status(500).send('Could not load messages');
+  }
 });
 
-app.post('/profile', upload.single('image'), async (req, res) => {
-    try {
-        const { name, bio } = req.body;
-        const photo = req.file ? req.file.filename : req.session.user.image;
+// POST new message
+app.post('/message/:id', async (req, res) => {
+  const receiverId = req.params.id;
+  const { content } = req.body;
 
-        await User.updateOne({ email: req.session.user.email }, { name, bio, image: photo });
-        req.session.user = await User.findOne({ email: req.session.user.email });
-        res.redirect('/dashboard');
-    } catch (err) {
-        console.error('Profile update error:', err);
-        res.status(500).send('Error updating profile.');
+  try {
+    await Message.create({
+      sender: req.session.user._id,
+      receiver: receiverId,
+      content,
+      timestamp: new Date()
+    });
+
+    res.redirect('/message/' + receiverId);
+  } catch (err) {
+    console.error('Message sending error:', err);
+    res.status(500).send('Message send failed');
+  }
+});
+
+//message id
+app.post('/send-message/:id', async (req, res) => {
+  if (!req.session.user) return res.redirect('/login');
+
+  try {
+    const newMessage = new Message({
+      sender: req.session.user._id,
+      recipient: req.params.id,
+      content: req.body.message
+    });
+
+    await newMessage.save();
+    res.redirect('/message/${req.params.id}');
+  } catch (err) {
+    console.error('Send message error:', err);
+    res.status(500).send('Message failed');
+  }
+});
+
+// Edit message (only if user is sender)
+app.post('/message/:id/edit', async (req, res) => {
+  const msgId = req.params.id;
+  const { content } = req.body;
+
+  try {
+    const message = await Message.findById(msgId);
+    if (!message || !message.sender.equals(req.session.user._id)) {
+      return res.status(403).send('Unauthorized');
     }
+
+    message.content = content;
+    await message.save();
+
+    res.redirect('/profile/' + message.receiver);
+  } catch (err) {
+    console.error('Edit message error:', err);
+    res.status(500).send('Could not edit message');
+  }
 });
 
-// Password reset placeholder (expand later)
+// Delete message (only if user is sender)
+app.post('/message/:id/delete', async (req, res) => {
+  const msgId = req.params.id;
+
+  try {
+    const message = await Message.findById(msgId);
+    if (!message || !message.sender.equals(req.session.user._id)) {
+      return res.status(403).send('Unauthorized');
+    }
+
+    const receiverId = message.receiver;
+    await message.remove();
+
+    res.redirect('/profile/' + receiverId);
+  } catch (err) {
+    console.error('Delete message error:', err);
+    res.status(500).send('Could not delete message');
+  }
+});
+
+
+// GET Profile with message history
+app.get('/profile/:id', async (req, res) => {
+  if (!req.session.user) return res.redirect('/login');
+
+  const profileId = req.params.id;
+
+  try {
+    const profileUser = await User.findById(profileId);
+    const messages = await Message.find({
+      $or: [
+        { sender: req.session.user._id, receiver: profileId },
+        { sender: profileId, receiver: req.session.user._id }
+      ]
+    }).sort({ timestamp: 1 });
+
+    res.render('profile', {
+      user: req.session.user,
+      profileUser,
+      messages
+    });
+  } catch (err) {
+    console.error('Profile error:', err);
+    res.status(500).send('Profile could not be loaded');
+  }
+});
+
+// Password Reset (Placeholder)
 app.get('/reset-password', (req, res) => {
     res.send(`
         <h2>Reset Password</h2>
@@ -139,9 +285,8 @@ app.post('/reset-password', async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) return res.send("Email not found.");
-    
-    // In real apps, send an email reset link here
-    res.send("A reset link would be sent (not implemented in this demo).");
+
+    res.send("A reset link would be sent to your email. (Not implemented)");
 });
 
 // Logout
@@ -153,5 +298,5 @@ app.get('/logout', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-    console.log('Server running at http://localhost:${PORT}');
+    console.log('Server running on http://localhost:${PORT}');
 });

@@ -1,0 +1,104 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #333;
+}
+[data-theme="dark"] {
+  --bg-color: #1e1e2f;
+  --text-color: #f0f0f5;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-color) url('/images/romantic-bg.jpg') center/cover no-repeat;
+  color: var(--text-color);
+}
+
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* overlay for readability */
+}
+
+.header {
+  text-align: center;
+  padding: 120px 20px 60px;
+}
+
+.header h1 {
+  font-size: 60px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.header p {
+  font-size: 22px;
+  margin-bottom: 30px;
+  color: #ddd;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn {
+  padding: 14px 30px;
+  font-size: 18px;
+  text-decoration: none;
+  border-radius: 25px;
+  transition: background 0.3s ease;
+}
+.btn.primary {
+  background-color: #ff4b7d;
+  color: white;
+}
+.btn.primary:hover {
+  background-color: #ff7395;
+}
+.btn.secondary {
+  background-color: rgba(255,255,255,0.3);
+  border: 2px solid #fff;
+  color: #fff;
+}
+.btn.secondary:hover {
+  background-color: rgba(255,255,255,0.5);
+}
+
+.toggle-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: var(--text-color);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  padding: 40px 20px;
+  flex-wrap: wrap;
+  color: #fff;
+}
+
+.feature {
+  max-width: 300px;
+  margin: 20px;
+  text-align: center;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;
+  font-size: 14px;
+  color: #eee;
+  background: rgba(0,0,0,0.2);
+}

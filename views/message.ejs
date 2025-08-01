@@ -1,0 +1,17 @@
+<h2>Chat with <%= otherUser.name %></h2>
+
+<div style="height:300px; overflow-y:scroll; border:1px solid #ccc; padding:10px;">
+  <% messages.forEach(msg => { %>
+    <div style="margin: 10px 0;">
+      <strong><%= msg.sender.equals(user._id) ? "You" : otherUser.name %>:</strong>
+      <%= msg.content %>
+    </div>
+  <% }) %>
+</div>
+
+<form method="POST" action="/message/<%= otherUser._id %>">
+  <input type="text" name="content" placeholder="Type a message..." required />
+  <button type="submit">Send</button>
+</form>
+
+<a href="/dashboard">⬅ Back to Dashboard</a>
