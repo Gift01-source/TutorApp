@@ -1,0 +1,102 @@
+/* public/css/soul.css */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom, #ffe4e6, #fff);
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+  color: #db2777;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+ul {
+  list-style: disc;
+  margin-left: 1.5rem;
+}
+
+a {
+  color: #ec4899;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+/* Common buttons */
+.button {
+  background-color: #db2777;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.button:hover {
+  background-color: #be185d;
+}
+
+/* Section styling */
+.section {
+  margin-bottom: 2rem;
+}
+
+.section p,
+.section ul {
+  line-height: 1.6;
+}
+
+/* Chat/message layout */
+.chat-message {
+  background: #fce7f3;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Likes and Premium Cards */
+.card {
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  transition: 0.3s;
+}
+
+.card:hover {
+  background: #fef2f2;
+  border-color: #fda4af;
+}

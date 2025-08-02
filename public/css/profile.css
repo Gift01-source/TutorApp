@@ -1,26 +1,30 @@
-/* Container for entire profile page */
-.profile-container {
-  max-width: 700px;
-  margin: 30px auto;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
   padding: 20px;
-  background: #fafafa;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-family: Arial, sans-serif;
 }
 
-/* Profile Header */
+.profile-container {
+  max-width: 700px;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 .profile-header {
   text-align: center;
   margin-bottom: 20px;
 }
 
 .profile-header img {
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
-  border: 3px solid #ccc;
+  border-radius: 50%;
+  border: 3px solid #6200ea;
 }
 
 .profile-header h2 {
@@ -29,106 +33,96 @@
   color: #333;
 }
 
-/* Profile Details */
-.profile-details p {
-  margin: 5px 0;
+.profile-details {
   font-size: 16px;
-}
-
-/* Messages Section */
-.messages-box {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  max-height: 300px;
-  overflow-y: auto;
-  padding: 10px;
-  background-color: #fff;
+  line-height: 1.6;
+  color: #444;
   margin-bottom: 20px;
 }
 
+.messages-box {
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 .message {
-  margin-bottom: 12px;
+  margin-bottom: 15px;
   padding: 10px;
   border-radius: 8px;
-  max-width: 70%;
+  background-color: #ffffff;
+  border-left: 5px solid #ccc;
 }
 
 .message.you {
-  background-color: #e0f7fa;
-  align-self: flex-end;
-  text-align: right;
+  border-left-color: #4caf50;
+  background-color: #eaffea;
 }
 
 .message.them {
-  background-color: #f1f1f1;
-  align-self: flex-start;
+  border-left-color: #2196f3;
+  background-color: #e8f4ff;
 }
 
-.message strong {
-  display: block;
-  margin-bottom: 5px;
-}
-
-/* Edit/Delete form */
 .message form {
   display: inline-block;
-  margin-top: 5px;
+  margin-right: 8px;
 }
 
 .message input[type="text"] {
-  padding: 6px;
-  width: 70%;
-  border: 1px solid #ccc;
+  padding: 5px;
   border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 200px;
 }
 
-/* Buttons */
-button {
-  padding: 6px 12px;
-  background-color: #0077cc;
+.message button {
+  padding: 5px 8px;
   border: none;
-  border-radius: 4px;
+  background-color: #6200ea;
   color: white;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #005fa3;
-}
-
 .delete-btn {
-  background-color: #cc0000;
+  background-color: #f44336;
 }
 
-.delete-btn:hover {
-  background-color: #a30000;
-}
-
-/* Send Message Form */
 .send-message {
   display: flex;
+  gap: 10px;
   margin-top: 10px;
 }
 
 .send-message input[type="text"] {
-  flex-grow: 1;
-  padding: 8px;
-  border-radius: 4px 0 0 4px;
-  border: 1px solid #ccc;
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
 }
 
 .send-message button {
-  border-radius: 0 4px 4px 0;
+  background-color: #6200ea;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-/* Back link */
+.send-message button:hover {
+  background-color: #4500b5;
+}
+
 .back-link {
   display: inline-block;
   margin-top: 20px;
-  color: #0077cc;
+  color: #6200ea;
   text-decoration: none;
-}
-
-.back-link:hover {
-  text-decoration: underline;
+  font-weight: bold;
 }

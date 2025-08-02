@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Likes | SoulSwipe</title>
+  <link rel="stylesheet" href="/css/likes.css" />
+</head>
+<body>
+  <h2>People Who Liked You</h2>
+  <% likes.forEach(user => { %>
+    <div class="like-card">
+      <img src="/uploads/<%= user.image %>" />
+      <p><%= user.name %></p>
+    </div>
+  <% }) %>
+</body>
+</html>

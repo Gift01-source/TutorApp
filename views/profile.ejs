@@ -1,64 +1,21 @@
-
 <head>
   <link rel="stylesheet" href="/css/profile.css" />
 </head>
-<h2><%= profileUser.name %>'s Profile</h2>
-<img src="/uploads/<%= profileUser.image %>" width="100" style="border-radius: 50%;" /><br/>
-<p>Email: <%= profileUser.email %></p>
-<p>Gender: <%= profileUser.gender || 'N/A' %></p>
-<p>Age: <%= profileUser.age || 'N/A' %></p>
-<p>Bio: <%= profileUser.bio || 'No bio yet' %></p>
 
-<hr/>
-
-<h3>Messages</h3>
 <div class="profile-container">
 
   <div class="profile-header">
-    <img src="/uploads/<%= profileUser.image %>" />
-    <h2><%= profileUser.name %></h2>
+    <img src="/uploads/<%= profileUser.image %>" width="100" style="border-radius: 50%;" />
+    <h2><%= profileUser.name %>'s Profile</h2>
   </div>
 
   <div class="profile-details">
-    <p>Email: <%= profileUser.email %></p>
     <p>Gender: <%= profileUser.gender || 'N/A' %></p>
     <p>Age: <%= profileUser.age || 'N/A' %></p>
     <p>Bio: <%= profileUser.bio || 'No bio yet' %></p>
   </div>
 
-  <h3>Messages</h3>
-  <div class="messages-box">
-    <% messages.forEach(msg => { %>
-      <div class="message <%= msg.sender.equals(user._id) ? 'you' : 'them' %>">
-        <strong><%= msg.sender.equals(user._id) ? "You" : profileUser.name %>:</strong>
-
-        <% if (msg.sender.equals(user._id)) { %>
-          <form method="POST" action="/message/<%= msg._id %>/edit">
-            <input type="text" name="content" value="<%= msg.content %>" />
-            <button type="submit">✏</button>
-          </form>
-          <form method="POST" action="/message/<%= msg._id %>/delete">
-            <button class="delete-btn" type="submit">🗑</button>
-          </form>
-        <% } else { %>
-          <span><%= msg.content %></span>
-        <% } %>
-      </div>
-    <% }) %>
-  </div>
-
-  <form class="send-message" method="POST" action="/message/<%= profileUser._id %>">
-    <input type="text" name="content" placeholder="Type a message..." required />
-    <button type="submit">Send</button>
-  </form>
-
+  <hr/>
   <a class="back-link" href="/dashboard">⬅ Back to Dashboard</a>
 
 </div>
-
-<form method="POST" action="/message/<%= profileUser._id %>">
-  <input type="text" name="content" placeholder="Type a message..." required />
-  <button type="submit">Send</button>
-</form>
-
-<br/><a href="/dashboard">⬅ Back to Dashboard</a>

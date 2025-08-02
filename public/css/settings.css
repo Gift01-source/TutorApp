@@ -1,0 +1,59 @@
+/* settings.css */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fdf2f8;
+  margin: 0;
+  padding: 0;
+}
+
+.settings-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.settings-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #db2777;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.settings-group {
+  margin-bottom: 1.5rem;
+}
+
+.settings-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.settings-group input,
+.settings-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.save-button {
+  display: inline-block;
+  background-color: #db2777;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #be185d;
+}

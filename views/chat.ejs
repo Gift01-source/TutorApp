@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat</title>
+</head>
+<body>
+  <h1>Chat with <%= chatUser.name %></h1>
+
+  <% messages.forEach(msg => { %>
+    <div>
+      <strong><%= msg.from.toString() === currentUser._id.toString() ? 'You' : chatUser.name %>:</strong>
+      <%= msg.text %>
+    </div>
+  <% }) %>
+
+  <form action="/message/send" method="POST">
+    <input type="hidden" name="to" value="<%= chatUser._id %>" />
+    <textarea name="text" required></textarea>
+    <button type="submit">Send</button>
+  </form>
+</body>
+</html>

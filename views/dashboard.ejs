@@ -8,13 +8,33 @@
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
+  <!-- Top Header -->
+  <div class="navbar">
+    <div class="hamburger" onclick="toggleMenu()">☰</div> 
+    <h1>SoulSwipe</h1>
+    <div class="nav-links">
+      <a href="/dashboard">Matches</a>
+      <a href="/chat">Chats</a>
+      <a href="/likes">Likes</a>
+    </div>
+  </div>
 
-  <h1>Welcome to SoulSwipe</h1>
+  <!-- Hidden Side Menu -->
+  <div class="side-menu" id="sideMenu">
+    <a href="/profile1">Profile</a>
+    <a href="/settings">Settings</a>
+    <a href="/premium">Premium</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/logout">Logout</a>
+  </div>
 
+  <!-- Search Form -->
   <form class="search-form" method="GET" action="/dashboard">
-    <input type="text" name="search" placeholder="Search users by name or email..." />
+    <input type="text" name="search" placeholder="Search users by location or age..." />
+    <button type="submit">Search</button>
   </form>
 
+  <!-- Matches Display -->
   <div class="user-grid">
     <% users.forEach(user => { %>
       <div class="user-card">
@@ -30,5 +50,11 @@
     <% }) %>
   </div>
 
+  <script>
+    function toggleMenu(){
+      const menu = document.getElementById('sideMenu');
+      menu.classList.toggle('active');
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subscribe - SoulSwipe Premium</title>
+  <link rel="stylesheet" href="/css/premium.css" />
+</head>
+<body>
+  <div class="premium-container">
+    <div class="premium-header">Go Premium with SoulSwipe</div>
+    <div class="premium-description">
+      Unlock exclusive features and connect deeper with matches.
+    </div>
+
+    <ul class="premium-benefits">
+      <li>Unlimited Swipes</li>
+      <li>See who liked you</li>
+      <li>Priority matches</li>
+      <li>Advanced filters</li>
+      <li>Ad-free experience</li>
+    </ul>
+
+    <div class="premium-plans">
+      <div class="plan-card">
+        <div class="plan-title">1 Day</div>
+        <div class="plan-price">Mk899.00</div>
+        <form action="/subscribe" method="POST">
+          <input type="hidden" name="plan" value="1month" />
+          <button type="submit" class="subscribe-button">Subscribe</button>
+        </form>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-title">1 Week</div>
+        <div class="plan-price">Mk4,999.00</div>
+        <form action="/subscribe" method="POST">
+          <input type="hidden" name="plan" value="6months" />
+          <button type="submit" class="subscribe-button">Subscribe</button>
+        </form>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-title">1 Month</div>
+        <div class="plan-price">MK9,999.00</div>
+        <form action="/subscribe" method="POST">
+          <input type="hidden" name="plan" value="12months" />
+          <button type="submit" class="subscribe-button">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
