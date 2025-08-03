@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subscribe - SoulSwipe</title>
+  <link rel="stylesheet" href="/css/payment.css">
+  <script>
+    function updateAmount() {
+      const duration = document.getElementById('duration').value;
+      const amountMap = {
+        '1-day': 899,
+        '1-week': 4999,
+        '1-month': 9999
+      };
+      document.getElementById('amount').value = amountMap[duration] || '';
+    }
+  </script>
+</head>
+<body>
+  <div class="payment-container">
+    <h2>Subscribe to Premium</h2>
+
+    <form action="/payment" method="POST">
+      <label for="duration">Choose Subscription Plan:</label>
+      <select id="duration" name="duration" onchange="updateAmount()" required>
+        <option value="">-- Select Duration --</option>
+        <option value="1-day">1 Day - MWK 899</option>
+        <option value="1-week">1 Week - MWK 4,999</option>
+        <option value="1-month">1 Month - MWK 9,999</option>
+      </select>
+
+      <label for="amount">Amount (MWK):</label>
+      <input type="number" id="amount" name="amount" readonly required>
+
+      <label for="provider">Choose Payment Method:</label>
+      <select id="provider" name="method" required>
+        <option value="">-- Select Method --</option>
+        <option value="Airtel">Airtel Money</option>
+        <option value="TNM">TNM Mpamba</option>
+        <option value="NBM">National Bank</option>
+      </select>
+
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" name="phone" required>
+
+      <button type="submit">Subscribe Now</button>
+    </form>
+  </div>
+</body>
+</html>

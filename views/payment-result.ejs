@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Payment Result</title>
+  <link rel="stylesheet" href="/css/payment.css">
+</head>
+<body>
+  <div class="payment-container">
+    <% if (result.status === 'success') { %>
+      <h2>✅ Payment Successful</h2>
+      <p><%= result.message %></p>
+    <% } else { %>
+      <h2>❌ Payment Failed</h2>
+      <p><%= result.message %></p>
+    <% } %>
+    <a href="/payment"><button>Back to Payment</button></a>
+  </div>
+</body>
+</html>

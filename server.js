@@ -7,9 +7,17 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const User = require('./models/User');
 const Message = require('./models/Messages');
+const Payment = require('./models/Payment');
 
 const app = express();
 const PORT = 3000;
+const SUBSCRIPTION_PRICES = {
+  day: 899,
+  week: 4999,
+  month: 9999
+};
+
+const PAYMENT_METHODS=['Airtel Money','TNM Mpamba','NBM Mo626'];
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -361,6 +369,28 @@ app.post('/subscribe',(req,res)=>{
   const selectPlan=req.body.plan;
   //save plan for user db
   res.redirect('/payment');
+});
+
+//payment 
+app.get('/payment',(req,res)=>{
+    res.render('payment');
+});
+// Payment POST route
+app.post('/payment', (req, res) => {
+  const { duration, provider } = req.body;
+  const amount= SUBSCRIPTION_PRICES[duration];
+
+  if (!amount) {
+    return res.status(400).send('Invalid ');
+    
+  } 
+  const result={
+    status:'success',
+   message : 'Paid MWK ${amount} for a ${duration}subscription using ${provider}.'};
+  
+
+  // save to database
+  res.render('payment-result', { result });
 });
 
 app.post('/update-settings', isLoggedIn, async (req, res) => {
