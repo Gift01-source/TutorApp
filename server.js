@@ -360,7 +360,7 @@ app.get('/subscribe', isLoggedIn, async (req, res) => {
 app.post('/subscribe',(req,res)=>{
   const selectPlan=req.body.plan;
   //save plan for user db
-  res.send('You selected:${selectedPlan}');
+  res.redirect('/payment');
 });
 
 app.post('/update-settings', isLoggedIn, async (req, res) => {
