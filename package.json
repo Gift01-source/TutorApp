@@ -1,15 +1,14 @@
 {
   "name": "tutorapp",
   "version": "1.0.0",
-  "description": "",
-  "main": "db.js",
+  "description": "SoulSwipe Dating Website",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["dating","soulmate","node.js"],
+  "author": "Gif Chimwaza",
+  "license": "MIT",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
