@@ -73,9 +73,9 @@ app.get('/register', (req, res) => {
 
 app.post('/register', upload.single('image'), async (req, res) => {
     try {
-        const { name, email, password, gender, age, bio } = req.body;
+        const { name, email, password,gender,bio,age } = req.body;
 
-        if (!email || !password || !name) {
+        if (!email) {
             return res.status(400).send("Name, email and password are required.");
         }
 

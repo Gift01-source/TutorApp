@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
   },
 
   // GeoJSON location format: { type: 'Point', coordinates: [longitude, latitude] }
-  location: {
+  /*location: {
     type: {
       type: String,
       enum: ['Point'],required:true
@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
     },
     description: String // Optional - e.g., city name
   },
-
+*/
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -82,6 +82,6 @@ const userSchema = new mongoose.Schema({
 
 
 // Create geospatial index on location
-userSchema.index({ location: '2dsphere' });
+//userSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('User', userSchema);
