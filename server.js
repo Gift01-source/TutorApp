@@ -6,8 +6,9 @@ const path = require('path');
 const mongoose = require('mongoose');
 const multer = require('multer');
 const User = require('./models/User');
-const Message = require('./models/Messages');
+const Message = require('./models/Message');
 const Payment = require('./models/Payment');
+const messageRouter = require('./routes/messages');
 
 const app = express();
 const PORT = 3000;
@@ -25,6 +26,9 @@ app.use(express.json());
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/message',messageRouter);
+app.use('/payment',Payment);
+
 
 app.use(session({
     secret: 'soulswipe_secret',
@@ -152,29 +156,57 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
     }
 });
 
-// Messaging routes
-app.get('/message/:id', isLoggedIn, async (req, res) => {
-    const otherUserId = req.params.id;
+ //Messaging routes
+app.get('/message',isLoggedIn, async (req, res) => {
+  try {
+    const senderId = req.session.user._id;
+    const receiverId = req.params.id;
+    const content = req.body.content;
 
-    try {
-        const messages = await Message.find({
-            $or: [
-                { sender: req.session.user._id, receiver: otherUserId },
-                { sender: otherUserId, receiver: req.session.user._id }
-            ]
-        }).sort({ timestamp: 1 });
-
-        const otherUser = await User.findById(otherUserId);
-
-        res.render('message', {
-            user: req.session.user,
-            otherUser,
-            messages
-        });
-    } catch (err) {
-        console.error('Message error:', err);
-        res.status(500).send('Could not load messages');
+    if (!content) {
+      return res.status(400).send('Message content is required.');
     }
+
+    console.log('Sending message from',senderId,'to',receiverId,'with content:',content);
+
+    await Message.create({
+      sender: senderId,
+      receiver: receiverId,
+      content,
+      timestamp: new Date()
+    });
+
+    res.redirect('/message');
+  } catch (err) {
+    console.error('Send message error:', err);
+    res.status(500).send('Message send failed:'+ err.message);
+  }
+});
+
+app.get('/chat/:otherUserId', isLoggedIn, async (req, res) => {
+  try {
+    const currentUser = req.session.user;
+    const otherUser = await User.findById(req.params.otherUserId);
+
+    if (!otherUser) return res.status(404).send('User not found');
+
+    // Find messages where sender and receiver are either currentUser or otherUser
+    const messages = await Message.find({
+      $or: [
+        { sender: currentUser._id, receiver: otherUser._id },
+        { sender: otherUser._id, receiver: currentUser._id }
+      ]
+    }).sort({ timestamp: 1 });
+
+    res.render('chat', {
+      user: currentUser,
+      otherUser,
+      messages
+    });
+  } catch (err) {
+    console.error('Chat load error:', err);
+    res.status(500).send('Failed to load chat');
+  }
 });
 
 app.post('/message/:id', isLoggedIn, async (req, res) => {
@@ -193,39 +225,42 @@ app.post('/message/:id', isLoggedIn, async (req, res) => {
     }
 });
 
+// Edit message
 app.post('/message/:id/edit', isLoggedIn, async (req, res) => {
-    try {
-        const message = await Message.findById(req.params.id);
-        if (!message || !message.sender.equals(req.session.user._id)) {
-            return res.status(403).send('Unauthorized');
-        }
-
-        message.content = req.body.content;
-        await message.save();
-
-        res.redirect('/profile/${message.receiver}');
-    } catch (err) {
-        console.error('Edit message error:', err);
-        res.status(500).send('Could not edit message');
+  try {
+    const message = await Message.findById(req.params.id);
+    if (!message) return res.status(404).send('Message not found');
+    if (message.sender.toString() !== req.session.user._id) {
+      return res.status(403).send('Unauthorized');
     }
+
+    message.content = req.body.content;
+    await message.save();
+
+    res.redirect('message');
+  } catch (err) {
+    console.error('Edit message error:', err);
+    res.status(500).send('Could not edit message');
+  }
 });
 
+// Delete message
 app.post('/message/:id/delete', isLoggedIn, async (req, res) => {
-    try {
-        const message = await Message.findById(req.params.id);
-        if (!message || !message.sender.equals(req.session.user._id)) {
-            return res.status(403).send('Unauthorized');
-        }
-
-        const receiverId = message.receiver;
-        await message.remove();
-
-        res.redirect('/profile/${receiverId}');
-    } catch (err) {
-        console.error('Delete message error:', err);
-        res.status(500).send('Could not delete message');
+  try {
+    const message = await Message.findById(req.params.id);
+    if (!message) return res.status(404).send('Message not found');
+    if (message.sender.toString() !== req.session.user._id) {
+      return res.status(403).send('Unauthorized');
     }
+
+    await message.remove();
+    res.redirect('message');
+  } catch (err) {
+    console.error('Delete message error:', err);
+    res.status(500).send('Could not delete message');
+  }
 });
+
 
 // Profile
 app.get('/profile/:id', isLoggedIn, async (req, res) => {
