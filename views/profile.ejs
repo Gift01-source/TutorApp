@@ -1,21 +1,24 @@
+<!DOCTYPE html>
+<html>
 <head>
-  <link rel="stylesheet" href="/css/profile.css" />
+  <title><%= profileuser%>'s Profile</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
+<body>
+  <h1>Welcome, <%= profileuser %>!</h1>
 
-<div class="profile-container">
+  <div class="profile-card">
+    <% if (user.avatarUrl) { %>
+      <img src="<%= user.avatarUrl %>" alt="Profile Picture" width="150">
+    <% } else { %>
+      <img src="/images/default-avatar.png" alt="Default Avatar" width="150">
+    <% } %>
 
-  <div class="profile-header">
-    <img src="/uploads/<%= profileUser.image %>" width="100" style="border-radius: 50%;" />
-    <h2><%= profileUser.name %>'s Profile</h2>
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <p><strong>Bio:</strong> <%= user.bio || 'No bio yet.' %></p>
+
+    <a href="/matches">View Matches</a> | 
+    <a href="/likes">View Likes</a>
   </div>
-
-  <div class="profile-details">
-    <p>Gender: <%= profileUser.gender || 'N/A' %></p>
-    <p>Age: <%= profileUser.age || 'N/A' %></p>
-    <p>Bio: <%= profileUser.bio || 'No bio yet' %></p>
-  </div>
-
-  <hr/>
-  <a class="back-link" href="/dashboard">⬅ Back to Dashboard</a>
-
-</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<h1>My Matches</h1>
+<ul>
+  <% matches.forEach(match => { %>
+    <li>
+      <img src="<%= match.profilePicture || '/default.jpg' %>" width="80">
+      <%= match.name %> - <a href="/chat/<%= match._id %>">Chat</a>
+    </li>
+  <% }) %>
+</ul>

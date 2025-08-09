@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>My Profile | SoulSwipe</title>
-  <link rel="stylesheet" href="/css/profile.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= profileuser %>'s Profile - SoulSwipe</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <h2>My Profile</h2>
-  <div class="profile-box">
-    <img src="/uploads/<%= user.image %>" width="100" style="border-radius: 50%;"  />
-    <h3><%= user.name %></h3>
-    
-    <p>Gender: <%= user.gender %></p>
-    <p>Age: <%= user.age %></p>
-    <p>Bio: <%= user.bio %></p>
-    <p>Location: <%= user.location %></p>
-    <p>Interests: <%= user.interests%></p>
-    <a href="/editprofile">Edit Profile</a>
+<body class="bg-gray-100">
+
+  <!-- Header -->
+  <div class="bg-pink-500 text-white py-4 px-6 flex justify-between items-center">
+    <h1 class="text-xl font-bold">SoulSwipe</h1>
+    <a href="/dashboard" class="bg-white text-pink-500 px-4 py-2 rounded">Dashboard</a>
   </div>
+
+
+      <!-- Edit Profile Button -->
+      <a href="/profile/edit" 
+         class="mt-6 inline-block bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-full">
+         Edit Profile
+      </a>
+    </div>
+  </div>
+
 </body>
 </html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Chats</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+  <h1 class="text-3xl mb-6">Your Conversations</h1>
+
+  <% if (conversations.length === 0) { %>
+    <p>You have no conversations yet.</p>
+  <% } else { %>
+    <ul class="space-y-4">
+      <% conversations.forEach(conv => { %>
+        <li class="bg-white p-4 rounded shadow hover:bg-gray-50">
+          <a href="/chat/<%= conv.user._id %>" class="flex justify-between items-center">
+            <span class="font-semibold text-lg"><%= conv.user.name %></span>
+            <span class="text-sm text-gray-600 truncate max-w-xs">
+              <%= conv.lastMessage.text.length > 30 ? conv.lastMessage.text.substring(0, 30) + '...' : conv.lastMessage.text %>
+            </span>
+          </a>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</body>
+</html>

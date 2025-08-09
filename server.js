@@ -11,11 +11,12 @@ const User = require('./models/User');
 const Message = require('./models/Message');
 const Payment = require('./models/Payment');
 const messageRouter = require('./routes/messages');
+const {getUserChats}=require('./utils/chatService');
 
 const app = express();
 const PORT = 3000;
 const server = http.createServer(app);
-//const {Server} = require('socket.io');
+const {Server} = require('socket.io');
 const io = socketIO(server);
 
 const SUBSCRIPTION_PRICES = {
@@ -25,21 +26,27 @@ const SUBSCRIPTION_PRICES = {
 };
 
 const PAYMENT_METHODS=['Airtel Money','TNM Mpamba','NBM Mo626'];
+const profileRoutes = require('./routes/profile');
+const matchRoutes = require('./routes/matches');
+const likeRoutes = require('./routes/likes');
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.set("view engine", "ejs");
+app.set('views',path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/message',messageRouter);
 app.use('/payment',Payment);
-
+app.use('/profile', requireLogin, profileRoutes);
+app.use('/matches', requireLogin, matchRoutes);
+app.use('/likes', requireLogin, likeRoutes);
 
 app.use(session({
     secret: 'soulswipe_secret',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
         secure: false,
     }
@@ -54,7 +61,9 @@ mongoose.connect('mongodb+srv://gift:2002@cluster0.i8kqrfw.mongodb.net/SoulSwipe
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, './public/uploads'),
     filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
+   }
+  );
+
 const upload = multer({ storage });
 
 // Helper function to escape special regex characters from user input
@@ -68,9 +77,20 @@ function isLoggedIn(req, res, next) {
     } else {
         res.redirect('/login');
     }
+    
 }
 
-// Routes
+//routes
+
+//mounting
+
+
+function requireLogin(req, res, next) {
+  
+    return res.redirect('/login');
+  
+  next();
+}
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -107,7 +127,28 @@ app.post('/register', upload.single('image'), async (req, res) => {
         });
 
         await newUser.save();
-        res.send('Registration successful! You can now <a href="/login">Login</a>.');
+      //setting session
+        req.session.userId=newUser._id;
+res.send(`
+  <div style="
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    background-color: #dff0d8;
+    color: #3c763d;
+    font-family: Arial, sans-seri
+  ">
+    <h2>Registration Successful!</h2>
+    <p>You can now <a href="/login" style="color: #4CAF50; text-decoration: none; font-weight: bold;">Login</a>.</p>
+  </div>
+`);
+
+  
+
+       // await newUser.save();
+       // res.send('Registration successful! You can now <a href="/login">Login</a>.');
     } catch (err) {
         console.error('Registration error:', err);
         res.status(500).send('Server error during registration.');
@@ -128,7 +169,9 @@ app.post('/login', async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).send('Invalid password.');
 
-        req.session.user = user;
+         // setting session
+        req.session.user = user._id;
+
         res.redirect('/dashboard');
     } catch (err) {
         console.error('Login error:', err);
@@ -197,19 +240,20 @@ app.post('/message/:id', async (req, res) => {
   }
 });
 //chat
-/*app.get('/chat', isLoggedIn, async (req, res) => {
-    const conversations = await getUserChats(req.session.user._id); // Implement as needed
-    res.render('chat', { conversations });
-});*/
+app.get('/chat/',  async (req, res) => {
+    const conversations = await getUserChats(req.user._id);
+     // Implement as needed
+    res.render('chat', { conversations, currentUser:req.user});
+ });
 
-app.get('/chat', isLoggedIn, async (req, res) => {
+app.get('/chat/:otherUserId', isLoggedIn, async (req, res) => {
   try {
-    const otherUserId = req.params.user.i_d;
+    const otherUserId = req.params.otherUserId; // Corrected parameter name
     const otherUser = await User.findById(otherUserId);
 
-    if (!otherUser) return res.status(404).send('User not found');
+    if (!otherUser) return res.status(404).send('Users not found');
 
-    // Find messages where sender and receiver are either currentUser or otherUser
+    // Find messages between current user and other user
     const messages = await Message.find({
       $or: [
         { from: req.user._id, to: otherUser._id },
@@ -217,14 +261,14 @@ app.get('/chat', isLoggedIn, async (req, res) => {
       ]
     }).sort({ timestamp: 1 });
 
-    res.render('chat',{
+    res.render('chat', {
       otherUser,
       messages,
-      currentUser:req.user
+      currentUser: req.user
     });
   } catch (err) {
     console.error('Chat load error:', err);
-    res.redirect('/chat');
+    res.redirect('/chat'); // Redirect to a more appropriate page
   }
 });
 
@@ -281,7 +325,7 @@ app.post('/message/:id/delete', isLoggedIn, async (req, res) => {
 });
 
 
-// Profile
+
 app.get('/profile/:id', isLoggedIn, async (req, res) => {
     try {
         const profileUser = await User.findById(req.params.id);
@@ -305,13 +349,7 @@ app.get('/profile/:id', isLoggedIn, async (req, res) => {
 
 // Password Reset
 app.get('/reset-password', (req, res) => {
-    res.send(`
-        <h2>Reset Password</h2>
-        <form method="POST" action="/reset-password">
-            <input type="email" name="email" placeholder="Enter your email" required />
-            <button type="submit">Send Reset Link</button>
-        </form>
-    `);
+    res.send(`reset-password`);
 });
 
 app.post('/reset-password', async (req, res) => {
@@ -319,10 +357,10 @@ app.post('/reset-password', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.send("Email not found.");
 
-    res.send("A reset link would be sent to your email. (Not implemented)");
+    res.render('reset-password');
 });
 
-/* Other pages
+
 app.get('/chat', isLoggedIn, async (req, res) => {
     const conversations = await getUserChats(req.session.user._id); // Implement as needed
     res.render('chat', { conversations });
@@ -364,7 +402,7 @@ app.post('/chat/:id', async (req, res) => {
   });
   res.redirect('/chat/' + req.params.id);
 });
-*/
+
 //socket
 io.on('connection', (socket) => {
   // client should emit 'join' with their userId after connecting
@@ -423,22 +461,38 @@ app.get('/settings', isLoggedIn, async (req, res) => {
 });
 
 app.get('/profile1', isLoggedIn, async (req, res) => {
-    const user = await User.findById(req.session.user._id);
-    res.render('profile', { user });
+    const profileuser = await User.findById(req.session.user._id);
+    res.render('profile1', { profileuser });
 });
 
 
 // Show edit form
-app.get('/profile/edit', async (req, res) => {
-  const user = await User.findById(req.session.userId);
-  res.render('edit-profile', { user });
+app.get('/profile1/edit', async (req, res) => {
+  const profileuser = await User.findById(req.session.userId);
+  res.render('edit-profile', { profileuser });
 });
 
 // Handle form submit
-app.post('/profile1/edit', async (req, res) => {
-  const { name, age, gender } = req.body;
-  await User.findByIdAndUpdate(req.session.userId, { name, age, gender });
+app.post('/profile1/edit', upload.single('profilePicture'), async (req, res) => {
+  try{
+    const updateData={
+      profileuser:req.body.profileuser,
+      age:req.body.age,
+      gender:req.body.gender,
+      bio:req.body.bio,
+      interests:req.body.interests?
+      req.body.interests.split(',').map(i=>i.trim()):[],
+    };
+    if(!req.file){
+      updateData.profilePicture='/uploads'+ req.file.filename;
+    }
+  
+  await profileuser.findByIdAndUpdate(req.session.userId, updateData);
+
   res.redirect('/profile1');
+  }catch(error){
+    console.error('Profile update erro:',error);
+  }
 });
 
 app.get('/premium', isLoggedIn, (req, res) => {
@@ -503,10 +557,10 @@ app.use((req, res) => {
 });
 
 // Placeholder utility functions
-async function getUserChats(userId) {
+//async function getUserChats(userId) {
     // TODO: Implement chat fetching logic here
-    return [];
-}
+   // return [];
+//}
 
 async function getUsersWhoLikedMe(userId) {
     // TODO: Implement like fetching logic here
