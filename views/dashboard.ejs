@@ -22,17 +22,37 @@
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden bg-gray-800 p-4 md:hidden">
-    <a href="/dashboard" class="block py-2 hover:underline">Matches</a>
-    <a href="/message" class="block py-2 hover:underline">Messages</a>
-    <a href="/likes" class="block py-2 hover:underline">Likes</a>
     <a href="/profile" class="block py-2 hover:underline">Profile</a>
     <a href="/settings" class="block py-2 hover:underline">Settings</a>
     <a href="/premium" class="block py-2 hover:underline">Premium</a>
     <a href="/privacy" class="block py-2 hover:underline">Privacy</a>
     <a href="/logout" class="block py-2 hover:underline text-red-400">Logout</a>
+     <a href="/dashboard" class="block py-2 hover:underline"></a>
+    <a href="/message" class="block py-2 hover:underline"></a>
+    <a href="/likes" class="block py-2 hover:underline"></a>
   </div>
 
-
+<!-- Bottom Navigation for Mobile -->
+<nav class="fixed bottom-0 left-0 w-full bg-gray-800 border-t border-gray-700 md:hidden">
+  <div class="flex justify-around items-center text-sm">
+    <a href="/dashboard" class="flex flex-col items-center p-2 text-gray-400 hover:text-white">
+      <i class="fas fa-user-friends text-lg"></i>
+      Matches
+    </a>
+    <a href="/chat" class="flex flex-col items-center p-2 text-gray-400 hover:text-white">
+      <i class="fas fa-comments text-lg"></i>
+      Chats
+    </a>
+    <a href="/likes" class="flex flex-col items-center p-2 text-gray-400 hover:text-white">
+      <i class="fas fa-heart text-lg"></i>
+      Likes
+    </a>
+    <a href="/profile" class="flex flex-col items-center p-2 text-gray-400 hover:text-white">
+      <i class="fas fa-user text-lg"></i>
+      Profile
+    </a>
+  </div>
+</nav>
   <!-- User Cards -->
   <div class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <% users.forEach(user => { %>

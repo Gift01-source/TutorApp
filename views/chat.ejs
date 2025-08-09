@@ -1,308 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Dating Chat with Media & Calls</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0;
-    height: 100%;
-    font-family: 'Poppins', sans-serif;
-    background: #f9f4f8;
-    overflow: hidden;
-  }
-
-  .chat-container {
-    height: calc(var(--vh, 1vh) * 100);
-    width: 100vw;
-    max-width: 600px;
-    margin: 0 auto;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    position: relative;
-  }
-
-  .chat-header {
-    background: #d6336c;
-    color: white;
-    padding: 16px 20px;
-    font-weight: 700;
-    font-size: 1.3rem;
-    text-align: center;
-    flex-shrink: 0;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-  }
-
-  #messages {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 15px 16px;
-    background: #fdf4f8;
-    margin-bottom: 60px; /* space for fixed input */
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .message {
-    display: flex;
-    max-width: 75%;
-    align-items: flex-end;
-    word-break: break-word;
-  }
-  .message.incoming {
-    flex-direction: row;
-  }
-  .message.incoming .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-right: 12px;
-    flex-shrink: 0;
-    background: #eee;
-  }
-  .message.incoming .avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .message.incoming .bubble {
-    background: #ffe0f0;
-    color: #66032a;
-    padding: 12px 18px;
-    border-radius: 24px 24px 24px 6px;
-    box-shadow: 0 1px 4px rgba(102, 3, 42, 0.2);
-    font-size: 0.95rem;
-  }
-
-  .message.outgoing {
-    flex-direction: row-reverse;
-    margin-left: auto;
-  }
-  .message.outgoing .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-left: 12px;
-    flex-shrink: 0;
-    background: #eee;
-  }
-  .message.outgoing .avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .message.outgoing .bubble {
-    background: #d6336c;
-    color: white;
-    padding: 12px 18px;
-    border-radius: 24px 24px 6px 24px;
-    box-shadow: 0 2px 8px rgba(214, 51, 108, 0.4);
-    font-size: 0.95rem;
-  }
-
-  .timestamp {
-    font-size: 0.65rem;
-    color: #a0526a;
-    margin-top: 4px;
-    text-align: right;
-  }
-
-  /* Input area fixed to bottom */
-  .input-area {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100vw;
-    max-width: 600px;
-    background: white;
-    border-top: 1px solid #f1c6d8;
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
-    gap: 10px;
-    box-sizing: border-box;
-    height: 60px;
-    z-index: 10;
-  }
-
-  .input-left {
-    display: flex;
-    gap: 12px;
-    flex-shrink: 0;
-  }
-
-  .icon-button {
-    font-size: 22px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    user-select: none;
-    color: #d6336c;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
-  }
-
-  .icon-button:hover,
-  .icon-button:focus {
-    background-color: #f7c9d6;
-    outline: none;
-  }
-
-  /* Hide the file input */
-  #photo-upload {
-    display: none;
-  }
-
-  .input-area {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
-  max-width: 600px;
-  background: white;
-  border-top: 1px solid #f1c6d8;
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
-  gap: 10px;
-  box-sizing: border-box;
-  height: 60px;
-  z-index: 10;
-  overflow-x: auto; /* allow horizontal scroll if needed */
-}
-
-.input-area button[type="submit"] {
-  min-width: 60px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  background: #d6336c;
-  border: none;
-  color: white;
-  padding: 0 22px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  height: 40px;
-  line-height: 40px;
-  transition: background 0.3s;
-}
-
-.input-area button[type="submit"]:hover,
-.input-area button[type="submit"]:focus {
-  background: #a0214a;
-  outline: none;
-}
-
-.input-area input[type="text"] {
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 40px;
-  border-radius: 30px;
-  border: 1.5px solid #d6336c;
-  font-size: 1rem;
-  outline: none;
-  padding: 0 16px;
-  transition: border-color 0.3s;
-}
-
-.input-area input[type="text"]:focus {
-  border-color: #a0214a;
-}
-
-  /* Scrollbar for desktop */
-  #messages::-webkit-scrollbar {
-    width: 6px;
-  }
-  #messages::-webkit-scrollbar-thumb {
-    background-color: rgba(214, 51, 108, 0.3);
-    border-radius: 3px;
-  }
-
-  @media(min-width: 600px) {
-    .chat-container {
-      height: 80vh;
-    }
-    
-    
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chat with <%= otherUser ? otherUser.name : "User" %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/socket.io/socket.io.js"></script>
 </head>
-<body>
-  <div class="chat-container">
-    <div class="chat-header">Chat with <%= otherUser.name %></div>
-    <div id="messages">
-      <% messages.forEach(msg => { %>
-        <div class="message <%= msg.from === currentUser.id ? 'outgoing' : 'incoming' %>">
-          <div class="avatar">
-            <% if (msg.from === currentUser.id) { %>
-              <img src="<%= currentUser.avatarUrl || '/default-avatar.png' %>" alt="You" />
-            <% } else { %>
-              <img src="<%= otherUser.avatarUrl || '/default-avatar.png' %>" alt="<%= otherUser.name %>" />
-            <% } %>
-          </div>
-          <div>
-            <div class="bubble"><%= msg.text %></div>
-            <div class="timestamp"><%= new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %></div>
-          </div>
-        </div>
-      <% }) %>
+<body class="bg-gray-900 text-white flex flex-col h-screen">
+
+  <!-- Header -->
+  <div class="bg-indigo-600 p-4 flex justify-between items-center">
+    <div class="text-lg font-bold">
+      Chat with <%= otherUser ? otherUser.name : "User" %>
+    </div>
+    <div class="flex gap-3">
+      <!-- Audio Call -->
+      <button class="bg-green-500 px-3 py-1 rounded hover:bg-green-400">📞</button>
+      <!-- Video Call -->
+      <button class="bg-blue-500 px-3 py-1 rounded hover:bg-blue-400">🎥</button>
     </div>
   </div>
 
-  <form class="input-area" action="/send-message" method="POST" enctype="multipart/form-data">
-    <div class="input-left">
-      <label for="photo-upload" class="icon-button" title="Send Photo" tabindex="0" aria-label="Send Photo">📷
-        <input id="photo-upload" type="file" name="photo" accept="image/*" />
-      </label>
-      <button type="button" class="icon-button" title="Audio Call" onclick="startAudioCall()" aria-label="Start Audio Call">🎤</button>
-      <button type="button" class="icon-button" title="Video Call" onclick="startVideoCall()" aria-label="Start Video Call">📹</button>
-    </div>
-    <input type="text" name="message" placeholder="Type your message..." autocomplete="off" required />
-    <button type="submit">Send</button>
+  <!-- Messages -->
+  <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-3">
+    <% if (messages && messages.length > 0) { %>
+      <% messages.forEach(msg => { %>
+        <div class="<%= msg.from.toString() === currentUser._id.toString() ? 'text-right' : 'text-left' %>">
+          <div class="inline-block px-4 py-2 rounded-lg 
+                      <%= msg.from.toString() === currentUser._id.toString() ? 'bg-indigo-500' : 'bg-gray-700' %>">
+            <% if (msg.content) { %>
+              <%= msg.content %>
+            <% } else if (msg.image) { %>
+              <img src="/uploads/<%= msg.image %>" alt="Image" class="max-w-xs rounded"/>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-center text-gray-400">No messages yet</p>
+    <% } %>
+  </div>
+
+  <!-- Input Form -->
+  <form method="POST" action="/message/<%= otherUser ? otherUser._id : '' %>" enctype="multipart/form-data" 
+        class="p-4 bg-gray-800 flex gap-2 items-center">
+    <input type="text" name="content" placeholder="Type a message..." 
+           class="flex-1 px-3 py-2 rounded bg-gray-700 text-white" />
+    <input type="file" name="image" accept="image/*" class="hidden" id="imageInput"/>
+    <label for="imageInput" class="cursor-pointer bg-yellow-500 px-3 py-2 rounded">📷</label>
+    <button type="submit" class="bg-indigo-600 px-4 py-2 rounded">Send</button>
   </form>
 
-  <script>
-    // Fix mobile viewport height issues
-    function setVh() {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh',' ${vh}px');
-    }
-    window.addEventListener('resize', setVh);
-    window.addEventListener('load', setVh);
-    setVh();
-
-    function startAudioCall() {
-      alert('Audio call started! 🎤');
-      // TODO: integrate actual audio call logic here
-    }
-
-    function startVideoCall() {
-      alert('Video call started! 📹');
-      // TODO: integrate actual video call logic here
-    }
-  </script>
 </body>
 </html>

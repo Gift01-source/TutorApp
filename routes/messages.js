@@ -1,20 +1,68 @@
 const express = require('express');
-const router = express.Router();
+const path = require('path');
+const multer = require('multer');
 const Message = require('../models/Message');
+const User = require('../models/User');
 
-// POST /messages - send a new message
-router.post('/', async (req, res) => {
+const router = express.Router();
+
+// Multer storage (store in public/uploads)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, path.join(__dirname, '..', 'public', 'uploads')),
+  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+});
+const upload = multer({ storage });
+
+// GET message thread page (renders chat.ejs)
+router.get('/:id', async (req, res) => {
   try {
-    const sender = req.user._id; // from auth middleware
-    const { receiver, text } = req.body;
-    if (!receiver || !text) {
-      return res.status(400).json({ error: 'Receiver and text required' });
-    }
-    const message = await Message.create({ sender, receiver, text });
-    res.json(message);
+    if (!req.session || !req.session.user) return res.redirect('/login');
+    const otherUserId = req.params.id;
+    const otherUser = await User.findById(otherUserId);
+    if (!otherUser) return res.status(404).send('User not found');
+
+    const messages = await Message.find({
+      $or: [
+        { sender: req.session.user._id, receiver: otherUserId },
+        { sender: otherUserId, receiver: req.session.user._id }
+      ]
+    }).sort({ createdAt: 1 });
+
+    res.render('chat', {
+      otherUser,
+      messages,
+      currentUser: req.session.user
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    console.error('Load thread error:', err);
+    res.status(500).send('Could not load messages');
+  }
+});
+
+// POST send message (text or image)
+router.post('/:id', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.session || !req.session.user) return res.redirect('/login');
+    const receiverId = req.params.id;
+    const content = req.body.content?.trim() || null;
+    const imagePath = req.file ? '/uploads/${req.file.filename}' : null;
+
+    if (!content && !imagePath) {
+      return res.status(400).send('Empty message');
+    }
+
+    await Message.create({
+      sender: req.session.user._id,
+      receiver: receiverId,
+      content,
+      image: imagePath
+    });
+
+    // (Optional) You could emit an event via socket.io here to update live clients
+    res.redirect('/message/${receiverId}');
+  } catch (err) {
+    console.error('Send message error:', err);
+    res.status(500).send('Could not send message');
   }
 });
 

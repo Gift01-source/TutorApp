@@ -1,4 +1,6 @@
 const express = require('express');
+const http = require('http');
+const socketIO = require('socket.io');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
@@ -12,6 +14,10 @@ const messageRouter = require('./routes/messages');
 
 const app = express();
 const PORT = 3000;
+const server = http.createServer(app);
+//const {Server} = require('socket.io');
+const io = socketIO(server);
+
 const SUBSCRIPTION_PRICES = {
   day: 899,
   week: 4999,
@@ -157,55 +163,68 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
 });
 
  //Messaging routes
-app.get('/message',isLoggedIn, async (req, res) => {
+app.get('/message/:id', async (req, res) => {
   try {
-    const senderId = req.session.user._id;
-    const receiverId = req.params.id;
-    const content = req.body.content;
+    const otherUser = await User.findById(req.params.id);
+    const messages = await Message.find({
+      $or: [
+        { from: req.user._id, to: req.params.id },
+        { from: req.params.id, to: req.user._id }
+      ]
+    }).sort({ createdAt: 1 });
 
-    if (!content) {
-      return res.status(400).send('Message content is required.');
-    }
-
-    console.log('Sending message from',senderId,'to',receiverId,'with content:',content);
-
-    await Message.create({
-      sender: senderId,
-      receiver: receiverId,
-      content,
-      timestamp: new Date()
+    res.render('chat', {
+      otherUser,
+      messages,
+      currentUser: req.user
     });
-
-    res.redirect('/message');
   } catch (err) {
-    console.error('Send message error:', err);
-    res.status(500).send('Message send failed:'+ err.message);
+    console.error(err);
+    res.status(500).send('Error loading chat');
   }
 });
-
-app.get('/chat/:otherUserId', isLoggedIn, async (req, res) => {
+app.post('/message/:id', async (req, res) => {
   try {
-    const currentUser = req.session.user;
-    const otherUser = await User.findById(req.params.otherUserId);
+    await Message.create({
+      from: req.user._id,
+      to: req.params.id,
+      content: req.body.content
+    });
+    res.redirect('/message/${req.params.id}');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Could not send message');
+  }
+});
+//chat
+/*app.get('/chat', isLoggedIn, async (req, res) => {
+    const conversations = await getUserChats(req.session.user._id); // Implement as needed
+    res.render('chat', { conversations });
+});*/
+
+app.get('/chat', isLoggedIn, async (req, res) => {
+  try {
+    const otherUserId = req.params.user.i_d;
+    const otherUser = await User.findById(otherUserId);
 
     if (!otherUser) return res.status(404).send('User not found');
 
     // Find messages where sender and receiver are either currentUser or otherUser
     const messages = await Message.find({
       $or: [
-        { sender: currentUser._id, receiver: otherUser._id },
-        { sender: otherUser._id, receiver: currentUser._id }
+        { from: req.user._id, to: otherUser._id },
+        { from: otherUser._id, to: req.user._id }
       ]
     }).sort({ timestamp: 1 });
 
-    res.render('chat', {
-      user: currentUser,
+    res.render('chat',{
       otherUser,
-      messages
+      messages,
+      currentUser:req.user
     });
   } catch (err) {
     console.error('Chat load error:', err);
-    res.status(500).send('Failed to load chat');
+    res.redirect('/chat');
   }
 });
 
@@ -303,7 +322,7 @@ app.post('/reset-password', async (req, res) => {
     res.send("A reset link would be sent to your email. (Not implemented)");
 });
 
-// Other pages
+/* Other pages
 app.get('/chat', isLoggedIn, async (req, res) => {
     const conversations = await getUserChats(req.session.user._id); // Implement as needed
     res.render('chat', { conversations });
@@ -344,6 +363,41 @@ app.post('/chat/:id', async (req, res) => {
     content: req.body.content
   });
   res.redirect('/chat/' + req.params.id);
+});
+*/
+//socket
+io.on('connection', (socket) => {
+  // client should emit 'join' with their userId after connecting
+  socket.on('join', (userId) => {
+    socket.userId = userId;
+    console.log('socket join', userId);
+    socket.join(userId); // join personal room
+  });
+
+  // send a call request to other user (offer will follow)
+  socket.on('call-request', ({ to, from, isVideo }) => {
+    io.to(to).emit('call-request', { from, isVideo });
+  });
+
+  socket.on('offer', ({ to, offer }) => {
+    io.to(to).emit('offer', { from: socket.userId, offer });
+  });
+
+  socket.on('answer', ({ to, answer }) => {
+    io.to(to).emit('answer', { from: socket.userId, answer });
+  });
+
+  socket.on('ice-candidate', ({ to, candidate }) => {
+    io.to(to).emit('ice-candidate', { from: socket.userId, candidate });
+  });
+
+  socket.on('call-end', ({ to }) => {
+    io.to(to).emit('call-end', { from: socket.userId });
+  });
+
+  socket.on('disconnect', () => {
+    // handle cleanup if needed
+  });
 });
 
 // Edit message
