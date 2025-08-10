@@ -60,17 +60,17 @@ router.get('/reset-password/:token', (req, res) => {
 });
 
 // Handle New Password Submission
-router.post('/reset-password/:token', (req, res) => {
+router.post('/reset-password/:token',async (req, res) => {
   const tokenData = resetTokens[req.params.token];
   if (!tokenData || tokenData.expires < Date.now()) {
-    return res.send('Token invalid or expired.');
+    return res.send('Token expired.');
   }
 
   const newPassword = req.body.password;
   console.log('Password for ${tokenData.email} updated to: ${newPassword}');
 
   delete resetTokens[req.params.token];
-  res.redirect('/public/login.html'); // redirect to login after reset
+  res.send('Paasword reset successfull. You can now <a href="/login">Log in</a>'); // redirect to login after reset
 });
 
 module.exports = router;
