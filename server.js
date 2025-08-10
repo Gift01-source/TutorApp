@@ -12,6 +12,7 @@ const Message = require('./models/Message');
 const Payment = require('./models/Payment');
 const messageRouter = require('./routes/messages');
 const {getUserChats}=require('./utils/chatService');
+const resetPasswordRoutes = require('./routes/reset-password');
 
 const app = express();
 const PORT = 3000;
@@ -42,6 +43,7 @@ app.use('/payment',Payment);
 app.use('/profile', requireLogin, profileRoutes);
 app.use('/matches', requireLogin, matchRoutes);
 app.use('/likes', requireLogin, likeRoutes);
+app.use('/', resetPasswordRoutes);
 
 app.use(session({
     secret: 'soulswipe_secret',
@@ -347,9 +349,9 @@ app.get('/profile/:id', isLoggedIn, async (req, res) => {
     }
 });
 
-// Password Reset
-app.get('/reset-password', (req, res) => {
-    res.send(`reset-password`);
+/* Password Reset
+app.get('/reset-password', async (req, res) => {
+    res.render(`reset-password`);
 });
 
 app.post('/reset-password', async (req, res) => {
@@ -358,7 +360,7 @@ app.post('/reset-password', async (req, res) => {
     if (!user) return res.send("Email not found.");
 
     res.render('reset-password');
-});
+});*/
 
 
 app.get('/chat', isLoggedIn, async (req, res) => {

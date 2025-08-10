@@ -77,7 +77,9 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     
-  }
+  },
+  resetPasswordToken:String,
+  resetPasswordExpire:Date
 });
 
 
