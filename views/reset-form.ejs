@@ -1,34 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Reset Your Password</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Set New Password - SoulSwipe</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-    <h2 class="text-xl font-bold mb-4">Reset Your Password</h2>
-    <form action="/reset-password/<%= token %>" method="POST" class="space-y-4">
-      <input 
-        type="password" 
-        name="password" 
-        placeholder="Enter new password" 
-        class="w-full px-3 py-2 border rounded-lg" 
-        required
-      >
+<body class="bg-gray-900 flex justify-center items-center min-h-screen text-white px-4">
 
-      <input 
-        type="password" 
-        name="password" 
-        placeholder="Confirm new password" 
-        class="w-full px-3 py-2 border rounded-lg" 
-        required
-      >
-      <button 
-        type="submit" 
-        class="w-full bg-grey-500 text-white py-2 rounded-lg hover:bg-pink-600">
-        Reset Password
+  <section class="w-full max-w-sm sm:max-w-md p-6 sm:p-8 bg-gray-800 rounded-lg shadow-md" aria-label="Reset password form">
+    <h2 class="text-2xl sm:text-3xl font-semibold mb-6 text-center">Set New Password</h2>
+    
+    <form class="space-y-5" action="/reset-password/<%= token %>" method="POST">
+      <div>
+        <label for="password" class="block mb-2 text-white text-opacity-80">New Password</label>
+        <input name="password" id="password" type="password" required placeholder="Enter new password"
+          class="w-full px-4 py-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+      </div>
+
+      <div>
+        <label for="password" class="block mb-2 text-white text-opacity-80">Corfim New Password</label>
+        <input name="password" id="password" type="password" required placeholder="Enter new password"
+          class="w-full px-4 py-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+      </div>
+      
+      <button type="submit"
+        class="w-full py-3 text-white font-semibold rounded-lg flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-500 transition-colors">
+        <i class="fas fa-key"></i> Reset Password
       </button>
     </form>
-  </div>
+
+    <p class="mt-4 text-sm text-center">
+      Remembered your password? 
+      <a href="/login" class="text-indigo-300 hover:underline">Login here</a>
+    </p>
+  </section>
+
 </body>
 </html>
