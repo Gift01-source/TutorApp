@@ -29,8 +29,8 @@
   </main>
 
   <form action="/chat/<%= otherUser._id %>" method="POST" class="bg-gray-800 p-4 flex gap-2">
-    <input name="content" type="text" placeholder="Type your message..." required
-      class="flex-grow rounded px-4 py-2 text-black" autocomplete="off" />
+    <input type="text"  name="content" placeholder="Type your message..." required
+      class="flex-grow rounded px-4 py-2 text-black" autocomplete="on" />
     <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 px-4 rounded text-white font-semibold">
       Send
     </button>

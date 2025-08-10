@@ -50,14 +50,18 @@ router.get('/:otherUserId', isLoggedIn, async (req, res) => {
 // Send message API
 router.post('/:userId', isLoggedIn, async (req, res) => {
   try {
-    const senderId = req.user._id;      // fix: get _id property
+    const senderId = req.user._id;           // get from req.user, not req.user directly
     const receiverId = req.params.userId;
     const content = req.body.content;
+
+    if (!content || !receiverId) {
+      return res.status(400).send('Missing message content or receiver');
+    }
 
     await Message.create({ sender: senderId, receiver: receiverId, content, timestamp: new Date() });
     res.redirect(`/chat/${receiverId}`);
   } catch (error) {
-    console.error(error);
+    console.error('Send message error:', error);
     res.status(500).send('Failed to send message');
   }
 });
