@@ -29,14 +29,23 @@
   </main>
 
   <form action="/chat/<%= otherUser._id %>" method="POST" class="bg-gray-800 p-4 flex gap-2">
+    <div
+       style="display:flex;align-items:center;gap:5px;">
+       <label style="cursor:pointer;">
+        📷
+        <input type="file" id="imageUpload" style="display:none;">
+       </label>
+       
+    </div>
     <input type="text"  name="content" placeholder="Type your message..." required
       class="flex-grow rounded px-4 py-2 text-black" autocomplete="on" />
-    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 px-4 rounded text-white font-semibold">
-      Send
-    </button>
+       <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 px-4 rounded text-white font-semibold">
+        Send
+       </button>
   </form>
 
   <script>
+
     const socket = io();
 
     const userId = '<%= user._id %>';
@@ -54,6 +63,7 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
     });
+   
 
     // Optional: you can also emit sendMessage from client here if you implement realtime sending
   </script>

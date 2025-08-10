@@ -1,24 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title><%= profileuser%>'s Profile</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= profileUser.name %>'s Profile</title>
+  <link href="https://cdn.tailwindcss.com" rel="stylesheet" />
 </head>
-<body>
-  <h1>Welcome, <%= profileuser %>!</h1>
+<body class="bg-gray-900 text-white p-6">
 
-  <div class="profile-card">
-    <% if (user.avatarUrl) { %>
-      <img src="<%= user.avatarUrl %>" alt="Profile Picture" width="150">
-    <% } else { %>
-      <img src="/images/default-avatar.png" alt="Default Avatar" width="150">
-    <% } %>
+  <div class="max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+    <img src="/uploads/<%= profileUser.image || 'default.jpg' %>" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto" />
+    <h1 class="text-3xl text-center mt-4 font-bold"><%= profileUser.name %></h1>
+    <p class="text-center text-gray-400"><%= profileUser.bio || 'No bio available' %></p>
 
-    <p><strong>Email:</strong> <%= user.email %></p>
-    <p><strong>Bio:</strong> <%= user.bio || 'No bio yet.' %></p>
+    <div class="mt-6 space-y-2">
+      <p><strong>Age:</strong> <%= profileUser.age || 'N/A' %></p>
+      <p><strong>Gender:</strong> <%= profileUser.gender || 'N/A' %></p>
+      <p><strong>Interests:</strong> <%= profileUser.interests ? profileUser.interests.join(', ') : 'N/A' %></p>
+    </div>
 
-    <a href="/matches">View Matches</a> | 
-    <a href="/likes">View Likes</a>
+    <div class="mt-6 flex justify-center gap-4">
+      <a href="/chat/<%= profileUser._id %>" class="bg-green-500 px-4 py-2 rounded hover:bg-green-400 flex items-center gap-2">
+        <i class="fas fa-comment"></i> Message
+      </a>
+      <a href="/dashboard" class="bg-gray-600 px-4 py-2 rounded hover:bg-gray-500">Back to Dashboard</a>
+    </div>
   </div>
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

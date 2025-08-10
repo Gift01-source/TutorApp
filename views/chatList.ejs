@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chat List</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 p-6">
+
+  <h1 class="text-3xl mb-6">Your Chats</h1>
+
+  <ul>
+    <% if (chatUsers.length === 0) { %>
+      <p>No chats yet. Start a conversation!</p>
+    <% } %>
+
+    <% chatUsers.forEach(user => { %>
+      <li class="mb-4">
+        <a href="/chat/<%= user.id %>" class="flex items-center gap-4 p-3 bg-white rounded shadow hover:bg-gray-50">
+          <img src="<%= user.profileImage %>" alt="<%= user.name %>" class="w-12 h-12 rounded-full object-cover" />
+          <span class="font-semibold"><%= user.name %></span>
+        </a>
+      </li>
+    <% }) %>
+  </ul>
+
+  <a href="/dashboard" class="text-indigo-600 hover:underline mt-6 inline-block">Back to Dashboard</a>
+
+</body>
+</html>

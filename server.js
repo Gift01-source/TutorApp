@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const {Server} = require('socket.io');
+const socketIO = require('socket.io');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
@@ -13,12 +14,13 @@ const Payment = require('./models/Payment');
 const messageRouter = require('./routes/messages');
 const {getUserChats}=require('./utils/chatService');
 const resetPasswordRoutes = require('./routes/reset-password');
-const chatRoutes = require('./routes/chat');
+const chatRoutes = require('./routes/chatList');
 
 const app = express();
 const PORT = 3000;
 const server = http.createServer(app);
-const io = new Server(server);
+const io=socketIO(server)
+//const io = new Server(server);
 
 //const io = new Server(server);
 
@@ -32,6 +34,7 @@ const PAYMENT_METHODS=['Airtel Money','TNM Mpamba','NBM Mo626'];
 const profileRoutes = require('./routes/profile');
 const matchRoutes = require('./routes/matches');
 const likeRoutes = require('./routes/likes');
+const { receiveMessageOnPort } = require('worker_threads');
 
 
 app.use(session({
@@ -56,7 +59,9 @@ app.use('/profile', requireLogin, profileRoutes);
 app.use('/matches', requireLogin, matchRoutes);
 app.use('/likes', requireLogin, likeRoutes);
 app.use('/chat',require ('./routes/chat'));
+app.use('/', chatRoutes);
 app.use('/', resetPasswordRoutes);
+app.use('/',require ('./routes/profilee'));
 /*
 app.use(session({
     secret: 'soulswipe_secret',
@@ -85,6 +90,25 @@ const upload = multer({ storage });
 function escapeRegex(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
+
+//send  image
+app.post('/upload-image',upload.single('image'),async(req,res)=>{
+  const{from,to}=req.body;
+  const imagePath=`/uploads/${req.file.filename}`;
+
+  const newMessage=new Message({
+    from,
+    to,
+    content:imagePath,
+    type:image
+  });
+  await newMessage.save();
+
+  io.to(to).emit('receiveMessage',newMessage);
+  io.to(from).emit('receiveMessage',newMessage);
+
+  res.json({success:true,message:newMessage});
+});
 
 function isLoggedIn(req, res, next) {
     if (req.session && req.session.user) {
@@ -421,17 +445,32 @@ app.post('/chat/:id', async (req, res) => {
 });*/
 
 //socket
+const onlineUsers=new Map();
+
 io.on('connection', (socket) => {
   console.log('New client connected');
 
-  socket.on('join', (userId) => {
-    socket.join(userId); // join a room named by userId
+    socket.on('join', (userId) => {
+     socket.join(userId); // join a room named by userId
     console.log(`User joined room: ${userId}`);
   });
 
-  socket.on('sendMessage', ({ to, content, from }) => {
+  socket.on('userOnline', (userId) => {
+     onlineUsers.set(userId,socket.id); // join a room named by userId
+    console.log(`User online: ${userId}`);
+
+    //brodcasting to others
+    io.emit('onlineUsers',
+      Array.from(onlineUsers.keys()));
+    }
+    );
+
+  socket.on('sendMessage', async(data) => {
+    const newMessage=new Message(data);
+    await newMessage.save();
     // emit message to recipient’s room
-    io.to(to).emit('receiveMessage', { from, content, timestamp: new Date() });
+    io.to(data.to).emit('receiveMessage',newMessage);
+    io.to(data.from).emit('receiveMessage',newMessage);
   });
 
   socket.on('disconnect', () => {
