@@ -1,6 +1,6 @@
 const express = require('express');
 const http = require('http');
-const socketIO = require('socket.io');
+const {Server} = require('socket.io');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
@@ -13,12 +13,14 @@ const Payment = require('./models/Payment');
 const messageRouter = require('./routes/messages');
 const {getUserChats}=require('./utils/chatService');
 const resetPasswordRoutes = require('./routes/reset-password');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
 const PORT = 3000;
 const server = http.createServer(app);
-const {Server} = require('socket.io');
-const io = socketIO(server);
+const io = new Server(server);
+
+//const io = new Server(server);
 
 const SUBSCRIPTION_PRICES = {
   day: 899,
@@ -30,6 +32,16 @@ const PAYMENT_METHODS=['Airtel Money','TNM Mpamba','NBM Mo626'];
 const profileRoutes = require('./routes/profile');
 const matchRoutes = require('./routes/matches');
 const likeRoutes = require('./routes/likes');
+
+
+app.use(session({
+    secret: 'soulswipe_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: false,
+    }
+}));
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -43,8 +55,9 @@ app.use('/payment',Payment);
 app.use('/profile', requireLogin, profileRoutes);
 app.use('/matches', requireLogin, matchRoutes);
 app.use('/likes', requireLogin, likeRoutes);
+app.use('/chat',require ('./routes/chat'));
 app.use('/', resetPasswordRoutes);
-
+/*
 app.use(session({
     secret: 'soulswipe_secret',
     resave: false,
@@ -53,7 +66,7 @@ app.use(session({
         secure: false,
     }
 }));
-
+*/
 // MongoDB Connection
 mongoose.connect('mongodb+srv://gift:2002@cluster0.i8kqrfw.mongodb.net/SoulSwipe?retryWrites=true&w=majority')
     .then(() => console.log('Connected to MongoDB'))
@@ -75,6 +88,8 @@ function escapeRegex(string) {
 
 function isLoggedIn(req, res, next) {
     if (req.session && req.session.user) {
+      req.user=req.session.user;
+
         next();
     } else {
         res.redirect('/login');
@@ -235,13 +250,13 @@ app.post('/message/:id', async (req, res) => {
       to: req.params.id,
       content: req.body.content
     });
-    res.redirect('/message/${req.params.id}');
+    res.redirect(`/message/${req.params.id}`);
   } catch (err) {
     console.error(err);
     res.status(500).send('Could not send message');
   }
 });
-//chat
+/*chat
 app.get('/chat/',  async (req, res) => {
     const conversations = await getUserChats(req.user._id);
      // Implement as needed
@@ -272,7 +287,7 @@ app.get('/chat/:otherUserId', isLoggedIn, async (req, res) => {
     console.error('Chat load error:', err);
     res.redirect('/chat'); // Redirect to a more appropriate page
   }
-});
+});*/
 
 app.post('/message/:id', isLoggedIn, async (req, res) => {
     try {
@@ -283,7 +298,7 @@ app.post('/message/:id', isLoggedIn, async (req, res) => {
             timestamp: new Date()
         });
 
-        res.redirect('/message/${req.params.id}');
+        res.redirect(`/message/${req.params.id}`);
     } catch (err) {
         console.error('Send message error:', err);
         res.status(500).send('Message send failed');
@@ -302,7 +317,7 @@ app.post('/message/:id/edit', isLoggedIn, async (req, res) => {
     message.content = req.body.content;
     await message.save();
 
-    res.redirect('message');
+    res.redirect(`message`);
   } catch (err) {
     console.error('Edit message error:', err);
     res.status(500).send('Could not edit message');
@@ -319,7 +334,7 @@ app.post('/message/:id/delete', isLoggedIn, async (req, res) => {
     }
 
     await message.remove();
-    res.redirect('message');
+    res.redirect(`message`);
   } catch (err) {
     console.error('Delete message error:', err);
     res.status(500).send('Could not delete message');
@@ -363,7 +378,7 @@ app.post('/reset-password', async (req, res) => {
 });*/
 
 
-app.get('/chat', isLoggedIn, async (req, res) => {
+/*app.get('/chat', isLoggedIn, async (req, res) => {
     const conversations = await getUserChats(req.session.user._id); // Implement as needed
     res.render('chat', { conversations });
 });
@@ -403,53 +418,37 @@ app.post('/chat/:id', async (req, res) => {
     content: req.body.content
   });
   res.redirect('/chat/' + req.params.id);
-});
+});*/
 
 //socket
 io.on('connection', (socket) => {
-  // client should emit 'join' with their userId after connecting
+  console.log('New client connected');
+
   socket.on('join', (userId) => {
-    socket.userId = userId;
-    console.log('socket join', userId);
-    socket.join(userId); // join personal room
+    socket.join(userId); // join a room named by userId
+    console.log(`User joined room: ${userId}`);
   });
 
-  // send a call request to other user (offer will follow)
-  socket.on('call-request', ({ to, from, isVideo }) => {
-    io.to(to).emit('call-request', { from, isVideo });
-  });
-
-  socket.on('offer', ({ to, offer }) => {
-    io.to(to).emit('offer', { from: socket.userId, offer });
-  });
-
-  socket.on('answer', ({ to, answer }) => {
-    io.to(to).emit('answer', { from: socket.userId, answer });
-  });
-
-  socket.on('ice-candidate', ({ to, candidate }) => {
-    io.to(to).emit('ice-candidate', { from: socket.userId, candidate });
-  });
-
-  socket.on('call-end', ({ to }) => {
-    io.to(to).emit('call-end', { from: socket.userId });
+  socket.on('sendMessage', ({ to, content, from }) => {
+    // emit message to recipient’s room
+    io.to(to).emit('receiveMessage', { from, content, timestamp: new Date() });
   });
 
   socket.on('disconnect', () => {
-    // handle cleanup if needed
+    console.log(`Client disconnected`);
   });
 });
 
 // Edit message
 app.post('/message/:id/edit', async (req, res) => {
   await Message.findByIdAndUpdate(req.params.id, { content: req.body.content });
-  res.redirect('back');
+  res.redirect('back');  
 });
 
 // Delete message
 app.post('/message/:id/delete', async (req, res) => {
   await Message.findByIdAndDelete(req.params.id);
-  res.redirect('back');
+  res.redirect(`back`);
 });
 
 app.get('/likes', isLoggedIn, async (req, res) => {
@@ -491,7 +490,7 @@ app.post('/profile1/edit', upload.single('profilePicture'), async (req, res) => 
   
   await profileuser.findByIdAndUpdate(req.session.userId, updateData);
 
-  res.redirect('/profile1');
+  res.redirect(`/profile1`);
   }catch(error){
     console.error('Profile update erro:',error);
   }
@@ -507,13 +506,13 @@ res.render('privacy');
 
 app.get('/subscribe', isLoggedIn, async (req, res) => {
     await User.findByIdAndUpdate(req.session.user._id, { premium: true });
-    res.redirect('/subscribe');
+    res.redirect(`/subscribe`);
 });
 //subscription
 app.post('/subscribe',(req,res)=>{
   const selectPlan=req.body.plan;
   //save plan for user db
-  res.redirect('/payment');
+  res.redirect(`/payment`);
 });
 
 //payment 
@@ -543,13 +542,13 @@ app.post('/update-settings', isLoggedIn, async (req, res) => {
     const update = { email };
     if (password) update.password = await bcrypt.hash(password, 10);
     await User.findByIdAndUpdate(req.session.user._id, update);
-    res.redirect('/settings');
+    res.redirect(`/settings`);
 });
 
 // Logout
 app.get('/logout', (req, res) => {
     req.session.destroy(() => {
-        res.redirect('/');
+        res.redirect(`/`);
     });
 });
 
@@ -570,6 +569,6 @@ async function getUsersWhoLikedMe(userId) {
 }
 
 // Start server
-app.listen(PORT, () => {
-    console.log('Server running on http://localhost:${PORT}');
+server.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });
