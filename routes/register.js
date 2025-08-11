@@ -8,7 +8,7 @@ const twilio = require('twilio');
 const multer = require('multer');
 const path = require('path');
 const User = require('../models/User');
-require('dotenv').config();
+
 
 // Multer for image uploads
 const storage = multer.diskStorage({
@@ -21,8 +21,7 @@ const upload = multer({ storage });
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    
   }
 });
 
@@ -102,7 +101,7 @@ router.post('/register-step1', async (req, res) => {
 
     // Send email
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `bae23-gchimwaza@poly.ac.mw`,
       to: email,
       subject: 'Your SoulSwipe verification code',
       text: `Your code: ${code}`,
@@ -187,7 +186,7 @@ router.post('/resend-code', async (req, res) => {
 
     // send both
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from:` bae23-gchimwaza@poly.ac.mw`,
       to: user.email,
       subject: 'Your new SoulSwipe verification code',
       text: `Your code: ${code}`,
