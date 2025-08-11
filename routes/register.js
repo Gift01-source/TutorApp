@@ -4,7 +4,6 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const twilio = require('twilio');
 const multer = require('multer');
 const path = require('path');
 const User = require('../models/User');
@@ -25,8 +24,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Twilio client
-const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
+
 
 // helper: 6-digit code
 function makeCode() {
@@ -110,18 +108,7 @@ router.post('/register-step1', async (req, res) => {
     await transporter.sendMail(mailOptions).catch(err => console.error('Mail send error', err));
 
     // Send SMS if phone provided
-    if (formattedPhone) {
-      try {
-        await twilioClient.messages.create({
-          body: `SoulSwipe verification code: ${code}`,
-          from: process.env.TWILIO_FROM,
-          to: formattetPhone
-        });
-      } catch (err) {
-        console.error('Twilio error:', err);
-        // do not fail registration if sms fails; user can still use email
-      }
-    }
+    
 
     res.redirect('/verify-code');
   } catch (err) {
@@ -193,13 +180,6 @@ router.post('/resend-code', async (req, res) => {
       html: `<p>Your SoulSwipe verification code is <strong>${code}</strong></p>`
     }).catch(err => console.error('Mail send error', err));
 
-    if (user.phone) {
-      await twilioClient.messages.create({
-        body: `SoulSwipe verification code: ${code}`,
-        from: process.env.TWILIO_FROM,
-        to: user.phone
-      }).catch(err => console.error('Twilio resend error', err));
-    }
 
     res.render('verify-code', { error: 'New code sent' });
   } catch (err) {
