@@ -15,10 +15,10 @@
     <% } %>
 
     <form action="/register-step1" method="POST" class="space-y-4">
-      <input name="email" type="email" placeholder="Email" required value="<%= email || '' %>"
-        class="w-full p-3 rounded bg-gray-700 text-white" />
       <input name="phone" type="tel" placeholder="+265.." value="<%= phone||'' %>"
       class="w-full p-3 rounded bg-gray-700 text-white"/>
+      <input name="email" type="email" placeholder="Email" required value="<%= email || '' %>"
+        class="w-full p-3 rounded bg-gray-700 text-white" />
       <input name="password" type="password" placeholder="Password" required
         class="w-full p-3 rounded bg-gray-700 text-white" />
       <input name="confirm" type="password" placeholder="Confirm password" required
