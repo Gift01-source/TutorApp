@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Interests & Photo</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white p-4 flex items-center justify-center min-h-screen">
+  <div class="w-full max-w-2xl bg-gray-800 p-6 rounded">
+    <h2 class="text-2xl mb-4">Choose at least 5 interests</h2>
+
+    <% if (error) { %><div class="bg-red-600 p-2 rounded mb-3"><%= error %></div><% } %>
+
+    <form action="/register-step4" method="POST" enctype="multipart/form-data" id="step4Form">
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+        <% interests.forEach(interest => { %>
+          <label class="flex items-center gap-2 bg-gray-700 p-2 rounded">
+            <input type="checkbox" name="hobbies" value="<%= interest %>" class="h-4 w-4" />
+            <span><%= interest %></span>
+          </label>
+        <% }) %>
+      </div>
+
+      <div class="mb-4">
+        <label class="block mb-2">Upload profile photo (optional)</label>
+        <input type="file" name="image" accept="image/*" id="imageInput" />
+        <div id="preview" class="mt-3"></div>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="submit" class="bg-indigo-600 px-4 py-2 rounded">Next</button>
+        <a href="/register-step3" class="bg-gray-600 px-4 py-2 rounded">Back</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // client-side enforce minimum 5 interests
+    const form = document.getElementById('step4Form');
+    form.addEventListener('submit', (e) => {
+      const checked = Array.from(document.querySelectorAll('input[name="hobbies"]:checked')).map(i => i.value);
+      if (checked.length < 5) {
+        e.preventDefault();
+        alert('Please select at least 5 interests');
+      }
+    });
+
+    // preview image
+    const imgInput = document.getElementById('imageInput');
+    imgInput.addEventListener('change', () => {
+      const preview = document.getElementById('preview');
+      preview.innerHTML = '';
+      const file = imgInput.files[0];
+      if (!file) return;
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(file);
+      img.width = 120;
+      img.onload = () => URL.revokeObjectURL(img.src);
+      preview.appendChild(img);
+    });
+  </script>
+</body>
+</html>

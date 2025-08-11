@@ -31,7 +31,7 @@ router.post('/reset-password', (req, res) => {
 console.log('Reset link:', resetLink);
 
 const mailOptions = {
-  from: 'bae23-gchimwaza@poly.ac.mw',
+  from: 'soulSwipe@gmail.com',
   to: email,
   subject: 'Password Reset Request',
   text: `Click here to reset your password: ${resetLink}`,

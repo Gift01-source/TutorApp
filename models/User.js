@@ -3,40 +3,57 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: false
   },
+
   email: {
     type: String,
     required: true,
     unique: true
   },
-  password: {
+
+  // Use only one field to store hashed password
+  passwordHash: {
     type: String,
     required: true
   },
+
+  phone: {
+    type: String
+  },
+
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+
+  verificationCode: String,
+
   age: Number,
+
   gender: String,
+
   bio: String,
-  interests: [String],
+
+  religion: String,
+
+  hobbies: {
+    type: [String],  // store as array of strings instead of single string
+    default: []
+  },
+
+  preferredGender: String, // fixed typo from 'preferedGender'
+
+  interests: {
+    type: [String],
+    default: []
+  },
 
   image: {
     type: String,
     default: ''
   },
 
-  // GeoJSON location format: { type: 'Point', coordinates: [longitude, latitude] }
-  /*location: {
-    type: {
-      type: String,
-      enum: ['Point'],required:true
-    },
-    coordinates: {
-      type: [Number],
-      required:true, // [longitude, latitude] // Enables geospatial queries
-    },
-    description: String // Optional - e.g., city name
-  },
-*/
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -51,24 +68,6 @@ const userSchema = new mongoose.Schema({
     }
   ],
 
- /*messages: [
-    {
-      sender: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      },
-      receiver: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      },
-      content: String,
-      timestamp: {
-        type: Date,
-        default: Date.now
-      }
-    } 
-  ],*/
-
   isPremium: {
     type: Boolean,
     default: false
@@ -76,14 +75,15 @@ const userSchema = new mongoose.Schema({
 
   createdAt: {
     type: Date,
-    
+    default: Date.now
   },
-  resetPasswordToken:String,
-  resetPasswordExpire:Date
+
+  resetPasswordToken: String,
+
+  resetPasswordExpire: Date
 });
 
-
-// Create geospatial index on location
-//userSchema.index({ location: '2dsphere' });
+// Optional geospatial location (commented out, can add later)
+// userSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('User', userSchema);

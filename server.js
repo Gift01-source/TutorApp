@@ -137,6 +137,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+const registerRoutes=require('./routes/register');
+app.use('/',registerRoutes);
+/*
 // Register
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'register.html'));
@@ -195,7 +198,7 @@ res.send(`
         res.status(500).send('Server error during registration.');
     }
 });
-
+*/
 // Login
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
@@ -203,11 +206,14 @@ app.get('/login', (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
+    /*if(!email||password){
+      return res.status('400').rederirect('/login.html',{error:'Please enter your email nd password'});
+    }*/
     try {
         const user = await User.findOne({ email });
         if (!user) return res.status(400).send('Invalid email.');
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(password, user.passwordHash);
         if (!isMatch) return res.status(400).send('Invalid password.');
 
          // setting session

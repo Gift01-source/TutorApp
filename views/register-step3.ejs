@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Details – SoulSwipe</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+  <div class="w-full max-w-md bg-gray-800 p-6 rounded-lg shadow">
+    <h2 class="text-2xl font-bold mb-4 text-center">Tell us a bit about you</h2>
+    <% if (error) { %> <div class="bg-red-600 p-2 rounded mb-3"><%= error %></div> <% } %>
+
+    <form action="/register-step3" method="POST" class="space-y-4">
+      <input name="name" type="text" placeholder="name" required class="w-full p-3 rounded bg-gray-700" />
+      
+      <input name="age" type="number" min="18" placeholder="Age" required class="w-full p-3 rounded bg-gray-700" />
+      
+      <select name="gender" required class="w-full p-3 rounded bg-gray-700">
+        <option value="">Select gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Non-binary</option>
+        <option>Prefer not to say</option>
+      </select>
+      
+      <input name="religion" type="text" placeholder="Religion (optional)" class="w-full p-3 rounded bg-gray-700" />
+      
+      <button type="submit" class="w-full p-3 rounded bg-indigo-600 hover:bg-indigo-500">Next</button>
+    </form>
+  </div>
+</body>
+</html>
