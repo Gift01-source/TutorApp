@@ -111,7 +111,7 @@ app.post('/upload-image',upload.single('image'),async(req,res)=>{
 });
 
 function isLoggedIn(req, res, next) {
-    if (req.session && req.session.user) {
+    if (req.session && req.session.user && req.session.user_id) {
       req.user=req.session.user;
 
         next();
@@ -217,16 +217,41 @@ app.post('/login', async (req, res) => {
         if (!isMatch) return res.status(400).send('Invalid password.');
 
          // setting session
-        req.session.user = user._id;
+        req.session.user = {
+          _id:user._id,
+          name:user.name,
+          location:user.location||null,
+          interests:user.interests,
+          image:user.image,
+      email:email};
 
-        res.redirect('/dashboard');
+       const users = await User.find({
+      _id: { $ne: req.session.user._id },
+    //  interests: { $in: loggedInUser.interests || [] },
+     // location: loggedInUser.location || '',
+     // $or: [{ name: regex }, { email: regex }]
+    }).select('name email profileImage isOnline interests location');
+
+    const likedBy = await User.find({ likes: req.session.user._id }).select('name profileImage');
+
+    res.render('dashboard', {
+      //user: loggedInUser,
+      users,
+      likedBy,
+      //query,
+    });
+
+       // res.render('dashboard',{users:users});
     } catch (err) {
         console.error('Login error:', err);
         res.status(500).send('Server error during login.');
     }
 });
 
-// Dashboard
+
+
+//DAS
+/*
 app.get('/dashboard', isLoggedIn, async (req, res) => {
     const query = req.query.q || '';
     const safeQuery = escapeRegex(query);
@@ -240,9 +265,9 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
 
         const likedBy = await User.find({ likes: req.session.user._id });
 
-        res.render("dashboard", {
+        res.render('dashboard', {
             user: req.session.user,
-            users,
+            users:users,
             likedBy,
             query
         });
@@ -250,8 +275,45 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
         console.error('Dashboard error:', err);
         res.status(500).send('Error loading dashboard.');
     }
-});
+});*/
+// Dashboard
+app.get('/dashboard', isLoggedIn, async (req, res) => {
+  if (!req.session || !req.session.user || !req.session.user._id) {
+    console.log('User session missing or expired');
+    return res.redirect('/login');  // or send an error if preferred
+  }
 
+  const query = req.query.q || '';
+  const safeQuery = escapeRegex(query);
+  const regex = new RegExp(safeQuery, 'i');
+
+  try {
+    const loggedInUser = await User.findById(req.session.user._id);
+    if (!loggedInUser) {
+      console.log('No user found in DB with session id');
+      return res.redirect('/login');
+    }
+
+    const users = await User.find({
+      _id: { $ne: req.session.user._id },
+    //  interests: { $in: loggedInUser.interests || [] },
+     // location: loggedInUser.location || '',
+      $or: [{ name: regex }, { email: regex }]
+    }).select('name email profileImage isOnline interests location');
+
+    const likedBy = await User.find({ likes: req.session.user._id }).select('name profileImage');
+
+    res.render('dashboard', {
+      user: loggedInUser,
+      users,
+      likedBy,
+      query,
+    });
+  } catch (err) {
+    console.error('Dashboard error:', err);
+    res.status(500).send('Error loading dashboard.');
+  }
+});
  //Messaging routes
 app.get('/message/:id', async (req, res) => {
   try {
@@ -456,12 +518,14 @@ const onlineUsers=new Map();
 io.on('connection', (socket) => {
   console.log('New client connected');
 
-    socket.on('join', (userId) => {
+    socket.on('join',async (userId) => {
+      await User.findByIdAndUpdate(userId,{onlin:true});
      socket.join(userId); // join a room named by userId
     console.log(`User joined room: ${userId}`);
   });
 
-  socket.on('userOnline', (userId) => {
+  socket.on('userOnline',async (userId) => {
+
      onlineUsers.set(userId,socket.id); // join a room named by userId
     console.log(`User online: ${userId}`);
 

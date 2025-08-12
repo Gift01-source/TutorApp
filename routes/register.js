@@ -20,10 +20,11 @@ const upload = multer({ storage });
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
+    user:"bae23-gchimwaza@poly.ac.mw",
+    pass:"zkbrlwoxxhwlxrea"
     
   }
 });
-
 
 
 // helper: 6-digit code
@@ -60,7 +61,7 @@ router.post('/register-step1', async (req, res) => {
     const formattedPhone=phone ?
     formatPhoneNumber(phone):undefined;
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash= await bcrypt.hash(password, 10);
     const code = makeCode();
     const expires = Date.now() + 60 * 60 * 1000; // 1 hour
 
@@ -99,7 +100,7 @@ router.post('/register-step1', async (req, res) => {
 
     // Send email
     const mailOptions = {
-      from: `bae23-gchimwaza@poly.ac.mw`,
+      from: `soulSwipe@gmail.ac.mw`,
       to: email,
       subject: 'Your SoulSwipe verification code',
       text: `Your code: ${code}`,
@@ -201,8 +202,8 @@ router.get('/register-step3', async (req, res) => {
 
 router.post('/register-step3', async (req, res) => {
   if (!req.session.userId) return res.redirect('/register-step1');
-  const { name,age, gender, religion } = req.body;
-  if (!name || !age || !gender) return res.render('register-step3', { error: 'Age and gender required' });
+  const { age, gender, religion } = req.body;
+  if ( !age || !gender) return res.render('register-step3', { error: 'Age and gender required' });
   if (Number(age) < 18) return res.render('register-step3', { error: 'You must be 18+' });
   try {
     await User.findByIdAndUpdate(req.session.userId, { age: Number(age), gender, religion });
@@ -219,7 +220,7 @@ router.post('/register-step3', async (req, res) => {
 const INTERESTS = [
   'Music', 'Movies', 'Sports', 'Travel', 'Food', 'Fitness', 'Reading',
   'Gaming', 'Art', 'Photography', 'Dancing', 'Technology', 'Nature',
-  'Pets', 'Cooking', 'Fashion', 'Politics', 'Science', 'Outdoors', 'Yoga'
+  'Pets', 'Cooking', 'Fashion', 'Politics', 'Science', 'Outdoors'
 ];
 
 router.get('/register-step4', (req, res) => {
@@ -269,7 +270,7 @@ router.post('/register-step5', async (req, res) => {
     const { preferredGender, name } = req.body;
     await User.findByIdAndUpdate(req.session.userId, { preferredGender, name });
     // registration complete
-    res.redirect('/dashboard');
+    res.render('dashboard');
   } catch (err) {
     console.error('Step5 error:', err);
     res.render('register-step5', { error: 'Could not save preferences' });

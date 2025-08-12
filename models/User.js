@@ -48,10 +48,18 @@ const userSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
+  location:String,//{type:{type:String},coordinates:[Number]},
+  profileImage:String,
+  isOnline:Boolean,
+  //likes:[ObjectId],
 
   image: {
     type: String,
     default: ''
+  },
+  online:{
+    type:Boolean,
+    default:false
   },
 
   likes: [
@@ -84,6 +92,6 @@ const userSchema = new mongoose.Schema({
 });
 
 // Optional geospatial location (commented out, can add later)
-// userSchema.index({ location: '2dsphere' });
+ userSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('User', userSchema);

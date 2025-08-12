@@ -108,7 +108,7 @@
   const socket = io();
 
   // Emit current logged-in user's ID to server for online tracking
-  const userId = '<%= user._id %>';
+ 
   socket.emit('userOnline', userId);
 
   // Update online status badges dynamically if needed
