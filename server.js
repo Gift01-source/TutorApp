@@ -206,15 +206,18 @@ app.get('/login', (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    /*if(!email||password){
-      return res.status('400').rederirect('/login.html',{error:'Please enter your email nd password'});
-    }*/
+     //if(!email||password){
+      //console.error('Password is required');
+      //return res.redirect('/login');
+    //}
     try {
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).send('Invalid email.');
+        if (!user) return res.status(400).send('Invalid email or Not registered with DateHub');
 
-        const isMatch = await bcrypt.compare(password, user.passwordHash);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).send('Invalid password.');
+
+        //res.status(200).json({message:'Login successful',user:{email:user.email}});
 
          // setting session
         req.session.user = {
