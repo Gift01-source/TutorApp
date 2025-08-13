@@ -17,7 +17,7 @@ const resetPasswordRoutes = require('./routes/reset-password');
 const chatRoutes = require('./routes/chatList');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 const server = http.createServer(app);
 const io=socketIO(server)
 //const io = new Server(server);
@@ -76,6 +76,7 @@ app.use(session({
 mongoose.connect('mongodb+srv://gift:2002@cluster0.i8kqrfw.mongodb.net/SoulSwipe?retryWrites=true&w=majority')
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
+  
 
 // Multer setup for uploads
 const storage = multer.diskStorage({
@@ -237,12 +238,12 @@ app.post('/login', async (req, res) => {
 
     const likedBy = await User.find({ likes: req.session.user._id }).select('name profileImage');
 
-    res.render('dashboard', {
-      //user: loggedInUser,
+    res.render('dashboard', {users});
+      /*user: loggedInUser,
       users,
       likedBy,
-      //query,
-    });
+      query,
+    });*/
 
        // res.render('dashboard',{users:users});
     } catch (err) {
@@ -306,12 +307,12 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
 
     const likedBy = await User.find({ likes: req.session.user._id }).select('name profileImage');
 
-    res.render('dashboard', {
-      user: loggedInUser,
+    res.render('dashboard', {userss});
+      /*user: loggedInUser,
       users,
       likedBy,
       query,
-    });
+    });*/
   } catch (err) {
     console.error('Dashboard error:', err);
     res.status(500).send('Error loading dashboard.');

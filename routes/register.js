@@ -100,7 +100,7 @@ router.post('/register-step1', async (req, res) => {
 
     // Send email
     const mailOptions = {
-      from: `soulSwipe@gmail.ac.mw`,
+      from: `DateHub@gmail.com`,
       to: email,
       subject: 'Your SoulSwipe verification code',
       text: `Your code: ${code}`,

@@ -77,26 +77,26 @@
   <div class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <% users.forEach(user => { %>
       <div class="bg-gray-800 rounded-lg shadow-lg p-4 text-center relative">
-        <img src="/uploads/<%= user.photo || 'default.jpg' %>" alt="<%= user.name %>" 
+        <img src="/public/uploads/<%= user.photo || '' %>" alt="<%= user.name %>" 
           class="w-24 h-24 object-cover rounded-full mx-auto border-4 border-indigo-500"/>
         <h2 class="mt-4 text-lg font-semibold">
-          
+          <span>
             <%= user.name %>
           </span>
         </h2>
-        <p class="text-sm text-gray-400"><%= user.bio %></p>
-        <p class="text-sm text-gray-400"><%= user.gender %></p>
-        <p class="text-sm text-gray-400"><%= user.age %></p>
-        <p class="text-sm text-gray-400"><%= user.interests %></p>
-        <p class="text-sm text-gray-400"><%= user.location %></p>
+        <p class="text-sm text-gray-400"><strong>Bio:</strong><%= user.bio %></p>
+        <p class="text-sm text-gray-400"><strong>Gender:</strong><%= user.gender%></p>
+        <p class="text-sm text-gray-400"><strong>Age:</strong><%= user.age %></p>
+        <p class="text-sm text-gray-400"><strong>interests:</strong><%= user.interests %></p>
+        <p class="text-sm text-gray-400"><strong>Location:</strong><%= user.location %>Kms</p>
         <div class="flex justify-center gap-4 mt-4">
-          <a href="/like/<%= user._id %>" class="text-red-500 hover:text-red-400" title="Like">
+          <a href="/like/<%= user._id %>" class="bg-green-500 px-2 py-0 rounded hover:bg-red-500 flex items-center gap-1" title="Like">
             <i class="fas fa-heart">Like</i>
           </a>
-          <a href="/chat/<%= user._id %>" class="bg-green-500 px-4 py-2 rounded hover:bg-green-400 flex items-center gap-2" title="Message">
+          <a href="/chat/<%= user._id %>" class="bg-green-500 px-2 py-2 rounded hover:bg-green-400 flex items-center gap-2" title="Message">
             <i class="fas fa-comment"></i> Message
           </a>
-          <a href="/profile<% user._id %>" class="bg-green-500 px-4 py-2 rounded hover:bg-green-400 flex items-center gap-2" title="Message">
+          <a href="/profile<% user._id %>" class="bg-pink-500 px-2 py-2 rounded hover:bg-pink-400 flex items-center gap-2" title="Message">
             <i class="fas fa-user"></i> View
           </a>
         </div>

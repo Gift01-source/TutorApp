@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema({
     default: []
   },
   location:String,//{type:{type:String},coordinates:[Number]},
-  profileImage:String,
+  profileImage:[String],
   isOnline:Boolean,
   //likes:[ObjectId],
 
