@@ -3,16 +3,166 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> PaKoNa - Find Your Match</title>
-  <link rel="stylesheet" href="/css/index.css" />
+  <title>PaKoNa - Find Your Match</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .landing-container {
+      background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+
+    .header, .features, .footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #fff;
+    }
+
+    .header {
+      padding: 80px 20px 40px;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .header p {
+      font-size: 1.25rem;
+      margin-top: 10px;
+      color: #f3f3f3;
+    }
+
+    .buttons {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .btn.primary {
+      background-color: #ec4899;
+      color: white;
+    }
+
+    .btn.primary:hover {
+      background-color: #db2777;
+    }
+
+    .btn.secondary {
+      background-color: white;
+      color: #111827;
+    }
+
+    .btn.secondary:hover {
+      background-color: #f3f4f6;
+    }
+
+    .features {
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      margin: 0 20px;
+    }
+
+    .feature {
+      margin-bottom: 20px;
+    }
+
+    .feature h3 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .feature p {
+      font-size: 0.95rem;
+      color: #e5e5e5;
+    }
+
+    .footer {
+      padding: 20px;
+      font-size: 0.9rem;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .toggle-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: white;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .header p {
+        font-size: 1rem;
+      }
+
+      .btn {
+        padding: 10px 20px;
+      }
+    }
+  </style>
 </head>
+
 <body>
   <button class="toggle-btn" id="theme-toggle" aria-label="Toggle theme">🌓</button>
 
   <div class="landing-container">
+    <div class="overlay"></div>
+
     <header class="header">
       <h1>PaKoNa Meet</h1>
-      <p>Find your perfect match today</p>
+      <p>Find your perfect match today 💘</p>
       <div class="buttons">
         <a href="/register-step1" class="btn primary">Get Started</a>
         <a href="/login" class="btn secondary">Login</a>
@@ -20,13 +170,22 @@
     </header>
 
     <section class="features">
-      <div class="feature"><h3>💖 Smart Matching</h3><p>Your perfect match based on shared interests!</p></div>
-      <div class="feature"><h3>📍 Nearby Connections</h3><p>Meet people near you instantly.</p></div>
-      <div class="feature"><h3>🔐 Secure & Private</h3><p>Your safety is our top priority.</p></div>
+      <div class="feature">
+        <h3>💖 Smart Matching</h3>
+        <p>Your perfect match based on shared interests!</p>
+      </div>
+      <div class="feature">
+        <h3>📍 Nearby Connections</h3>
+        <p>Meet people near you instantly.</p>
+      </div>
+      <div class="feature">
+        <h3>🔐 Secure & Private</h3>
+        <p>Your safety is our top priority.</p>
+      </div>
     </section>
 
     <footer class="footer">
-      <p>© 2025. PaKoNa. All rights reserved.</p>
+      <p>© 2025 PaKoNa. All rights reserved.</p>
     </footer>
   </div>
 

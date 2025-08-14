@@ -1,21 +1,56 @@
-<h2>Chat with <%= otherUser.name %></h2>
+<h2 class="text-2xl font-bold mb-4 text-center text-indigo-600">Chat with <%= otherUser.name %></h2>
 
-<div style="height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background: #f9f9f9;">
+<!-- Chat Messages Container -->
+<div id="chat-box" class="h-80 overflow-y-auto bg-white text-gray-800 rounded-lg shadow-inner p-4 mb-4">
   <% messages.forEach(msg => { %>
-    <div style="margin: 10px 0;">
-      <strong>
-        <%= (msg.sender.toString() === user._id.toString()) ? "You" : otherUser.name %>:
-      </strong>
-      <%= msg.text %>
+    <div class="<%= (msg.sender.toString() === user._id.toString()) ? 'text-right' : 'text-left' %> mb-2">
+      <div class="inline-block max-w-xs px-4 py-2 rounded-lg 
+        <%= (msg.sender.toString() === user._id.toString()) ? 'bg-indigo-500 text-white' : 'bg-gray-200' %>">
+        <strong class="block text-xs mb-1">
+          <%= (msg.sender.toString() === user._id.toString()) ? "You" : otherUser.name %>
+        </strong>
+        <%= msg.text %>
+      </div>
     </div>
   <% }) %>
 </div>
 
-<form method="POST" action="/messages" style="margin-top: 10px; display: flex; gap: 5px;">
-  <input type="text" name="text" placeholder="Type a message..." required style="flex: 1; padding: 8px;"/>
-  <button type="submit" style="padding: 8px 12px; background: #4f46e5; color: white; border: none; border-radius: 4px;">
+<!-- Message Form -->
+<form method="POST" action="/messages" class="flex items-center gap-2">
+  <input type="text" name="text" placeholder="Type a message..." required
+    class="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+  <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
     Send
   </button>
 </form>
 
-<a href="/dashboard" style="display: inline-block; margin-top: 10px; color: #4f46e5;">⬅ Back to Dashboard</a>s
+<!-- Audio/Video Call Buttons -->
+<div class="flex justify-center gap-6 mt-4">
+  <button onclick="startAudioCall()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow">
+    🎧 Audio Call
+  </button>
+  <button onclick="startVideoCall()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow">
+    🎥 Video Call
+  </button>
+</div>
+
+<!-- Back to Dashboard -->
+<div class="mt-4 text-center">
+  <a href="/dashboard" class="text-indigo-600 hover:underline text-sm">⬅ Back to Dashboard</a>
+</div>
+
+<script>
+  function startAudioCall() {
+    alert('Audio call functionality coming soon!');
+    // TODO: Implement WebRTC or third-party audio call integration
+  }
+
+  function startVideoCall() {
+    alert('Video call functionality coming soon!');
+    // TODO: Implement WebRTC or third-party video call integration
+  }
+
+  // Auto-scroll to latest message
+  const chatBox = document.getElementById('chat-box');
+  chatBox.scrollTop = chatBox.scrollHeight;
+</script>
