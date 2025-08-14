@@ -13,10 +13,10 @@ const userSchema = new mongoose.Schema({
   },
 
   // Use only one field to store hashed password
-  passwordHash: {
-    type: String,
-    required: true
-  },
+  //passwordHash: {
+  //  type: String,
+  //  required: true
+//  },
   password: {
     type: String,
     required: true

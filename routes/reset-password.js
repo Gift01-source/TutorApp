@@ -21,17 +21,19 @@ router.post('/reset-password', (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'bae23-gchimwaza@poly.ac.mw',  // <-- change to yours
+      user: 'pakonameet@gmail.com',  // <-- change to yours
       pass: 'nzlspvdrepdyrxcf'     // <-- change to your Gmail app password
     }
   });
 
+
+  
  const resetLink =`http://pakona.onrender.com/reset-password/${token}`;
 
 console.log('Reset link:', resetLink);
 
 const mailOptions = {
-  from: 'soulSwipe@gmail.com',
+  from: 'bae23-gchimwaza@poly.ac.mw',
   to: email,
   subject: 'Password Reset Request',
   text: `Click here to reset your password: ${resetLink}`,
