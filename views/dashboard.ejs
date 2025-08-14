@@ -39,13 +39,13 @@
 <body class="bg-gradient-to-b from-purple-900 via-gray-900 to-black text-white min-h-screen">
 
   <!-- Navbar -->
-  <nav class="bg-pink-600 p-4 flex justify-between items-center shadow-lg">
-    <div class="text-xl font-bold">❤️ PaKoNa Meet</div>
-    <button id="menu-btn" class="text-3xl md:hidden focus:outline-none">☰</button>
-    <ul id="menu" class="hidden md:flex space-x-6 text-white font-medium">
-      <li><a href="/dashboard" class="hover:text-yellow-300">Matches</a></li>
-      <li><a href="/chat/list" class="hover:text-yellow-300">Chats</a></li>
-      <li><a href="/likes" class="hover:text-yellow-300">Likes</a></li>
+  <nav class="bg-indigo-600 p-4 flex justify-between items-center">
+    <div class="text-xl font-bold">SoulSwipe</div>
+    <button id="menu-btn" class="text-2xl md:hidden">☰</button>
+    <ul id="menu" class="hidden md:flex space-x-6">
+      <li><a href="/dashboard" class="hover:underline">Matches</a></li>
+      <li><a href="/chat/list" class="hover:underline">Chats</a></li>
+      <li><a href="/likes" class="hover:underline">Likes</a></li>
     </ul>
   </nav>
 
@@ -115,57 +115,27 @@
   <script>
     const socket = io();
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const menuBtn = document.getElementById('menu-btn');
-      const mobileMenu = document.getElementById('mobile-menu');
+  // Emit current logged-in user's ID to server for online tracking
+ 
+  socket.emit('userOnline', userId);
 
-      if (menuBtn && mobileMenu) {
-        menuBtn.addEventListener('click', () => {
-          mobileMenu.classList.toggle('hidden');
-        });
-      }
-    });
-
-    // Online user tracking (if enabled)
-    socket.emit('userOnline', userId);
-
-    socket.on('onlineUsers', (onlineUsers) => {
-      document.querySelectorAll('.user-item').forEach(userElem => {
-        const id = userElem.dataset.userid;
-        if (onlineUsers.includes(id)) {
-          userElem.classList.add('online');
-        } else {
-          userElem.classList.remove('online');
-        }
-      });
-    });
-
-    //like
-  function likeUser(userId, btn) {
-    fetch(`/like/${userId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(async res => {
-      const data = await res.json();
-      if (res.ok) {
-        btn.innerHTML = '✅ Liked';
-        btn.disabled = true;
-        btn.classList.remove('bg-green-500');
-        btn.classList.add('bg-gray-500');
+  // Update online status badges dynamically if needed
+  socket.on('onlineUsers', (onlineUsers) => {
+    document.querySelectorAll('.user-item').forEach(userElem => {
+      const id = userElem.dataset.userid;
+      if (onlineUsers.includes(id)) {
+        userElem.classList.add('online');
       } else {
-        alert(data.message || 'Failed to like');
+        userElem.classList.remove('online');
       }
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Error liking user');
     });
-  }
+  });
 
+  // Mobile menu toggle
+  document.getElementById('menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+</script>
 
-  </script>
 </body>
 </html>
