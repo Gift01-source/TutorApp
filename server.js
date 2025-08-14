@@ -16,6 +16,7 @@ const {getUserChats}=require('./utils/chatService');
 const resetPasswordRoutes = require('./routes/reset-password');
 const chatRoutes = require('./routes/chatList');
 const profileRoutes = require('./routes/profile');
+const likeRoutes = require('./routes/like');
 
 const app = express();
 const PORT = 3001;
@@ -34,7 +35,7 @@ const SUBSCRIPTION_PRICES = {
 const PAYMENT_METHODS=['Airtel Money','TNM Mpamba','NBM Mo626'];
 //const profileRoutes = require('./routes/profile');
 const matchRoutes = require('./routes/matches');
-const likeRoutes = require('./routes/likes');
+//const likeRoutes = require('./routes/likes');
 const { receiveMessageOnPort } = require('worker_threads');
 
 
@@ -57,7 +58,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/message',messageRouter);
 app.use('/payment',Payment);
 app.use('/matches', requireLogin, matchRoutes);
-app.use('/likes', requireLogin, likeRoutes);
+app.use('/likes', likeRoutes);
 app.use('/chat',require ('./routes/chat'));
 app.use('/', chatRoutes);
 app.use('/', resetPasswordRoutes);

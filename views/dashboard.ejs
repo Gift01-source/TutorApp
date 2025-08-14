@@ -75,9 +75,11 @@
         </div>
 
         <div class="flex justify-center gap-3 mt-5">
-          <a href="/like/<%= user._id %>" class="bg-pink-600 px-3 py-1 rounded-full hover:bg-red-500 flex items-center gap-1 text-sm font-semibold">
-            <i class="fas fa-heart"></i> Like
-          </a>
+          <button 
+     onclick="likeUser('<%= user._id %>', this)" 
+     class="like-btn bg-green-500 px-2 py-1 rounded hover:bg-red-500 flex items-center gap-1 text-sm font-semibold">
+  ❤️ Like
+   </button>
           <a href="/chat/<%= user._id %>" class="bg-blue-500 px-3 py-1 rounded-full hover:bg-blue-400 flex items-center gap-1 text-sm font-semibold">
             <i class="fas fa-comment"></i> Message
           </a>
@@ -100,10 +102,8 @@
         <i class="fas fa-comments text-lg"></i>
         Chats
       </a>
-      <a href="/likes" class="flex flex-col items-center p-2 hover:text-white">
-        <i class="fas fa-heart text-lg"></i>
-        Likes
-      </a>
+      
+
       <a href="/profile" class="flex flex-col items-center p-2 hover:text-white">
         <i class="fas fa-user text-lg"></i>
         Profile
@@ -139,6 +139,33 @@
         }
       });
     });
+
+    //like
+  function likeUser(userId, btn) {
+    fetch(`/like/${userId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(async res => {
+      const data = await res.json();
+      if (res.ok) {
+        btn.innerHTML = '✅ Liked';
+        btn.disabled = true;
+        btn.classList.remove('bg-green-500');
+        btn.classList.add('bg-gray-500');
+      } else {
+        alert(data.message || 'Failed to like');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Error liking user');
+    });
+  }
+
+
   </script>
 </body>
 </html>
