@@ -15,6 +15,7 @@ const messageRouter = require('./routes/messages');
 const {getUserChats}=require('./utils/chatService');
 const resetPasswordRoutes = require('./routes/reset-password');
 const chatRoutes = require('./routes/chatList');
+const profileRoutes = require('./routes/profile');
 
 const app = express();
 const PORT = 3001;
@@ -31,7 +32,7 @@ const SUBSCRIPTION_PRICES = {
 };
 
 const PAYMENT_METHODS=['Airtel Money','TNM Mpamba','NBM Mo626'];
-const profileRoutes = require('./routes/profile');
+//const profileRoutes = require('./routes/profile');
 const matchRoutes = require('./routes/matches');
 const likeRoutes = require('./routes/likes');
 const { receiveMessageOnPort } = require('worker_threads');
@@ -55,14 +56,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/message',messageRouter);
 app.use('/payment',Payment);
-app.use('/profile', requireLogin, profileRoutes);
 app.use('/matches', requireLogin, matchRoutes);
 app.use('/likes', requireLogin, likeRoutes);
 app.use('/chat',require ('./routes/chat'));
 app.use('/', chatRoutes);
 app.use('/', resetPasswordRoutes);
-app.use('/',require ('./routes/profilee'));
-/*
+//app.use('/',require ('./routes/profilee'));
+app.use('/',profileRoutes);
+
 app.use(session({
     secret: 'soulswipe_secret',
     resave: false,
@@ -71,7 +72,7 @@ app.use(session({
         secure: false,
     }
 }));
-*/
+
 // MongoDB Connection
 mongoose.connect('mongodb+srv://gift:2002@cluster0.i8kqrfw.mongodb.net/SoulSwipe?retryWrites=true&w=majority')
     .then(() => console.log('Connected to MongoDB'))
@@ -439,7 +440,7 @@ app.post('/message/:id/delete', isLoggedIn, async (req, res) => {
 
 
 
-app.get('/profile/:id', isLoggedIn, async (req, res) => {
+/*app.get('/profile/:id', isLoggedIn, async (req, res) => {
     try {
         const profileUser = await User.findById(req.params.id);
         const messages = await Message.find({
@@ -459,7 +460,7 @@ app.get('/profile/:id', isLoggedIn, async (req, res) => {
         res.status(500).send('Profile could not be loaded');
     }
 });
-
+*/
 /* Password Reset
 app.get('/reset-password', async (req, res) => {
     res.render(`reset-password`);
@@ -581,7 +582,7 @@ app.get('/profile1', isLoggedIn, async (req, res) => {
 
 
 // Show edit form
-app.get('/profile1/edit', async (req, res) => {
+/*app.get('/profile1/edit', async (req, res) => {
   const profileuser = await User.findById(req.session.userId);
   res.render('edit-profile', { profileuser });
 });
@@ -608,6 +609,14 @@ app.post('/profile1/edit', upload.single('profilePicture'), async (req, res) => 
     console.error('Profile update erro:',error);
   }
 });
+*/
+// Update path as needed
+
+// GET /profile/:id
+
+
+
+
 
 app.get('/premium', isLoggedIn, (req, res) => {
     res.render('subscribe');
