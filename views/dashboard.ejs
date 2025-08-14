@@ -33,7 +33,7 @@
 
   <!-- Navbar -->
   <nav class="bg-indigo-600 p-4 flex justify-between items-center">
-    <div class="text-xl font-bold">SoulSwipe</div>
+    <div class="text-xl font-bold">PaKoNa Meet</div>
     <button id="menu-btn" class="text-2xl md:hidden">☰</button>
     <ul id="menu" class="hidden md:flex space-x-6">
       <li><a href="/dashboard" class="hover:underline">Matches</a></li>
@@ -109,6 +109,31 @@
 
   // Emit current logged-in user's ID to server for online tracking
  
+  /*socket.emit('userOnline', userId);
+
+  // Update online status badges dynamically if needed
+  socket.on('onlineUsers', (onlineUsers) => {
+    document.querySelectorAll('.user-item').forEach(userElem => {
+      const id = userElem.dataset.userid;
+      if (onlineUsers.includes(id)) {
+        userElem.classList.add('online');
+      } else {
+        userElem.classList.remove('online');
+      }
+    });
+  });
+*/
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (menuBtn && mobileMenu){
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+  });
+
   socket.emit('userOnline', userId);
 
   // Update online status badges dynamically if needed
@@ -123,10 +148,15 @@
     });
   });
 
+
+
   // Mobile menu toggle
+
+  /*
   document.getElementById('menu-btn').addEventListener('click', () => {
     document.getElementById('mobile-menu').classList.toggle('hidden');
   });
+  */
 </script>
 
 </body>

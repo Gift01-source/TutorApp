@@ -69,6 +69,7 @@ router.post('/register-step1', async (req, res) => {
     const user=new User({
       email,
       phone:formattedPhone,
+      password,
       passwordHash,
       isVerified:false,
       verificationCode:code,
@@ -100,11 +101,11 @@ router.post('/register-step1', async (req, res) => {
 
     // Send email
     const mailOptions = {
-      from: `DateHub@gmail.com`,
+      from: `pakona@gmail.com`,
       to: email,
-      subject: 'Your SoulSwipe verification code',
+      subject: 'Your PaKoNa Meet verification code',
       text: `Your code: ${code}`,
-      html:` <p>Your SoulSwipe verification code is <strong>${code}</strong></p>`
+      html:` <p>Your PaKoNa Meet verification code is <strong>${code}</strong></p>`
     };
     await transporter.sendMail(mailOptions).catch(err => console.error('Mail send error', err));
 
