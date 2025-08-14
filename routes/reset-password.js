@@ -26,7 +26,7 @@ router.post('/reset-password', (req, res) => {
     }
   });
 
- const resetLink =`http://soul-swipe-f3ib.onrender.com/reset-password/${token}`;
+ const resetLink =`http://pakona.onrender.com/reset-password/${token}`;
 
 console.log('Reset link:', resetLink);
 
@@ -38,6 +38,7 @@ const mailOptions = {
   html: `<p>Hello,</p><p>You requested a password reset. Click the link below to reset your password:</p>
     <p><a href="${resetLink}">${resetLink}</a></p>
     <p>If you did not request this, please ignore this email.</p>
+    <p>Thyank you. have a great day.</p>
   `
 };
 
