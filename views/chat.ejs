@@ -9,9 +9,23 @@
 </head>
 <body class="bg-gray-900 text-white flex flex-col min-h-screen">
 
-  <!-- Header -->
-  <header class="bg-gray-800 p-4 text-center text-xl font-semibold shadow-md">
-    💬 Chat with <%= otherUser.name %>
+  <!-- Header with Call Buttons -->
+  <header class="bg-gray-800 p-4 text-center text-xl font-semibold shadow-md flex flex-col items-center gap-2">
+    <div class="flex items-center justify-between w-full max-w-lg mx-auto">
+      <span>💬 Chat with <%= otherUser.name %></span>
+      <div class="flex items-center gap-2">
+        <!-- Audio Call -->
+        <button type="button" onclick="startAudioCall()" title="Audio Call"
+          class="text-green-400 hover:text-green-300 text-xl focus:outline-none">
+          🎧
+        </button>
+        <!-- Video Call -->
+        <button type="button" onclick="startVideoCall()" title="Video Call"
+          class="text-red-400 hover:text-red-300 text-xl focus:outline-none">
+          🎥
+        </button>
+      </div>
+    </div>
   </header>
 
   <!-- Chat Messages -->
@@ -31,32 +45,14 @@
     <% } %>
   </main>
 
-  <!-- Message Input + File + Call Buttons -->
-  <!-- Footer: Message Input + Camera + Call Buttons -->
+  <!-- Footer: Message Input + Camera Button -->
 <footer class="bg-gray-800 p-3 shadow-inner">
   <form action="/chat/<%= otherUser._id %>" method="POST" class="flex items-center gap-3">
-
-    <!-- Left-side buttons: Camera, Audio, Video -->
-    <div class="flex items-center gap-2">
-      <!-- Camera -->
-      <label class="cursor-pointer text-xl" title="Send Image">
-        📷
-        <input type="file" id="imageUpload" name="image" class="hidden">
-      </label>
-
-      <!-- Audio Call -->
-      <button type="button" onclick="startAudioCall()" title="Audio Call"
-        class="text-green-400 hover:text-green-300 text-xl focus:outline-none">
-        🎧
-      </button>
-
-      <!-- Video Call -->
-      <button type="button" onclick="startVideoCall()" title="Video Call"
-        class="text-red-400 hover:text-red-300 text-xl focus:outline-none">
-        🎥
-      </button>
-    </div>
-
+    <!-- Camera -->
+    <label class="cursor-pointer text-xl" title="Send Image">
+      📷
+      <input type="file" id="imageUpload" name="image" class="hidden">
+    </label>
     <!-- Text Input -->
     <input type="text" name="content" placeholder="Type your message..." required
       class="flex-grow rounded-lg px-4 py-2 text-black focus:outline-none" />
@@ -98,160 +94,15 @@
     }
 
     function startVideoCall() {
-<body class="bg-gray-900 text-white fixed inset-0 flex flex-col">
-
-  <!-- Header with call buttons -->
-  <header class="bg-gray-800 p-4 flex items-center justify-between shadow-md">
-    <span class="text-lg font-semibold">💬 Chat with <%= otherUser.name %></span>
-
-    <!-- Call Options -->
-    <select onchange="handleCallOption(this.value)" class="bg-gray-700 text-white px-2 py-1 rounded">
-<body class="bg-gray-900 text-white fixed inset-0 flex flex-col">
-
-  <!-- Header with call buttons -->
-  <header class="bg-gray-800 p-4 flex items-center justify-between shadow-md">
-    <span class="text-lg font-semibold">💬 Chat with <%= otherUser.name %></span>
-
-    <!-- Call Options -->
-    <select onchange="handleCallOption(this.value)" class="bg-gray-700 text-white px-2 py-1 rounded">
-<body class="bg-gray-900 text-white fixed inset-0 flex flex-col">
-
-  <!-- Header with call buttons -->
-  <header class="bg-gray-800 p-4 flex items-center justify-between shadow-md">
-    <span class="text-lg font-semibold">💬 Chat with <%= otherUser.name %></span>
-
-    <!-- Call Options -->
-    <select onchange="handleCallOption(this.value)" class="bg-gray-700 text-white px-2 py-1 rounded">
-      <option value="">📞 Call Options</option>
-      <option value="audio">🎧 Audio Call</option>
-      <option value="video">🎥 Video Call</option>
-    </select>
-  </header>
-
-  <!-- Messages area -->
-  <main id="chat-container" class="flex-grow px-4 py-3 overflow-y-auto space-y-4">
-    <% if (messages.length === 0) { %>
-      <p class="text-center text-gray-400">No messages yet. Start the conversation!</p>
-    <% } else { %>
-      <% messages.forEach(message => { %>
-        <div class="flex <%= message.sender.toString() === user._id.toString() ? 'justify-end' : 'justify-start' %>">
-          <div class="max-w-[75%] px-4 py-2 rounded-lg 
-            <%= message.sender.toString() === user._id.toString() ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-100' %>">
-            <p class="text-sm"><%= message.content %></p>
-            <small class="block text-xs text-gray-300 mt-1">
-              <%= new Date(message.timestamp).toLocaleTimeString() %>
-            </small>
-          </div>
-        </div>
-      <% }); %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chat with <%= otherUser.name %></title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="/socket.io/socket.io.js"></script>
-</head>
-<body class="bg-gray-900 text-white fixed inset-0 flex flex-col">
-
-  <!-- Header with call buttons -->
-  <header class="bg-gray-800 p-4 flex items-center justify-between shadow-md">
-    <span class="text-lg font-semibold">💬 Chat with <%= otherUser.name %></span>
-
-    <!-- Call Options -->
-    <select onchange="handleCallOption(this.value)" class="bg-gray-700 text-white px-2 py-1 rounded">
-      <option value="">📞 Call Options</option>
-      <option value="audio">🎧 Audio Call</option>
-      <option value="video">🎥 Video Call</option>
-    </select>
-  </header>
-
-  <!-- Messages area -->
-  <main id="chat-container" class="flex-grow px-4 py-3 overflow-y-auto space-y-4">
-    <% if (messages.length === 0) { %>
-      <p class="text-center text-gray-400">No messages yet. Start the conversation!</p>
-    <% } else { %>
-      <% messages.forEach(message => { %>
-        <div class="flex <%= message.sender.toString() === user._id.toString() ? 'justify-end' : 'justify-start' %>">
-          <div class="max-w-[75%] px-4 py-2 rounded-lg 
-            <%= message.sender.toString() === user._id.toString() ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-100' %>">
-            <p class="text-sm"><%= message.content %></p>
-            <small class="block text-xs text-gray-300 mt-1">
-              <%= new Date(message.timestamp).toLocaleTimeString() %>
-            </small>
-          </div>
-        </div>
-      <% }); %>
-    <% } %>
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-gray-800 p-3 shadow-inner">
-    <form action="/chat/<%= otherUser._id %>" method="POST" class="flex items-center gap-3">
-      <!-- Camera -->
-      <label class="cursor-pointer text-xl" title="Send Image">
-        📷
-        <input type="file" id="imageUpload" name="image" class="hidden">
-      </label>
-
-      <!-- Text Input -->
-      <input type="text" name="content" placeholder="Type your message..." required
-        class="flex-grow rounded-lg px-4 py-2 text-black focus:outline-none" />
-
-      <!-- Send Button -->
-      <button type="submit"
-        class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-white font-semibold">
-        Send
-      </button>
-    </form>
-  </footer>
-
-  <script>
-    const socket = io();
-    const userId = '<%= user._id %>';
-    const otherUserId = '<%= otherUser._id %>';
-
-    // Join chat room
-    socket.emit('join', userId);
-
-    // Handle receiving messages
-    socket.on('receiveMessage', (msg) => {
-      if (msg.from === otherUserId) {
-        const chatContainer = document.getElementById('chat-container');
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'flex justify-start';
-        msgDiv.innerHTML = `
-          <div class="max-w-[75%] px-4 py-2 rounded-lg bg-gray-700 text-gray-100">
-            <p class="text-sm">${msg.content}</p>
-            <small class="block text-xs text-gray-300 mt-1">
-              ${new Date(msg.timestamp).toLocaleTimeString()}
-            </small>
-          </div>`;
-        chatContainer.appendChild(msgDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-      }
-    });
-
-    // Handle call options
-    function handleCallOption(type) {
-      if (type === 'audio') startAudioCall();
-      if (type === 'video') startVideoCall();
-    }
-
-    function startAudioCall() {
-      alert('Audio call coming soon!');
-    }
-
-    function startVideoCall() {
       alert('Video call coming soon!');
     }
 
-    // Auto scroll to latest message on page load
+    // Auto scroll to latest message
     window.onload = () => {
       const chatContainer = document.getElementById('chat-container');
       chatContainer.scrollTop = chatContainer.scrollHeight;
     };
   </script>
+
 </body>
 </html>

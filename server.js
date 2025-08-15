@@ -60,8 +60,9 @@ app.use('/message',messageRouter);
 app.use('/payment',Payment);
 app.use('/matches', requireLogin, matchRoutes);
 app.use('/likes', likeRoutes);
-app.use('/chat',require ('./routes/chat'));
-app.use('/', chatRoutes);
+// Place chat list route before /chat/:otherUserId to avoid CastError
+app.use('/chat/list', chatRoutes); // handles /chat/list
+app.use('/chat', require('./routes/chat')); // handles /chat/:otherUserId
 app.use('/', resetPasswordRoutes);
 //app.use('/',require ('./routes/profilee'));
 app.use('/',profileRoutes);

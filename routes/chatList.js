@@ -15,32 +15,35 @@ router.get('/chat/list', requireLogin, async (req, res) => {
   try {
     const userId = req.session.userId;
 
-    // Find all messages where the user is sender or receiver
-    const messages = await Message.find({
-      $or: [{ sender: userId }, { receiver: userId }]
-    }).sort({ timestamp: -1 });
+    // Aggregate distinct chat users and last message
+    const chats = await Message.aggregate([
+      { $match: { $or: [ { sender: mongoose.Types.ObjectId(userId) }, { receiver: mongoose.Types.ObjectId(userId) } ] } },
+      { $sort: { timestamp: -1 } },
+      { $group: {
+        _id: {
+          $cond: [ { $eq: [ "$sender", mongoose.Types.ObjectId(userId) ] }, "$receiver", "$sender" ]
+        },
+        lastMessage: { $first: "$content" },
+        lastTimestamp: { $first: "$timestamp" },
+        unreadCount: { $sum: { $cond: [ { $and: [ { $eq: [ "$receiver", mongoose.Types.ObjectId(userId) ] }, { $eq: [ "$read", false ] } ] }, 1, 0 ] } }
+      }},
+      { $limit: 50 }
+    ]);
 
-    const chatUsersMap = new Map();
-
-    for (let msg of messages) {
-      let otherUserId = msg.sender.toString() === userId ? msg.receiver : msg.sender;
-
-      if (!chatUsersMap.has(otherUserId.toString())) {
-        const otherUser = await User.findById(otherUserId);
-        if (otherUser) {
-          chatUsersMap.set(otherUserId.toString(), {
-            id: otherUser._id,
-            name: otherUser.name,
-            profileImage: otherUser.image || '/images/default.png',
-          });
-        }
-      }
-    }
-
-    const chatUsers = Array.from(chatUsersMap.values());
+    // Fetch user details and online status
+    const chatUsers = await Promise.all(chats.map(async chat => {
+      const otherUser = await User.findById(chat._id);
+      return {
+        id: otherUser._id,
+        name: otherUser.name,
+        profileImage: otherUser.image || '/images/default.png',
+        online: otherUser.online || false,
+        lastMessage: chat.lastMessage,
+        unreadCount: chat.unreadCount || 0
+      };
+    }));
 
     res.render('chatList', { chatUsers });
-
   } catch (err) {
     console.error(err);
     res.status(500).send('Error loading chat list');

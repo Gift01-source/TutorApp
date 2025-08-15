@@ -8,28 +8,65 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex flex-col items-center py-10">
 
-  <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md text-center">
-    <img src="/public/uploads/<%= user.photo || 'default.jpg' %>" alt="<%= user.name %>" class="w-32 h-32 rounded-full mx-auto border-4 border-pink-500" />
-    <h1 class="text-2xl font-bold mt-4 text-pink-300"><%= user.name %></h1>
-    <p class="italic text-gray-400 mt-2"><%= user.bio %></p>
-
-    <div class="mt-4 text-gray-300 text-sm space-y-1">
-      <p><strong>Gender:</strong> <%= user.gender %></p>
-      <p><strong>Age:</strong> <%= user.age %></p>
-      <p><strong>Interests:</strong> <%= user.interests %></p>
-      <p><strong>Location:</strong> <%= user.location %> km away</p>
+  <div class="bg-gray-800 p-0 rounded-2xl shadow-lg w-full max-w-md text-center overflow-hidden">
+    <!-- Swipeable Photos -->
+    <div id="profile-photos" class="flex overflow-x-auto snap-x snap-mandatory relative" style="height: 320px;">
+      <% (user.photos || [user.photo || 'default.jpg']).forEach(function(photo) { %>
+        <img src="/public/uploads/<%= photo %>" alt="<%= user.name %>" class="w-full h-full object-cover snap-center flex-shrink-0" />
+      <% }) %>
+      <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+        <% (user.photos || [user.photo || 'default.jpg']).forEach(function(photo, idx) { %>
+          <span class="w-2 h-2 rounded-full bg-pink-400 opacity-70 inline-block" id="dot-<%= idx %>"></span>
+        <% }) %>
+      </div>
     </div>
-
-    <div class="mt-6 flex justify-center gap-4">
-      <a href="/like/<%= user._id %>" class="bg-pink-500 px-4 py-2 rounded-full hover:bg-red-500 text-white font-semibold">
-        ❤️ Like
-      </a>
-      <a href="/chat/<%= user._id %>" class="bg-blue-500 px-4 py-2 rounded-full hover:bg-blue-400 text-white font-semibold">
-        💬 Message
-      </a>
+    <div class="px-6 py-4">
+      <h1 class="text-2xl font-bold text-pink-300"><%= user.name %></h1>
+      <p class="italic text-gray-400 mt-2"><%= user.bio %></p>
+      <div class="mt-4 text-gray-300 text-sm space-y-1">
+        <p><strong>Gender:</strong> <%= user.gender %></p>
+        <p><strong>Age:</strong> <%= user.age %></p>
+        <p><strong>Interests:</strong> <%= user.interests %></p>
+        <p><strong>Location:</strong> <%= user.location %> km away</p>
+      </div>
+      <!-- Social Links (example) -->
+      <% if (user.social) { %>
+        <div class="mt-3 flex justify-center gap-3">
+          <% if (user.social.instagram) { %>
+            <a href="<%= user.social.instagram %>" target="_blank" class="text-pink-400 hover:text-pink-300 text-xl"><i class="fab fa-instagram"></i></a>
+          <% } %>
+          <% if (user.social.twitter) { %>
+            <a href="<%= user.social.twitter %>" target="_blank" class="text-blue-400 hover:text-blue-300 text-xl"><i class="fab fa-twitter"></i></a>
+          <% } %>
+        </div>
+      <% } %>
+      <div class="mt-6 flex justify-center gap-4">
+        <a href="/like/<%= user._id %>" class="bg-pink-500 px-4 py-2 rounded-full hover:bg-red-500 text-white font-semibold">
+          ❤️ 
+        </a>
+        <a href="/chat/<%= user._id %>" class="bg-blue-500 px-4 py-2 rounded-full hover:bg-blue-400 text-white font-semibold">
+          💬 
+        </a>
+        <a href="/report/<%= user._id %>" class="bg-gray-700 px-4 py-2 rounded-full hover:bg-gray-600 text-white font-semibold">
+          🚩 Report
+        </a>
+      </div>
     </div>
   </div>
 
   <a href="/dashboard" class="mt-6 text-indigo-400 hover:underline text-sm">← Back to Dashboard</a>
+
+  <script>
+    // Swipe dots indicator (optional, basic)
+    const photos = document.querySelectorAll('#profile-photos img');
+    const dots = document.querySelectorAll('[id^="dot-"]');
+    const profilePhotos = document.getElementById('profile-photos');
+    profilePhotos.addEventListener('scroll', () => {
+      const scrollLeft = profilePhotos.scrollLeft;
+      const width = profilePhotos.offsetWidth;
+      const idx = Math.round(scrollLeft / width);
+      dots.forEach((dot, i) => dot.style.opacity = i === idx ? '1' : '0.7');
+    });
+  </script>
 </body>
 </html>
