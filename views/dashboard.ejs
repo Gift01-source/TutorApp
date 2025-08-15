@@ -78,7 +78,7 @@
           <button 
      onclick="likeUser('<%= user._id %>', this)" 
      class="like-btn bg-green-500 px-2 py-1 rounded hover:bg-red-500 flex items-center gap-1 text-sm font-semibold">
-  ❤️ Like
+  ❤️
    </button>
           <a href="/chat/<%= user._id %>" class="bg-blue-500 px-3 py-1 rounded-full hover:bg-blue-400 flex items-center gap-1 text-sm font-semibold">
             <i class="fas fa-comment"></i> Message
@@ -113,6 +113,11 @@
 
   <!-- Scripts -->
   <script>
+
+     // Mobile menu toggle
+  document.getElementById('menu-btn').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
     const socket = io();
 
   // Emit current logged-in user's ID to server for online tracking
@@ -131,10 +136,7 @@
     });
   });
 
-  // Mobile menu toggle
-  document.getElementById('menu-btn').addEventListener('click', () => {
-    document.getElementById('mobile-menu').classList.toggle('hidden');
-  });
+  
 </script>
 
 </body>
