@@ -121,7 +121,7 @@ function isLoggedIn(req, res, next) {
 
         next();
     } else {
-        res.redirect('/login');
+        res.render('dashboard');
     }
     
 }
@@ -631,7 +631,7 @@ res.render('privacy');
 
 app.get('/subscribe', async (req, res) => {
     await User.findByIdAndUpdate(req.session.user._id, { premium: true });
-    res.render('subscribe);
+    res.render('subscribe');
 });
 //subscription
 app.post('/subscribe',(req,res)=>{
