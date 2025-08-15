@@ -1,96 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat with <%= otherUser.name || otherUser.username %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Simple mobile-friendly styling -->
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f7f7f7;
+      color: #222;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #4a90e2;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 70px; /* space for input */
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .messages {
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .message {
+      max-width: 80%;
+      padding: 0.7rem 1rem;
+      border-radius: 1.2rem;
+      position: relative;
+      word-break: break-word;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      background: #fff;
+    }
+    .message.sent {
+      align-self: flex-end;
+      background: #d8ebff;
+    }
+    .message.received {
+      align-self: flex-start;
+      background: #fff;
+    }
+    .message img {
+      max-width: 100%;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .timestamp {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 0.25rem;
+      text-align: right;
+    }
+    form.message-form {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #fff;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      z-index: 20;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .message-input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 1.2rem;
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+    }
+    .file-input {
+      display: none;
+    }
+    .file-label {
+      background: #e3e3e3;
+      border-radius: 1.2rem;
+      padding: 0.5rem 0.7rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-right: 0.2rem;
+      transition: background 0.2s;
+    }
+    .file-label:hover {
+      background: #d0d0d0;
+    }
+    .send-btn {
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 1.2rem;
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .send-btn:active {
+      background: #357abd;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Chat with <%= otherUser.name || otherUser.username %>
+  </header>
 
-<!DOCTYPE html> 
-<html lang="en">  
-<head>  
-  <meta charset="UTF-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1" />  
-  <title>Chat with <%= otherUser.name %></title>  
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">  
-  <script src="/socket.io/socket.io.js"></script>  
-</head>  
-<body class="bg-gray-900 text-white flex flex-col min-h-screen">    <!-- Header -->    <header class="bg-gray-800 p-4 text-center text-xl font-semibold shadow-md">  
-    💬 Chat with <%= otherUser.name %>  
-  </header>    <!-- Chat Messages -->    <main id="chat-container" class="flex-grow px-4 py-3 overflow-y-auto space-y-4">  
-    <% if (messages.length === 0) { %>  
-      <p class="text-center text-gray-400">No messages yet. Start the conversation!</p>  
-    <% } else { %>  
-      <% messages.forEach(message => { %>  
-        <div class="flex <%= message.sender.toString() === user._id.toString() ? 'justify-end' : 'justify-start' %>">  
-          <div class="max-w-[75%] px-4 py-2 rounded-lg   
-            <%= message.sender.toString() === user._id.toString() ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-100' %>">  
-            <p class="text-sm"><%= message.content %></p>  
-            <small class="block text-xs text-gray-300 mt-1"><%= new Date(message.timestamp).toLocaleTimeString() %></small>  
-          </div>  
-        </div>  
-      <% }); %>  
-    <% } %>  
-  </main>    <!-- Message Input + File + Call Buttons -->    <!-- Footer: Message Input + Camera + Call Buttons -->  <footer class="bg-gray-800 p-3 shadow-inner">  
-  <form action="/chat/<%= otherUser._id %>" method="POST" class="flex items-center gap-3">  <!-- Left-side buttons: Camera, Audio, Video -->  
-<div class="flex items-center gap-2">  
-  <!-- Camera -->  
-  <label class="cursor-pointer text-xl" title="Send Image">  
-    📷  
-    <input type="file" id="imageUpload" name="image" class="hidden">  
-  </label>  
+  <div class="chat-container">
+    <div class="messages" id="messages">
+      <% messages.forEach(function(msg) { %>
+        <div class="message <%= msg.sender.toString() === currentUser._id.toString() ? 'sent' : 'received' %>">
+          <% if (msg.content) { %>
+            <span><%= msg.content %></span>
+          <% } %>
+          <% if (msg.image) { %>
+            <img src="<%= msg.image %>" alt="Image message">
+          <% } %>
+          <div class="timestamp">
+            <%= new Date(msg.createdAt).toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }) %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
 
-  <!-- Audio Call -->  
-  <button type="button" onclick="startAudioCall()" title="Audio Call"  
-    class="text-green-400 hover:text-green-300 text-xl focus:outline-none">  
-    🎧  
-  </button>  
+  <form class="message-form" action="/messages/<%= otherUser._id %>" method="POST" enctype="multipart/form-data">
+    <label for="file" class="file-label" title="Send Image">&#128247;</label>
+    <input type="file" name="image" id="file" class="file-input" accept="image/*" />
+    <input type="text" name="content" class="message-input" placeholder="Type a message..." autocomplete="off" />
+    <button type="submit" class="send-btn">Send</button>
+  </form>
 
-  <!-- Video Call -->  
-  <button type="button" onclick="startVideoCall()" title="Video Call"  
-    class="text-red-400 hover:text-red-300 text-xl focus:outline-none">  
-    🎥  
-  </button>  
-</div>  
+  <script>
+    // Scroll to bottom on load
+    window.onload = function() {
+      var messagesDiv = document.getElementById('messages');
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
 
-<!-- Text Input -->  
-<input type="text" name="content" placeholder="Type your message..." required  
-  class="flex-grow rounded-lg px-4 py-2 text-black focus:outline-none" />  
-
-<!-- Send Button -->  
-<button type="submit"  
-  class="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg text-white font-semibold">  
-  Send  
-</button>
-
-  </form>  
-</footer>    <!-- Scripts -->    <script>  
-    const socket = io();  
-    const userId = '<%= user._id %>';  
-    const otherUserId = '<%= otherUser._id %>';  
-  
-    socket.emit('join', userId);  
-  
-    socket.on('receiveMessage', (msg) => {  
-      if (msg.from === otherUserId) {  
-        const chatContainer = document.getElementById('chat-container');  
-        const msgDiv = document.createElement('div');  
-        msgDiv.className = 'flex justify-start';  
-        msgDiv.innerHTML = `  
-          <div class="max-w-[75%] px-4 py-2 rounded-lg bg-gray-700 text-gray-100">  
-            <p class="text-sm">${msg.content}</p>  
-            <small class="block text-xs text-gray-300 mt-1">${new Date(msg.timestamp).toLocaleTimeString()}</small>  
-          </div>`;  
-        chatContainer.appendChild(msgDiv);  
-        chatContainer.scrollTop = chatContainer.scrollHeight;  
-      }  
-    });  
-  
-    function startAudioCall() {  
-      alert('Audio call coming soon!');  
-    }  
-  
-    function startVideoCall() {  
-      alert('Video call coming soon!');  
-    }  
-  
-    // Auto scroll to latest message  
-    window.onload = () => {  
-      const chatContainer = document.getElementById('chat-container');  
-      chatContainer.scrollTop = chatContainer.scrollHeight;  
-    };  
+    // Click label to open file chooser
+    document.querySelector('.file-label').onclick = function() {
+      document.getElementById('file').click();
+    };
   </script>
+</body>
 </html>
