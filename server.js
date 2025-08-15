@@ -16,6 +16,7 @@ const {getUserChats}=require('./utils/chatService');
 const resetPasswordRoutes = require('./routes/reset-password');
 const chatRoutes = require('./routes/chatList');
 const profileRoutes = require('./routes/profile');
+const profilRoutes = require('./routes/profil')
 const likeRoutes = require('./routes/like');
 
 const app = express();
@@ -64,6 +65,7 @@ app.use('/', chatRoutes);
 app.use('/', resetPasswordRoutes);
 //app.use('/',require ('./routes/profilee'));
 app.use('/',profileRoutes);
+app.use('/',profilRoutes);
 
 app.use(session({
     secret: 'soulswipe_secret',
@@ -571,15 +573,15 @@ app.get('/likes', isLoggedIn, async (req, res) => {
     res.render('likes', { likes });
 });
 
-app.get('/settings', isLoggedIn, async (req, res) => {
+app.get('/settings',  async (req, res) => {
     const user = await User.findById(req.session.user._id);
     res.render('settings', { user });
 });
 
-app.get('/profile1', isLoggedIn, async (req, res) => {
+/*app.get('/profile1', isLoggedIn, async (req, res) => {
     const profileuser = await User.findById(req.session.user._id);
     res.render('profile1', { profileuser });
-});
+});*/
 
 
 // Show edit form
@@ -619,7 +621,7 @@ app.post('/profile1/edit', upload.single('profilePicture'), async (req, res) => 
 
 
 
-app.get('/premium', isLoggedIn, (req, res) => {
+app.get('/premium',  (req, res) => {
     res.render('subscribe');
 });
 
@@ -627,7 +629,7 @@ app.get('/privacy',(req,res)=>{
 res.render('privacy');
 })
 
-app.get('/subscribe', isLoggedIn, async (req, res) => {
+app.get('/subscribe', async (req, res) => {
     await User.findByIdAndUpdate(req.session.user._id, { premium: true });
     res.redirect(`/subscribe`);
 });
