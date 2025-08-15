@@ -22,9 +22,9 @@ const likeRoutes = require('./routes/like');
 const settingsRoutes = require('./routes/settings');
 
 const app = express();
-const PORT = 3001;
+const PORT = 3000;
 const server = http.createServer(app);
-const io=socketIO(server)
+const io=socketIO(server);
 //const io = new Server(server);
 
 //const io = new Server(server);
