@@ -33,7 +33,7 @@ router.get('edit',async(req,res)=>{
         interests:interests.split(',').map(i=>i.trim()),
         profilePicture
     });
-   res.render('/profile');
+   res.render('profile');
 });
 
 module.exports=router;
