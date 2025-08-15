@@ -568,7 +568,7 @@ app.post('/message/:id/delete', async (req, res) => {
   res.redirect(`back`);
 });
 
-app.get('/likes', isLoggedIn, async (req, res) => {
+app.get('/likes', async (req, res) => {
     const likes = await getUsersWhoLikedMe(req.session.user._id); // Implement as needed
     res.render('likes', { likes });
 });
@@ -631,13 +631,13 @@ res.render('privacy');
 
 app.get('/subscribe', async (req, res) => {
     await User.findByIdAndUpdate(req.session.user._id, { premium: true });
-    res.redirect(`/subscribe`);
+    res.render('subscribe);
 });
 //subscription
 app.post('/subscribe',(req,res)=>{
   const selectPlan=req.body.plan;
   //save plan for user db
-  res.redirect(`/payment`);
+  res.render('payment');
 });
 
 //payment 
@@ -667,7 +667,7 @@ app.post('/update-settings', isLoggedIn, async (req, res) => {
     const update = { email };
     if (password) update.password = await bcrypt.hash(password, 10);
     await User.findByIdAndUpdate(req.session.user._id, update);
-    res.redirect(`/settings`);
+    res.render('settings');
 });
 
 // Logout
