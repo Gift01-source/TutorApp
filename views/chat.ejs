@@ -106,6 +106,61 @@
 
     <!-- Call Options -->
     <select onchange="handleCallOption(this.value)" class="bg-gray-700 text-white px-2 py-1 rounded">
+<body class="bg-gray-900 text-white fixed inset-0 flex flex-col">
+
+  <!-- Header with call buttons -->
+  <header class="bg-gray-800 p-4 flex items-center justify-between shadow-md">
+    <span class="text-lg font-semibold">💬 Chat with <%= otherUser.name %></span>
+
+    <!-- Call Options -->
+    <select onchange="handleCallOption(this.value)" class="bg-gray-700 text-white px-2 py-1 rounded">
+<body class="bg-gray-900 text-white fixed inset-0 flex flex-col">
+
+  <!-- Header with call buttons -->
+  <header class="bg-gray-800 p-4 flex items-center justify-between shadow-md">
+    <span class="text-lg font-semibold">💬 Chat with <%= otherUser.name %></span>
+
+    <!-- Call Options -->
+    <select onchange="handleCallOption(this.value)" class="bg-gray-700 text-white px-2 py-1 rounded">
+      <option value="">📞 Call Options</option>
+      <option value="audio">🎧 Audio Call</option>
+      <option value="video">🎥 Video Call</option>
+    </select>
+  </header>
+
+  <!-- Messages area -->
+  <main id="chat-container" class="flex-grow px-4 py-3 overflow-y-auto space-y-4">
+    <% if (messages.length === 0) { %>
+      <p class="text-center text-gray-400">No messages yet. Start the conversation!</p>
+    <% } else { %>
+      <% messages.forEach(message => { %>
+        <div class="flex <%= message.sender.toString() === user._id.toString() ? 'justify-end' : 'justify-start' %>">
+          <div class="max-w-[75%] px-4 py-2 rounded-lg 
+            <%= message.sender.toString() === user._id.toString() ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-100' %>">
+            <p class="text-sm"><%= message.content %></p>
+            <small class="block text-xs text-gray-300 mt-1">
+              <%= new Date(message.timestamp).toLocaleTimeString() %>
+            </small>
+          </div>
+        </div>
+      <% }); %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat with <%= otherUser.name %></title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body class="bg-gray-900 text-white fixed inset-0 flex flex-col">
+
+  <!-- Header with call buttons -->
+  <header class="bg-gray-800 p-4 flex items-center justify-between shadow-md">
+    <span class="text-lg font-semibold">💬 Chat with <%= otherUser.name %></span>
+
+    <!-- Call Options -->
+    <select onchange="handleCallOption(this.value)" class="bg-gray-700 text-white px-2 py-1 rounded">
       <option value="">📞 Call Options</option>
       <option value="audio">🎧 Audio Call</option>
       <option value="video">🎥 Video Call</option>
@@ -153,6 +208,32 @@
   </footer>
 
   <script>
+    const socket = io();
+    const userId = '<%= user._id %>';
+    const otherUserId = '<%= otherUser._id %>';
+
+    // Join chat room
+    socket.emit('join', userId);
+
+    // Handle receiving messages
+    socket.on('receiveMessage', (msg) => {
+      if (msg.from === otherUserId) {
+        const chatContainer = document.getElementById('chat-container');
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'flex justify-start';
+        msgDiv.innerHTML = `
+          <div class="max-w-[75%] px-4 py-2 rounded-lg bg-gray-700 text-gray-100">
+            <p class="text-sm">${msg.content}</p>
+            <small class="block text-xs text-gray-300 mt-1">
+              ${new Date(msg.timestamp).toLocaleTimeString()}
+            </small>
+          </div>`;
+        chatContainer.appendChild(msgDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+    });
+
+    // Handle call options
     function handleCallOption(type) {
       if (type === 'audio') startAudioCall();
       if (type === 'video') startVideoCall();
@@ -165,6 +246,12 @@
     function startVideoCall() {
       alert('Video call coming soon!');
     }
+
+    // Auto scroll to latest message on page load
+    window.onload = () => {
+      const chatContainer = document.getElementById('chat-container');
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    };
   </script>
 </body>
 </html>
