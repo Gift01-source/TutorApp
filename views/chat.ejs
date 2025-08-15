@@ -29,21 +29,23 @@
   </header>
 
   <!-- Chat Messages -->
-  <main id="chat-container" class="flex-grow px-4 py-3 overflow-y-auto space-y-4">
-    <% if (messages.length === 0) { %>
-      <p class="text-center text-gray-400">No messages yet. Start the conversation!</p>
-    <% } else { %>
-      <% messages.forEach(message => { %>
-        <div class="flex <%= message.sender.toString() === user._id.toString() ? 'justify-end' : 'justify-start' %>">
-          <div class="max-w-[75%] px-4 py-2 rounded-lg 
-            <%= message.sender.toString() === user._id.toString() ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-100' %>">
-            <p class="text-sm"><%= message.content %></p>
-            <small class="block text-xs text-gray-300 mt-1"><%= new Date(message.timestamp).toLocaleTimeString() %></small>
+  <div class="flex-1 flex flex-col">
+    <div id="chat-container" class="flex-1 px-4 py-3 overflow-y-auto space-y-4" style="min-height:0;">
+      <% if (messages.length === 0) { %>
+        <p class="text-center text-gray-400">No messages yet. Start the conversation!</p>
+      <% } else { %>
+        <% messages.forEach(message => { %>
+          <div class="flex <%= message.sender.toString() === user._id.toString() ? 'justify-end' : 'justify-start' %>">
+            <div class="max-w-[75%] px-4 py-2 rounded-lg 
+              <%= message.sender.toString() === user._id.toString() ? 'bg-indigo-600 text-white' : 'bg-gray-700 text-gray-100' %>">
+              <p class="text-sm"><%= message.content %></p>
+              <small class="block text-xs text-gray-300 mt-1"><%= new Date(message.timestamp).toLocaleTimeString() %></small>
+            </div>
           </div>
-        </div>
-      <% }); %>
-    <% } %>
-  </main>
+        <% }); %>
+      <% } %>
+    </div>
+  </div>
 
   <!-- Footer: Message Input + Camera Button -->
 <footer class="bg-gray-800 p-3 shadow-inner">

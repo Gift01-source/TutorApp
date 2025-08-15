@@ -39,9 +39,13 @@
     <div class="text-2xl font-extrabold tracking-wider">💖 PaKoNa</div>
     <button id="menu-btn" class="text-2xl md:hidden">☰</button>
     <ul id="menu" class="hidden md:flex space-x-6 text-lg">
-      <li><a href="/dashboard" class="hover:text-yellow-300 transition">Matches</a></li>
-      <li><a href="/chat/list" class="hover:text-yellow-300 transition">Chats</a></li>
+      <li><a href="/matches" class="hover:text-yellow-300 transition">Matches</a></li>
+      <li><a href="/chatList" class="hover:text-yellow-300 transition">Chats</a></li>
       <li><a href="/likes" class="hover:text-yellow-300 transition">Likes</a></li>
+       <a href="/profil" class="block hover:text-pink-400">Profile</a>
+    <a href="/settings" class="block hover:text-pink-400">Settings</a>
+    <a href="/premium" class="block hover:text-pink-400">Premium</a>
+    <a href="/privacy" class="block hover:text-pink-400">Privacy</a>
     </ul>
   </nav>
 
@@ -60,8 +64,17 @@
       <% users.forEach(user => { %>
         <div class="min-w-[320px] max-w-xs bg-gray-800 rounded-2xl shadow-lg text-center card-hover relative overflow-hidden snap-center flex-shrink-0 flex flex-col" style="height: 480px;">
           <div class="relative w-full h-2/3">
-            <img src="/public/uploads/<%= user.photo || '' %>" alt="<%= user.name %>" 
-              class="absolute inset-0 w-full h-full object-cover" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;" />
+            <!-- Swipeable photos -->
+            <div class="flex overflow-x-auto snap-x snap-mandatory h-full" id="photos-<%= user._id %>">
+              <% (user.photos || [user.photo || 'default.jpg']).forEach(function(photo) { %>
+                <div class="relative w-full h-full snap-center flex-shrink-0">
+                  <img src="/public/uploads/<%= photo %>" alt="<%= user.name %>" class="absolute inset-0 w-full h-full object-cover" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;" />
+                  <% if (user.online) { %>
+                    <span class="absolute top-3 right-3 w-4 h-4 bg-green-400 border-2 border-white rounded-full z-20"></span>
+                  <% } %>
+                </div>
+              <% }) %>
+            </div>
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
           </div>
           <div class="flex-1 flex flex-col justify-between px-4 py-3">
