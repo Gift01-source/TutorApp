@@ -312,7 +312,7 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
 
     const likedBy = await User.find({ likes: req.session.user._id }).select('name profileImage');
 
-    res.render('dashboard', {userss});
+    res.render('dashboard', {users:userArray});
       /*user: loggedInUser,
       users,
       likedBy,

@@ -1,16 +1,32 @@
-<!doctype html><html><head>...</head><body class="bg-gray-900 text-white p-4">
-  <div class="max-w-md mx-auto bg-gray-800 p-6 rounded">
-    <h2>Preferences</h2>
-    <% if (error) { %><div class="bg-red-600 p-2 rounded mb-3"><%= error %></div><% } %>
-    <form action="/register-step5" method="POST">
-      <input name="name" placeholder="Display name (optional)" class="w-full p-2 rounded mb-3">
-      <select name="preferredGender" required class="w-full p-2 rounded mb-3">
-        <option value="">Preferred gender</option>
-        <option value="women">Women</option>
-        <option value="men">Men</option>
-        <option value="everyone">Everyone</option>
-      </select>
-      <button type="submit" class="w-full bg-indigo-600 p-3 rounded">Finish</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Preferences – PaKoNa Meet</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-b from-pink-100 via-pink-200 to-pink-300">
+  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm text-center">
+    <h1 class="text-3xl font-bold text-pink-600 mb-2">💖 PaKoNa Meet</h1>
+    <p class="text-gray-500 mb-6">Set your preferences</p>
+    <% if (error) { %><div class="bg-red-100 text-red-700 p-2 rounded mb-3 text-sm"><%= error %></div><% } %>
+    <form action="/register-step5" method="POST" class="space-y-4 text-left">
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="name">Display name (optional)</label>
+        <input name="name" id="name" placeholder="Display name (optional)" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none mb-3">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="preferredGender">Preferred gender</label>
+        <select name="preferredGender" id="preferredGender" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none mb-3">
+          <option value="">Preferred gender</option>
+          <option value="women">Women</option>
+          <option value="men">Men</option>
+          <option value="everyone">Everyone</option>
+        </select>
+      </div>
+      <button type="submit" class="w-full bg-pink-500 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-pink-600 transition">Finish</button>
     </form>
   </div>
-</body></html>
+</body>
+</html>
