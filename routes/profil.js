@@ -3,18 +3,18 @@ const router = express.Router();
 const User = require('../models/User');
 
 // GET /profile
-router.get('/profile', async (req, res) => {
+router.get('/profile1', async (req, res) => {
   try {
     if (!req.session.userId) {
-      return res.redirect('/dashboard');
+      return res.render('dashboard');
     }
 
     const user = await User.findById(req.session.userId);
     if (!user) {
-      return res.redirect('/dashboard');
+      return res.render('dashboard');
     }
 
-    res.render('profile', { userId });
+    res.render('profile1', { userId });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
