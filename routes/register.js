@@ -271,7 +271,7 @@ router.post('/register-step5', async (req, res) => {
     const { preferredGender, name } = req.body;
     await User.findByIdAndUpdate(req.session.userId, { preferredGender, name });
     // registration complete
-    res.render('dashboard');
+    res.render('dashboard',{users:userArray});
   } catch (err) {
     console.error('Step5 error:', err);
     res.render('register-step5', { error: 'Could not save preferences' });
