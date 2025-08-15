@@ -14,7 +14,7 @@ router.get('/profile1', async (req, res) => {
       return res.render('dashboard');
     }
 
-    res.render('profile1', { userId });
+    res.render('profile1');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
