@@ -13,11 +13,13 @@ const Message = require('./models/Message');
 const Payment = require('./models/Payment');
 const messageRouter = require('./routes/messages');
 const {getUserChats}=require('./utils/chatService');
+
 const resetPasswordRoutes = require('./routes/reset-password');
 const chatRoutes = require('./routes/chatList');
 const profileRoutes = require('./routes/profile');
-const profilRoutes = require('./routes/profil')
+const profilRoutes = require('./routes/profil');
 const likeRoutes = require('./routes/like');
+const settingsRoutes = require('./routes/settings');
 
 const app = express();
 const PORT = 3001;
@@ -55,9 +57,11 @@ app.use(express.json());
 app.set("view engine", "ejs");
 app.set('views',path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
-app.use('/message',messageRouter);
-app.use('/payment',Payment);
+app.use('/message', messageRouter);
+app.use('/payment', Payment);
+app.use('/settings', settingsRoutes);
 app.use('/matches', requireLogin, matchRoutes);
 app.use('/likes', likeRoutes);
 // Place chat list route before /chat/:otherUserId to avoid CastError
