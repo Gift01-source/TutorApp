@@ -1,77 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chat with <%= otherUser.name %></title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-pink-50 text-gray-800 fixed inset-0 flex flex-col">
 
+<div class="fixed inset-0 flex flex-col bg-gray-50">
+  
   <!-- Header -->
-  <header class="bg-white shadow flex items-center justify-between px-4 py-3">
-    <div class="flex items-center gap-2">
-      <img src="<%= otherUser.profilePic || '/default-avatar.png' %>" alt="Profile" 
-           class="w-10 h-10 rounded-full border border-pink-400">
-      <span class="font-semibold text-lg text-pink-600">💬 <%= otherUser.name %></span>
-    </div>
+  <div class="bg-white shadow px-4 py-3 flex flex-col items-center">
+    <h2 class="text-2xl font-bold text-center text-indigo-600">
+      Chat with <%= otherUser.name %>
+    </h2>
 
-    <!-- Call Options -->
-    <div class="flex gap-2">
-      <button onclick="startAudioCall()" title="Audio Call"
-        class="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg shadow">
-        🎧
+    <!-- Audio/Video Call Buttons -->
+    <div class="flex justify-center gap-6 mt-2">
+      <button onclick="startAudioCall()" 
+        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow">
+        🎧 Audio
       </button>
-      <button onclick="startVideoCall()" title="Video Call"
-        class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg shadow">
-        🎥
+      <button onclick="startVideoCall()" 
+        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg shadow">
+        🎥 Video
       </button>
     </div>
-  </header>
+  </div>
 
-  <!-- Messages -->
-  <main id="chat-box" class="flex-grow overflow-y-auto px-4 py-3 bg-white">
-    <% if (messages.length === 0) { %>
-      <p class="text-center text-gray-400">No messages yet. Start the conversation!</p>
-    <% } else { %>
-      <% messages.forEach(msg => { %>
-        <div class="<%= (msg.sender.toString() === user._id.toString()) ? 'text-right' : 'text-left' %> mb-3">
-          <div class="inline-block max-w-[75%] px-4 py-2 rounded-2xl 
-            <%= (msg.sender.toString() === user._id.toString()) ? 'bg-pink-500 text-white' : 'bg-pink-100 text-gray-800' %>">
-            <strong class="block text-xs mb-1">
-              <%= (msg.sender.toString() === user._id.toString()) ? "You" : otherUser.name %>
-            </strong>
-            <%= msg.text %>
-          </div>
+  <!-- Chat Messages -->
+  <div id="chat-box" class="flex-1 overflow-y-auto bg-white text-gray-800 p-4">
+    <% messages.forEach(msg => { %>
+      <div class="<%= (msg.sender.toString() === user._id.toString()) ? 'text-right' : 'text-left' %> mb-2">
+        <div class="inline-block max-w-xs px-4 py-2 rounded-lg 
+          <%= (msg.sender.toString() === user._id.toString()) ? 'bg-indigo-500 text-white' : 'bg-gray-200' %>">
+          <strong class="block text-xs mb-1">
+            <%= (msg.sender.toString() === user._id.toString()) ? "You" : otherUser.name %>
+          </strong>
+          <%= msg.text %>
         </div>
-      <% }) %>
-    <% } %>
-  </main>
+      </div>
+    <% }) %>
+  </div>
 
-  <!-- Message Input -->
-  <footer class="bg-white p-3 shadow-inner">
-    <form method="POST" action="/messages" class="flex items-center gap-2">
-      <input type="text" name="text" placeholder="Type a message..." required
-        class="flex-1 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400"/>
-      <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-full hover:bg-pink-600">
-        Send
-      </button>
-    </form>
-  </footer>
+  <!-- Input Area -->
+  <form method="POST" action="/messages" class="bg-white p-3 flex items-center gap-2 border-t">
+    <input type="text" name="text" placeholder="Type a message..." required
+      class="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+      Send
+    </button>
+  </form>
 
-  <script>
-    function startAudioCall() {
-      alert('Audio call coming soon!');
-    }
+</div>
 
-    function startVideoCall() {
-      alert('Video call coming soon!');
-    }
-
-    // Auto-scroll to latest message
-    const chatBox = document.getElementById('chat-box');
-    chatBox.scrollTop = chatBox.scrollHeight;
-  </script>
-
-</body>
-</html>
+<script>
+  function startAudioCall() {
+    alert('Audio call functionality coming soon!');
+  }
+  function startVideoCall() {
+    alert('Video call functionality coming soon!');
+  }
+  const chatBox = document.getElementById('chat-box');
+  chatBox.scrollTop = chatBox.scrollHeight;
+</script>
