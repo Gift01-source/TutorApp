@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST update settings
-router.post('/update-settings', requireLogin, async (req, res) => {
+router.post('/update-settings', async (req, res) => {
   const { displayName, email, bio, password, showProfile, showOnline, emailNotifications, pushNotifications } = req.body;
   const updates = {
     name: displayName,
