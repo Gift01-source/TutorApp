@@ -91,7 +91,7 @@
             <div class="flex justify-center gap-3 mt-4">
               <button onclick="likeUser('<%= user._id %>', this)" 
                 class="bg-pink-500 px-3 py-1 rounded-full hover:bg-pink-400 transition flex items-center gap-1 text-sm font-semibold">
-                ❤️ Like
+                ❤️
               </button>
               <a href="/chat/<%= user._id %>" class="bg-blue-500 px-3 py-1 rounded-full hover:bg-blue-400 transition flex items-center gap-1 text-sm font-semibold">
                 <i class="fas fa-comment"></i> Chat
@@ -117,9 +117,13 @@
         <i class="fas fa-comments text-lg"></i>
         Chats
       </a>
-      <a href="/profile1" class="flex flex-col items-center p-2 hover:text-pink-400">
+      <a href="/settings" class="flex flex-col items-center p-2 hover:text-pink-400">
         <i class="fas fa-user text-lg"></i>
-        Profile
+        sertings
+      </a>
+      <a href="/stories" class="flex flex-col items-center p-2 hover:text-pink-400">
+        <i class="fas fa-user text-lg"></i>
+        Stories
       </a>
     </div>
   </nav>
