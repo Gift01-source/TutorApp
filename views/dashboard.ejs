@@ -35,8 +35,8 @@
 <body class="bg-gradient-to-b from-purple-900 via-gray-900 to-black text-white min-h-screen">
 
   <!-- Navbar -->
-  <nav class="bg-pink-600 p-4 flex justify-between items-center shadow-lg">
-    <div class="text-2xl font-extrabold tracking-wider">💖 PaKoNa</div>
+  <!--nav class="bg-pink-600 p-4 flex justify-between items-center shadow-lg"--!>
+    <div class="text-2xl font-extrabold tracking-wider"></div>
     <button id="menu-btn" class="text-2xl md:hidden">☰</button>
     <ul id="menu" class="hidden md:flex space-x-6 text-lg">
       <li><a href="/matches" class="hover:text-yellow-300 transition">Matches</a></li>
@@ -47,7 +47,7 @@
     <a href="/premium" class="block hover:text-pink-400">Premium</a>
     <a href="/privacy" class="block hover:text-pink-400">Privacy</a>
     </ul>
-  </nav>
+  
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden bg-gray-800 p-4 md:hidden space-y-3 rounded-b-lg shadow-lg">
@@ -82,10 +82,10 @@
               <h2 class="text-xl font-bold text-pink-300"><%= user.name %></h2>
               <p class="text-sm text-gray-300 mt-1 italic"><%= user.bio %></p>
               <div class="mt-2 text-sm text-gray-200 space-y-1">
-                <p><strong>Gender:</strong> <%= user.gender %></p>
-                <p><strong>Age:</strong> <%= user.age %></p>
-                <p><strong>Interests:</strong> <%= user.interests %></p>
-                <p><strong>Location:</strong> <%= user.location %> km</p>
+                <p><strong></strong> <%= user.gender %></p>
+                <p><strong></strong> <%= user.age %></p>
+                <p><strong></strong> <%= user.interests %></p>
+                <p><strong></strong> <%= user.location %> km</p>
               </div>
             </div>
             <div class="flex justify-center gap-3 mt-4">
@@ -94,7 +94,7 @@
                 ❤️
               </button>
               <a href="/chat/<%= user._id %>" class="bg-blue-500 px-3 py-1 rounded-full hover:bg-blue-400 transition flex items-center gap-1 text-sm font-semibold">
-                <i class="fas fa-comment"></i> Chat
+                <i class="fas fa-comment"></i>💬
               </a>
               <a href="/profile/<%= user._id %>" class="bg-purple-600 px-3 py-1 rounded-full hover:bg-purple-500 transition flex items-center gap-1 text-sm font-semibold">
                 <i class="fas fa-user"></i> View
