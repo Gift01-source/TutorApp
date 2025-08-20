@@ -66,4 +66,28 @@ router.post('/:id', upload.single('image'), async (req, res) => {
   }
 });
 
+router.post('/chat/:otherUserId', async (req, res) => {
+  const senderId = req.session.user._id;
+  const receiverId = req.params.otherUserId;
+  const content = req.body.content;
+
+  if (!senderId || !receiverId) {
+    return res.status(400).send('Sender and receiver are required.');
+  }
+
+  const newMessage = new Message({
+    sender: senderId,
+    receiver: receiverId,
+    content: content,
+    timestamp: new Date()
+  });
+
+  try {
+    await newMessage.save();
+    res.redirect(`/chat/${receiverId}`);
+  } catch (err) {
+    res.status(500).send('Failed to send message.');
+  }
+});
+
 module.exports = router;

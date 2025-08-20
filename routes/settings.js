@@ -1,22 +1,32 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
 
 // Middleware to require login
-function requireLogin(req, res, next) {
-  if (!req.session.userId) return res.redirect('/login');
-  next();
+function isLoggedIn(req, res, next) {
+  // Use req.session.userId for consistency
+  if (req.session && req.session.userId) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
 }
 
 // GET settings page
-router.get('/', requireLogin, async (req, res) => {
-  const user = await User.findById(req.session.userId);
-  if (!user) return res.redirect('/login');
-  res.render('settings', { user });
+router.get('/', async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    if (!user) return res.redirect('/dashboard');
+    
+    res.render('settings', { user });
+  } catch (err) {
+    res.redirect('/login');
+  }
 });
 
 // POST update settings
-router.post('/update-settings', requireLogin, async (req, res) => {
+router.post('/update-settings', async (req, res) => {
   const { displayName, email, bio, password, showProfile, showOnline, emailNotifications, pushNotifications } = req.body;
   const updates = {
     name: displayName,
@@ -27,12 +37,18 @@ router.post('/update-settings', requireLogin, async (req, res) => {
     emailNotifications: !!emailNotifications,
     pushNotifications: !!pushNotifications
   };
-  if (password) updates.password = password; // Hash in real app
+
   try {
+    // Hash password if provided
+    if (password && password.trim() !== '') {
+      const salt = await bcrypt.genSalt(10);
+      updates.password = await bcrypt.hash(password, salt);
+    }
     await User.findByIdAndUpdate(req.session.userId, updates);
     res.redirect('/settings');
   } catch (err) {
-    res.render('settings', { user: { ...updates }, error: 'Failed to update settings.' });
+    const user = await User.findById(req.session.userId);
+    res.render('settings', { user, error: 'Failed to update settings.' });
   }
 });
 

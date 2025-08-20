@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notifications – PaKoNa Meet</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center px-4">
+  <div class="space-y-4">
+      <% notifications.forEach(n => { %>
+        <div class="bg-gray-800 p-4 rounded shadow">
+          <% if (n.type === 'like') { %>
+            <span class="text-pink-300 font-bold"><%= n.from && n.from.name ? n.from.name : 'Someone' %></span>
+            liked your story
+            <% if (n.story) { %>
+              <a href="/stories/<%= n.story._id %>" class="text-indigo-400 underline"><%= n.story.title %></a>
+            <% } else { %>
+              <span class="text-gray-400">[Story deleted]</span>
+            <% } %>
+            <span class="text-xs text-gray-400 ml-2"><%= new Date(n.date).toLocaleString() %></span>
+          <% } else if (n.type === 'comment') { %>
+            <span class="text-pink-300 font-bold"><%= n.from && n.from.name ? n.from.name : 'Someone' %></span>
+            commented on your story
+            <% if (n.story) { %>
+              <a href="/stories/<%= n.story._id %>" class="text-indigo-400 underline"><%= n.story.title %></a>
+            <% } else { %>
+              <span class="text-gray-400">[Story deleted]</span>
+            <% } %>
+            <span class="text-xs text-gray-400 ml-2"><%= new Date(n.date).toLocaleString() %></span>
+          <% } %>
+        </div>
+      <% }) %>
+      <% if (notifications.length === 0) { %>
+        <p class="text-center text-gray-400">No notifications yet.</p>
+      <% } %>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
+</body>
+</html>

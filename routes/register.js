@@ -21,7 +21,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user:"bae23-gchimwaza@poly.ac.mw",
-    pass:"zkbrlwoxxhwlxrea"
+    pass:"docizuczxzoznfoj"
     
   }
 });
@@ -56,7 +56,7 @@ router.post('/register-step1', async (req, res) => {
     const existing = await User.findOne({ email });
     if (existing) return res.render('register-step1', { error: 'Email already registered', email, phone });
 
-
+   
      //format phone for tolio
     const formattedPhone=phone ?
     formatPhoneNumber(phone):undefined;
@@ -101,7 +101,7 @@ router.post('/register-step1', async (req, res) => {
 
     // Send email
     const mailOptions = {
-      from: `pakona@gmail.com`,
+      from: `bae23-gchimwaza@gmail.com`,
       to: email,
       subject: 'Your PaKoNa Meet verification code',
       text: `Your code: ${code}`,

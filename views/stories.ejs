@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Love Stories – PaKoNa Meet</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center px-4">
+
+  <div class="w-full max-w-2xl mt-10">
+    <h1 class="text-3xl font-bold text-pink-400 mb-2 text-center">💖 Love Stories</h1>
+    <p class="text-gray-300 mb-6 text-center">Share your story and inspire others!</p>
+
+    <!-- Error/success messages -->
+    <% if (error) { %>
+      <div class="bg-red-600 p-2 rounded mb-3 text-center"><%= error %></div>
+    <% } %>
+    <% if (success) { %>
+      <div class="bg-green-600 p-2 rounded mb-3 text-center"><%= success %></div>
+    <% } %>
+
+    <!-- Share Story Form -->
+    <form action="/stories" method="POST" class="bg-gray-800 p-6 rounded-lg shadow mb-8 space-y-4">
+      <input type="text" name="title" placeholder="Story Title" required class="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none" />
+      <textarea name="content" rows="5" placeholder="Share your love story..." required class="w-full p-3 rounded bg-gray-700 text-white placeholder-gray-400 focus:outline-none"></textarea>
+      <button type="submit" class="w-full py-3 rounded bg-pink-500 hover:bg-pink-600 font-semibold">Share Story</button>
+    </form>
+
+    <!-- Stories List -->
+    <div class="space-y-6">
+      <% stories.forEach(story => { %>
+        <div class="bg-gray-800 p-5 rounded-lg shadow">
+          <h2 class="text-xl font-bold text-pink-300 mb-2"><%= story.title %></h2>
+          <p class="text-gray-200 mb-2"><%= story.content %></p>
+          <div class="text-xs text-gray-400 flex justify-between mb-2">
+            <span>By <%= story.authorName || 'Anonymous' %></span>
+            <span><%= new Date(story.createdAt).toLocaleDateString() %></span>
+          </div>
+          <div class="flex items-center gap-4 mb-2">
+            <form action="/stories/<%= story._id %>/<%= story.likes.includes(user._id) ? 'unlike' : 'like' %>" method="POST" style="display:inline;">
+              <button type="submit" class="text-pink-400 hover:text-pink-600 font-bold">
+                <%= story.likes.includes(user._id) ? '💔 Unlike' : '💖 Like' %>
+              </button>
+            </form>
+            <span class="text-gray-300 text-sm"><%= story.likes.length %> likes</span>
+          </div>
+          <!-- Edit/Delete buttons for owner -->
+          <% if (user && story.author && story.author.toString() === user._id.toString()) { %>
+            <form action="/stories/<%= story._id %>/delete" method="POST" style="display:inline;">
+              <button type="submit" class="text-red-400 hover:underline mr-2">Delete</button>
+            </form>
+            <a href="/stories/<%= story._id %>/edit" class="text-indigo-400 hover:underline">Edit</a>
+          <% } %>
+          <!-- Comments -->
+          <div class="mt-4">
+            <h3 class="text-pink-300 font-semibold mb-2">Comments</h3>
+            <% story.comments.forEach(comment => { %>
+              <div class="bg-gray-700 p-2 rounded mb-2">
+                <span class="font-bold text-xs text-pink-200"><%= comment.authorName %></span>
+                <span class="text-xs text-gray-400 ml-2"><%= new Date(comment.createdAt).toLocaleDateString() %></span>
+                <div class="text-gray-100 text-sm"><%= comment.content %></div>
+              </div>
+            <% }) %>
+            <form action="/stories/<%= story._id %>/comment" method="POST" class="mt-2 flex gap-2">
+              <input type="text" name="comment" placeholder="Add a comment..." required class="flex-grow p-2 rounded bg-gray-600 text-white" />
+              <button type="submit" class="bg-pink-500 px-3 rounded text-white">Comment</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+      <% if (stories.length === 0) { %>
+        <p class="text-center text-gray-400">No stories yet. Be the first to share!</p>
+      <% } %>
+    </div>
+  </div>
+</body>
+</html>

@@ -46,6 +46,10 @@
     <a href="/settings" class="block hover:text-pink-400">Settings</a>
     <a href="/premium" class="block hover:text-pink-400">Premium</a>
     <a href="/privacy" class="block hover:text-pink-400">Privacy</a>
+    <a href="/stories" class="block hover:text-pink-400">Stories</a>
+    <a href="/notifications" class="text-pink-200 hover:text-white font-semibold">
+    <i class="fas fa-bell"></i> Notifications
+     </a>
     </ul>
   </nav>
 
@@ -68,7 +72,8 @@
             <div class="flex overflow-x-auto snap-x snap-mandatory h-full" id="photos-<%= user._id %>">
               <% (user.photos || [user.photo || 'default.jpg']).forEach(function(photo) { %>
                 <div class="relative w-full h-full snap-center flex-shrink-0">
-                  <img src="/public/uploads/<%= photo %>" alt="<%= user.name %>" class="absolute inset-0 w-full h-full object-cover" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;" />
+                  <img src="src="<%= typeof user.profileImage === 'string' && user.profileImage.trim() !== '' ? user.profileImage : '/images/default-profile.png' %>" class="absolute inset-0 w-full h-full object-cover" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;" />
+
                   <% if (user.online) { %>
                     <span class="absolute top-3 right-3 w-4 h-4 bg-green-400 border-2 border-white rounded-full z-20"></span>
                   <% } %>
@@ -82,16 +87,15 @@
               <h2 class="text-xl font-bold text-pink-300"><%= user.name %></h2>
               <p class="text-sm text-gray-300 mt-1 italic"><%= user.bio %></p>
               <div class="mt-2 text-sm text-gray-200 space-y-1">
-                <p><strong>Gender:</strong> <%= user.gender %></p>
-                <p><strong>Age:</strong> <%= user.age %></p>
-                <p><strong>Interests:</strong> <%= user.interests %></p>
-                <p><strong>Location:</strong> <%= user.location %> km</p>
+                <p><strong></strong> <%= user.gender %></p>
+                <p><strong></strong> <%= user.age %></p>
+                <p><strong></strong> <%= user.interests %></p>
+                <p><strong></strong> <%= user.location %> km</p>
               </div>
             </div>
             <div class="flex justify-center gap-3 mt-4">
-              <button onclick="likeUser('<%= user._id %>', this)" 
-                class="bg-pink-500 px-3 py-1 rounded-full hover:bg-pink-400 transition flex items-center gap-1 text-sm font-semibold">
-                ❤️ Like
+              <button onclick="likeUser('<%= user._id %>', this)" class="bg-pink-500 px-3 py-1 rounded-full hover:bg-pink-400 transition flex items-center gap-1 text-sm font-semibold">
+                ❤️
               </button>
               <a href="/chat/<%= user._id %>" class="bg-blue-500 px-3 py-1 rounded-full hover:bg-blue-400 transition flex items-center gap-1 text-sm font-semibold">
                 <i class="fas fa-comment"></i> Chat
@@ -121,6 +125,27 @@
         <i class="fas fa-user text-lg"></i>
         Profile
       </a>
+      <a href="/settings" class="flex flex-col items-center p-2 hover:text-pink-400">
+        <i class="fas fa-user text-lg"></i>
+        Settings
+      </a>
+      </a>
+      <a href="/profile1" class="flex flex-col items-center p-2 hover:text-pink-400">
+        <i class="fas fa-user text-lg"></i>
+        Profile
+      </a>
+      </a>
+      <a href="/profile1" class="flex flex-col items-center p-2 hover:text-pink-400">
+        <i class="fas fa-user text-lg"></i>
+        Profile
+      </a>
+      <a href="/stories" class="flex flex-col items-center p-2 hover:text-pink-400">
+        <i class="fas fa-user text-lg"></i>
+        Stories
+      </a>
+      <a href="/notifications" class="text-pink-200 hover:text-white font-semibold">
+      <i class="fas fa-bell"></i> Notifications
+       </a>
     </div>
   </nav>
 

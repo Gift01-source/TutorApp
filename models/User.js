@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+const notificationSchema = new mongoose.Schema({
+  type: String, // 'like', 'comment', etc.
+  from: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  story: { type: mongoose.Schema.Types.ObjectId, ref: 'Story' },
+  date: { type: Date, default: Date.now },
+  read: { type: Boolean, default: false }
+});
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -84,15 +92,20 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  emailNotification: { type: Boolean, default: true },
+  pushNotification: { type: Boolean, default: true },
 
   createdAt: {
     type: Date,
     default: Date.now
   },
+  
 
   resetPasswordToken: String,
 
-  resetPasswordExpire: Date
+  resetPasswordExpire: Date,
+
+  notifications: [notificationSchema]
 });
 
 // Optional geospatial location (commented out, can add later)

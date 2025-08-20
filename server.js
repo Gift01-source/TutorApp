@@ -20,6 +20,8 @@ const profileRoutes = require('./routes/profile');
 const profilRoutes = require('./routes/profil');
 const likeRoutes = require('./routes/like');
 const settingsRoutes = require('./routes/settings');
+//const storiesRoutes = require('./routes/stories');
+
 
 const app = express();
 const PORT = 3000;
@@ -62,7 +64,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/message', messageRouter);
 app.use('/payment', Payment);
 app.use('/settings', settingsRoutes);
-app.use('/matches', requireLogin, matchRoutes);
+app.use('/matches', matchRoutes);
 app.use('/likes', likeRoutes);
 // Place chat list route before /chat/:otherUserId to avoid CastError
 app.use('/chat/list', chatRoutes); // handles /chat/list
@@ -71,6 +73,8 @@ app.use('/', resetPasswordRoutes);
 //app.use('/',require ('./routes/profilee'));
 app.use('/',profileRoutes);
 app.use('/',profilRoutes);
+app.use('/stories', require('./routes/stories'));
+app.use('/notifications', require('./routes/notifications'));
 
 app.use(session({
     secret: 'soulswipe_secret',
@@ -82,6 +86,7 @@ app.use(session({
 }));
 
 // MongoDB Connection
+//mongoose.connect('mongodb+srv://chimwazagift7:8jA9nmcecX5V3xxx@gift.mmcrg9v.mongodb.net/SoulSwipe?retryWrites=true&w=majority')
 mongoose.connect('mongodb+srv://gift:2002@cluster0.i8kqrfw.mongodb.net/SoulSwipe?retryWrites=true&w=majority')
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
@@ -293,6 +298,45 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
 app.get('/dashboard', isLoggedIn, async (req, res) => {
   if (!req.session || !req.session.user || !req.session.user._id) {
     console.log('User session missing or expired');
+    return res.redirect('/login');
+  }
+
+  const query = req.query.q || '';
+  const safeQuery = escapeRegex(query);
+  const regex = new RegExp(safeQuery, 'i');
+
+  try {
+    const loggedInUser = await User.findById(req.session.user._id);
+    if (!loggedInUser) {
+      console.log('No user found in DB with session id');
+      return res.redirect('/login');
+    }
+
+    // Fetch users and include profileImage
+    const users = await User.find({
+      _id: { $ne: req.session.user._id },
+      $or: [{ name: regex }, { email: regex }]
+    }).select('name email profileImage isOnline interests location');
+
+    // Fetch users who liked the logged-in user
+    const likedBy = await User.find({ likes: req.session.user._id }).select('name profileImage');
+
+    // Pass users array to dashboard view
+    res.render('dashboard', {
+      user: loggedInUser,
+      users,//:users,
+      likedBy: likedBy,
+      query: query
+    });
+  } catch (err) {
+    console.error('Dashboard error:', err);
+    res.status(500).send('Error loading dashboard.');
+  }
+});
+
+/*app.get('/dashboard', isLoggedIn, async (req, res) => {
+  if (!req.session || !req.session.user || !req.session.user._id) {
+    console.log('User session missing or expired');
     return res.redirect('/login');  // or send an error if preferred
   }
 
@@ -322,11 +366,12 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
       likedBy,
       query,
     });*/
-  } catch (err) {
+  /*} catch (err) {
     console.error('Dashboard error:', err);
     res.status(500).send('Error loading dashboard.');
   }
 });
+*/  // Commented out for now
  //Messaging routes
 app.get('/message/:id', async (req, res) => {
   try {
@@ -578,10 +623,10 @@ app.get('/likes', async (req, res) => {
     res.render('likes', { likes });
 });
 
-app.get('/settings',  async (req, res) => {
+/*app.get('/settings',  async (req, res) => {
     const user = await User.findById(req.session.user._id);
     res.render('settings', { user });
-});
+});*/
 
 /*app.get('/profile1', isLoggedIn, async (req, res) => {
     const profileuser = await User.findById(req.session.user._id);
@@ -626,10 +671,10 @@ app.post('/profile1/edit', upload.single('profilePicture'), async (req, res) => 
 
 
 
-app.get('/premium',  (req, res) => {
+/*app.get('/premium',  (req, res) => {
     res.render('subscribe');
 });
-
+*/
 app.get('/privacy',(req,res)=>{
 res.render('privacy');
 })

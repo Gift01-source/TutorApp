@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edit Story – PaKoNa Meet</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center px-4">
+  <div class="w-full max-w-lg mt-10">
+    <h1 class="text-2xl font-bold text-pink-400 mb-4 text-center">Edit Your Story</h1>
+    <form action="/stories/<%= story._id %>/edit" method="POST" class="bg-gray-800 p-6 rounded-lg shadow space-y-4">
+      <input type="text" name="title" value="<%= story.title %>" required class="w-full p-3 rounded bg-gray-700 text-white" />
+      <textarea name="content" rows="5" required class="w-full p-3 rounded bg-gray-700 text-white"><%= story.content %></textarea>
+      <button type="submit" class="w-full py-3 rounded bg-pink-500 hover:bg-pink-600 font-semibold">Save Changes</button>
+    </form>
+  </div>
+</body>
+</html>
