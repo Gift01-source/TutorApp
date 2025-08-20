@@ -626,7 +626,7 @@ app.get('/likes', async (req, res) => {
 /*app.get('/settings',  async (req, res) => {
     const user = await User.findById(req.session.user._id);
     res.render('settings', { user });
-});*/
+});
 
 /*app.get('/profile1', isLoggedIn, async (req, res) => {
     const profileuser = await User.findById(req.session.user._id);
@@ -671,10 +671,10 @@ app.post('/profile1/edit', upload.single('profilePicture'), async (req, res) => 
 
 
 
-/*app.get('/premium',  (req, res) => {
+app.get('/premium',  (req, res) => {
     res.render('subscribe');
 });
-*/
+
 app.get('/privacy',(req,res)=>{
 res.render('privacy');
 })
@@ -712,14 +712,14 @@ app.post('/payment', (req, res) => {
   res.render('payment-result', { result });
 });
 
-app.post('/update-settings', isLoggedIn, async (req, res) => {
+/*app.post('/update-settings', isLoggedIn, async (req, res) => {
     const { email, password } = req.body;
     const update = { email };
     if (password) update.password = await bcrypt.hash(password, 10);
     await User.findByIdAndUpdate(req.session.user._id, update);
     res.render('settings');
 });
-
+*/
 // Logout
 app.get('/logout', (req, res) => {
     req.session.destroy(() => {

@@ -4,25 +4,16 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
 // Middleware to require login
-function isLoggedIn(req, res, next) {
-  // Use req.session.userId for consistency
-  if (req.session && req.session.userId) {
-    next();
-  } else {
-    res.redirect('/login');
-  }
+function requireLogin(req, res, next) {
+  if (!req.session.userId) return res.redirect('/login');
+  next();
 }
 
 // GET settings page
-router.get('/', async (req, res) => {
-  try {
-    const user = await User.findById(req.session.userId);
-    if (!user) return res.redirect('/dashboard');
-    
-    res.render('settings', { user });
-  } catch (err) {
-    res.redirect('/login');
-  }
+router.get('/', requireLogin, async (req, res) => {
+  const user = await User.findById(req.session.userId);
+  if (!user) return res.redirect('/login');
+  res.render('settings', { user });
 });
 
 // POST update settings
@@ -45,7 +36,7 @@ router.post('/update-settings', async (req, res) => {
       updates.password = await bcrypt.hash(password, salt);
     }
     await User.findByIdAndUpdate(req.session.userId, updates);
-    res.redirect('/settings');
+    res.render('settings');
   } catch (err) {
     const user = await User.findById(req.session.userId);
     res.render('settings', { user, error: 'Failed to update settings.' });
