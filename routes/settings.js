@@ -5,14 +5,14 @@ const bcrypt = require('bcrypt');
 
 // Middleware to require login
 function requireLogin(req, res, next) {
-  if (!req.session.userId) return res.redirect('/login');
+  if (!req.session.userId) return res.render('dashboard');
   next();
 }
 
 // GET settings page
-router.get('/', requireLogin, async (req, res) => {
+router.get('/',  async (req, res) => {
   const user = await User.findById(req.session.userId);
-  if (!user) return res.redirect('/login');
+  if (!user) return res.render('dashboard');
   res.render('settings', { user });
 });
 
