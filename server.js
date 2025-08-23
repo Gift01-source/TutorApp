@@ -16,8 +16,8 @@ const {getUserChats}=require('./utils/chatService');
 
 const resetPasswordRoutes = require('./routes/reset-password');
 const chatRoutes = require('./routes/chatList');
-const profileRoutes = require('./routes/profile');
-const profilRoutes = require('./routes/profil');
+//const profileRoutes = require('./routes/profile');
+//const profilRoutes = require('./routes/profil');
 const likeRoutes = require('./routes/like');
 const settingsRoutes = require('./routes/settings');
 //const storiesRoutes = require('./routes/stories');
@@ -63,7 +63,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/message', messageRouter);
 app.use('/payment', Payment);
-app.use('/settings', settingsRoutes);
+app.use('/', settingsRoutes);
 app.use('/matches', matchRoutes);
 app.use('/likes', likeRoutes);
 // Place chat list route before /chat/:otherUserId to avoid CastError
@@ -71,8 +71,8 @@ app.use('/chat/list', chatRoutes); // handles /chat/list
 app.use('/chat', require('./routes/chat')); // handles /chat/:otherUserId
 app.use('/', resetPasswordRoutes);
 //app.use('/',require ('./routes/profilee'));
-app.use('/',profileRoutes);
-app.use('/',profilRoutes);
+app.use('/profile',require('.routes/profile'));
+app.use('/profil',require('.routes/profi'));
 app.use('/stories', require('./routes/stories'));
 app.use('/notifications', require('./routes/notifications'));
 
