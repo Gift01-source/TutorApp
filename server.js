@@ -16,8 +16,8 @@ const {getUserChats}=require('./utils/chatService');
 
 const resetPasswordRoutes = require('./routes/reset-password');
 const chatRoutes = require('./routes/chatList');
-//const profileRoutes = require('./routes/profile');
-//const profilRoutes = require('./routes/profil');
+const profileRoutes = require('./routes/profile');
+const profilRoutes = require('./routes/profil');
 const likeRoutes = require('./routes/like');
 const settingsRoutes = require('./routes/settings');
 //const storiesRoutes = require('./routes/stories');
@@ -70,9 +70,9 @@ app.use('/likes', likeRoutes);
 app.use('/chat/list', chatRoutes); // handles /chat/list
 app.use('/chat', require('./routes/chat')); // handles /chat/:otherUserId
 app.use('/', resetPasswordRoutes);
-//app.use('/',require ('./routes/profilee'));
-app.use('/profile',require('./routes/profile'));
-app.use('/profil',require('./routes/profil'));
+//app.use('/',require ('./routes/profilee));
+app.use('/profile',profileRoutes');
+app.use('/profil',profilRoutes');
 app.use('/stories', require('./routes/stories'));
 app.use('/notifications', require('./routes/notifications'));
 
