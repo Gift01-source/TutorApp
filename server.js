@@ -72,7 +72,7 @@ app.use('/chat', require('./routes/chat')); // handles /chat/:otherUserId
 app.use('/', resetPasswordRoutes);
 //app.use('/',require ('./routes/profilee'));
 app.use('/profile',require('.routes/profile'));
-app.use('/profil',require('.routes/profi'));
+app.use('/profil',require('.routes/profil'));
 app.use('/stories', require('./routes/stories'));
 app.use('/notifications', require('./routes/notifications'));
 
