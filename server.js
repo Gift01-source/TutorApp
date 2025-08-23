@@ -71,8 +71,8 @@ app.use('/chat/list', chatRoutes); // handles /chat/list
 app.use('/chat', require('./routes/chat')); // handles /chat/:otherUserId
 app.use('/', resetPasswordRoutes);
 //app.use('/',require ('./routes/profilee));
-app.use('/',profileRoutes');
-app.use('/',profilRoutes');
+app.use('/',profileRoutes);
+app.use('/',profilRoutes);
 app.use('/stories', require('./routes/stories'));
 app.use('/notifications', require('./routes/notifications'));
 
