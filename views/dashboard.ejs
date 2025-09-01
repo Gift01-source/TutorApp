@@ -71,7 +71,7 @@
             <div class="flex overflow-x-auto snap-x snap-mandatory h-full" id="photos-<%= user._id %>">
               <% (user.photos || [user.photo || 'default.jpg']).forEach(function(photo) { %>
                 <div class="relative w-full h-full snap-center flex-shrink-0">
-                  <img src="src="<%= typeof user.profileImage === 'string' && user.profileImage.trim() !== '' ? user.profileImage : '/images/default-profile.png' %>" class="absolute inset-0 w-full h-full object-cover" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;" />
+                  <img src="src="<%= typeof user.profileImage === 'string' && user.profileImage.trim() !== '' ? user.profileImage : '/public/uploads/default.jpg' %>" class="absolute inset-0 w-full h-full object-cover" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;" />
 
                   <% if (user.online) { %>
                     <span class="absolute top-3 right-3 w-4 h-4 bg-green-400 border-2 border-white rounded-full z-20"></span>
