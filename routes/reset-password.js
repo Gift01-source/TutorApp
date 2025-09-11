@@ -27,7 +27,7 @@ router.post('/reset-password', (req, res) => {
   });
 
 
- const resetLink =`http://pakona.onrender.com/reset-password/${token}`;
+ const resetLink =`http://pakona.onrender.com/reset-form/${token}`;
 
 console.log('Reset link:', resetLink);
 
