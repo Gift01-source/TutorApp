@@ -62,7 +62,7 @@ router.get('/reset-password/:token', (req, res) => {
 });
 
 // Handle New Password Submission
-router.post('/reset-password/:token',async (req, res) => {
+router.post('/reset-form/:token',async (req, res) => {
   const tokenData = resetTokens[req.params.token];
   if (!tokenData || tokenData.expires < Date.now()) {
     return res.send('Token expired.');
