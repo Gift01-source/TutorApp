@@ -53,7 +53,7 @@ const mailOptions = {
 });
 
 // Show Reset Form
-router.get('/reset-password/:token', (req, res) => {
+router.get('/reset-form/:token', (req, res) => {
   const tokenData = resetTokens[req.params.token];
   if (!tokenData || tokenData.expires < Date.now()) {
     return res.send('Token invalid or expired.');
@@ -72,7 +72,7 @@ router.post('/reset-form/:token',async (req, res) => {
   console.log('Password for ${tokenData.email} updated to: ${newPassword}');
 
   delete resetTokens[req.params.token];
-  res.send('Paasword reset successfull. You can now <a href="/login">Log in</a>'); // redirect to login after reset
+  res.send('Password reset successfull. You can now <a href="/login">Log in</a>'); // redirect to login after reset
 });
 
 module.exports = router;
