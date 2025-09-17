@@ -3,24 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= profileuser %>'s Profile - SoulSwipe</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <title><%= profileuser.name %>'s Profile - SoulSwipe</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    .card-hover {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gradient-to-b from-purple-900 via-gray-900 to-black text-white min-h-screen">
 
-  <!-- Header -->
-  <div class="bg-pink-500 text-white py-4 px-6 flex justify-between items-center">
-    <h1 class="text-xl font-bold">SoulSwipe</h1>
-    <a href="/dashboard" class="bg-white text-pink-500 px-4 py-2 rounded">Dashboard</a>
+  <!-- Navbar -->
+  <nav class="bg-purple-600 p-4 flex justify-between items-center shadow-lg">
+    <div class="text-2xl font-extrabold tracking-wider">SoulSwipe</div>
+    <a href="/dashboard" class="text-yellow-300 hover:text-white font-semibold">Dashboard</a>
+  </nav>
+
+  <div class="flex items-center justify-center min-h-[80vh]">
+    <div class="bg-gray-800 rounded-2xl shadow-lg card-hover p-10 max-w-md w-full text-center">
+      <div class="flex flex-col items-center mb-6">
+        <div class="relative w-32 h-32 mb-3">
+          <img src="<%= (profileuser.profileImage && profileuser.profileImage !== '' ? (Array.isArray(profileuser.profileImage) ? (profileuser.profileImage[0] || '/uploads/default.jpg') : profileuser.profileImage) : '/uploads/default.jpg') %>" alt="<%= profileuser.name %>" class="w-32 h-32 rounded-full object-cover border-4 border-pink-400" />
+        </div>
+        <h2 class="text-2xl font-bold text-pink-300 mb-1 flex items-center justify-center gap-2">
+          <i class="fas fa-user-circle"></i> <%= profileuser.name || 'No name set' %>
+        </h2>
+        <p class="text-gray-300 italic mb-2">
+          <%= profileuser.bio && profileuser.bio.trim() !== '' ? profileuser.bio : 'No bio added yet.' %>
+        </p>
+      </div>
+      <div class="text-left text-gray-200 space-y-2 mb-6">
+        <p><i class="fas fa-venus-mars text-pink-400 mr-2"></i> <strong>Gender:</strong> <%= profileuser.gender || 'Not specified' %></p>
+        <p><i class="fas fa-birthday-cake text-pink-400 mr-2"></i> <strong>Age:</strong> <%= profileuser.age ? profileuser.age : 'Not specified' %></p>
+        <p><i class="fas fa-heart text-pink-400 mr-2"></i> <strong>Interests:</strong> <%= Array.isArray(profileuser.interests) && profileuser.interests.length > 0 ? profileuser.interests.join(', ') : 'Not specified' %></p>
+        <p><i class="fas fa-map-marker-alt text-pink-400 mr-2"></i> <strong>Location:</strong> <%= profileuser.location || 'Not specified' %></p>
+        <p><i class="fas fa-envelope text-pink-400 mr-2"></i> <strong>Email:</strong> <%= profileuser.email || 'Not specified' %></p>
+      </div>
+      <% if (!profileuser.name && !profileuser.bio && (!Array.isArray(profileuser.interests) || profileuser.interests.length === 0) && !profileuser.gender && !profileuser.age && !profileuser.location) { %>
+        <div class="bg-yellow-100 text-yellow-800 rounded-lg px-4 py-3 mb-4 text-center">
+          Your profile is incomplete. <a href="/profile/edit" class="text-pink-500 underline font-semibold">Add your details</a> to get the best experience!
+        </div>
+      <% } %>
+      <a href="/profile/edit" class="mt-6 inline-block bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg transition">Edit Profile</a>
+    </div>
   </div>
 
-
-      <!-- Edit Profile Button -->
-      <a href="/profile/edit" 
-         class="mt-6 inline-block bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-full">
-         Edit Profile
-      </a>
-    </div>
+  <div class="mt-10 text-center text-sm text-gray-400">
+    <i class="fas fa-heart text-pink-400"></i> © <script>document.write(new Date().getFullYear())</script> SoulSwipe. All rights reserved.
   </div>
 
 </body>

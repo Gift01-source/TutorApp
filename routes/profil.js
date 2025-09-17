@@ -14,7 +14,7 @@ router.get('/profile1', async (req, res) => {
   return res.render('dashboard', { users: [] });
     }
 
-    res.render('profile1');
+  res.render('profile1', { profileuser: user });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -33,7 +33,7 @@ router.get('edit',async(req,res)=>{
         interests:interests.split(',').map(i=>i.trim()),
         profilePicture
     });
-   res.render('profile');
+   res.render('profile1', { profileuser: user });
 });
 
 module.exports=router;
