@@ -67,12 +67,21 @@
       <% users.forEach(user => { %>
         <div class="min-w-[320px] max-w-xs bg-gray-800 rounded-2xl shadow-lg text-center card-hover relative overflow-hidden snap-center flex-shrink-0 flex flex-col" style="height: 480px;">
           <div class="relative w-full h-2/3">
-            <!-- Swipeable photos -->
+            <!-- User image gallery -->
             <div class="flex overflow-x-auto snap-x snap-mandatory h-full" id="photos-<%= user._id %>">
-              <% (user.photos || [user.photo || 'default.jpg']).forEach(function(photo) { %>
+              <% 
+                let images = [];
+                if (Array.isArray(user.profileImage) && user.profileImage.length > 0) {
+                  images = user.profileImage;
+                } else if (typeof user.profileImage === 'string' && user.profileImage.trim() !== '') {
+                  images = [user.profileImage];
+                } else {
+                  images = ['/uploads/default.jpg'];
+                }
+                images.forEach(function(photo) { 
+              %>
                 <div class="relative w-full h-full snap-center flex-shrink-0">
-                  <img src="src="<%= typeof user.profileImage === 'string' && user.profileImage.trim() !== '' ? user.profileImage : '/public/uploads/default.jpg' %>" class="absolute inset-0 w-full h-full object-cover" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;" />
-
+                  <img src="<%= photo.startsWith('/') ? photo : '/uploads/' + photo %>" class="absolute inset-0 w-full h-full object-cover" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;" />
                   <% if (user.online) { %>
                     <span class="absolute top-3 right-3 w-4 h-4 bg-green-400 border-2 border-white rounded-full z-20"></span>
                   <% } %>
@@ -86,10 +95,10 @@
               <h2 class="text-xl font-bold text-pink-300"><%= user.name %></h2>
               <p class="text-sm text-gray-300 mt-1 italic"><%= user.bio %></p>
               <div class="mt-2 text-sm text-gray-200 space-y-1">
-                <p><strong></strong> <%= user.gender %></p>
-                <p><strong></strong> <%= user.age %></p>
-                <p><strong></strong> <%= user.interests %></p>
-                <p><strong></strong> <%= user.location %> km</p>
+                <p><strong>Gender:</strong> <%= user.gender %></p>
+                <p><strong>Age:</strong> <%= user.age %></p>
+                <p><strong>Interests:</strong> <%= Array.isArray(user.interests) ? user.interests.join(', ') : user.interests %></p>
+                <p><strong>Location:</strong> <%= user.location ? user.location : 'Not specified' %></p>
               </div>
             </div>
             <div class="flex justify-center gap-3 mt-4">
