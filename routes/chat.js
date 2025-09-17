@@ -23,9 +23,14 @@ async function isLoggedIn(req, res, next) {
 }
 
 // Get chat page with a specific user
+const mongoose = require('mongoose');
 router.get('/:otherUserId', isLoggedIn, async (req, res) => {
+  const { otherUserId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(otherUserId)) {
+    return res.status(400).send('Invalid user ID');
+  }
   try {
-    const otherUser = await User.findById(req.params.otherUserId);
+    const otherUser = await User.findById(otherUserId);
     if (!otherUser) return res.status(404).send('User not found');
 
     const currentUser = req.user;  // full user object from middleware

@@ -1,9 +1,56 @@
-<h1>My Matches</h1>
-<ul>
-  <% matches.forEach(match => { %>
-    <li>
-      <img src="<%= match.profilePicture || '/default.jpg' %>" width="80">
-      <%= match.name %> - <a href="/chat/<%= match._id %>">Chat</a>
-    </li>
-  <% }) %>
-</ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Matches</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    .card-hover {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-purple-900 via-gray-900 to-black text-white min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-purple-600 p-4 flex justify-between items-center shadow-lg">
+    <div class="text-2xl font-extrabold tracking-wider">Matches</div>
+    <a href="/dashboard" class="text-yellow-300 hover:text-white font-semibold">Dashboard</a>
+  </nav>
+
+  <div class="max-w-4xl mx-auto p-6">
+    <h1 class="text-3xl mb-6 font-bold text-pink-300">Your Matches</h1>
+    <% if (matches.length === 0) { %>
+      <p class="text-center text-gray-400">No matches yet. Keep swiping!</p>
+    <% } %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <% matches.forEach(match => { %>
+        <div class="bg-gray-800 rounded-2xl shadow-lg card-hover flex flex-col items-center p-5">
+          <div class="relative w-28 h-28 mb-3">
+            <img src="<%= (match.profileImage && match.profileImage !== '' ? (Array.isArray(match.profileImage) ? (match.profileImage[0] || '/uploads/default.jpg') : match.profileImage) : '/uploads/default.jpg') %>" alt="<%= match.name %>" class="w-28 h-28 rounded-full object-cover border-2 border-pink-300" />
+            <% if (match.online) { %>
+              <span class="absolute bottom-2 right-2 w-4 h-4 bg-green-400 border-2 border-white rounded-full"></span>
+            <% } %>
+          </div>
+          <h2 class="text-xl font-bold text-pink-200 mb-1"><%= match.name %></h2>
+          <p class="text-sm text-gray-300 italic mb-2"><%= match.bio %></p>
+          <div class="text-sm text-gray-200 mb-2">
+            <p><strong>Gender:</strong> <%= match.gender %></p>
+            <p><strong>Age:</strong> <%= match.age %></p>
+            <p><strong>Interests:</strong> <%= Array.isArray(match.interests) ? match.interests.join(', ') : match.interests %></p>
+            <p><strong>Location:</strong> <%= match.location ? match.location : 'Not specified' %></p>
+          </div>
+          <a href="/chat/<%= match._id %>" class="bg-pink-500 text-white px-4 py-2 rounded-full font-semibold hover:bg-pink-400 transition mt-auto">Chat</a>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -6,67 +6,79 @@
   <title>Privacy Policy - PaKoNa</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-b from-pink-50 via-white to-pink-50 text-gray-800">
+<body class="bg-gradient-to-b from-purple-900 via-gray-900 to-black text-white min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-purple-600 p-4 flex justify-between items-center shadow-lg">
+    <div class="text-2xl font-extrabold tracking-wider">Privacy Policy</div>
+    <a href="/dashboard" class="text-yellow-300 hover:text-white font-semibold">Dashboard</a>
+  </nav>
 
   <!-- Container -->
   <div class="max-w-3xl mx-auto px-6 py-12">
     
     <!-- Header -->
     <div class="text-center mb-10">
-      <h1 class="text-4xl font-extrabold text-pink-600">Privacy Policy</h1>
-      <p class="text-gray-500 mt-2">Effective Date: <%= new Date().toLocaleDateString() %></p>
-      <div class="mt-4 border-b border-gray-200"></div>
+      <h1 class="text-4xl font-extrabold text-pink-300 flex items-center justify-center gap-2">
+        <i class="fas fa-user-shield text-pink-400"></i> Privacy Policy
+      </h1>
+      <p class="text-gray-300 mt-2">Effective Date: <%= new Date().toLocaleDateString() %></p>
+      <div class="mt-4 border-b border-gray-700"></div>
     </div>
 
     <!-- Intro -->
-    <p class="mb-6 text-lg leading-relaxed">
-      At <span class="font-semibold text-pink-600">PaKoNa</span>, we value your privacy and are committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you use our services.
+    <p class="mb-6 text-lg leading-relaxed text-gray-200">
+      At <span class="font-semibold text-pink-400">PaKoNa</span>, your privacy is our top priority. This Privacy Policy explains how we collect, use, and safeguard your information when you use our services.
     </p>
 
     <!-- Section 1 -->
-    <h2 class="text-2xl font-semibold text-pink-500 mt-8 mb-3">1. Information We Collect</h2>
-    <ul class="list-disc list-inside space-y-1 pl-2 text-gray-700">
-      <li>Account information: name, email, password , profile info</li>
-      <li>Messages and interactions with other users</li>
-      <li>Usage data, such as logins and swipes</li>
+    <h2 class="text-2xl font-semibold text-pink-400 mt-8 mb-3 flex items-center gap-2"><i class="fas fa-database"></i> 1. Information We Collect</h2>
+    <ul class="list-disc list-inside space-y-1 pl-2 text-gray-300">
+      <li><strong>Account info:</strong> name, email, password, profile details</li>
+      <li><strong>Profile content:</strong> photos, bio, interests, preferences</li>
+      <li><strong>Messages:</strong> chats and interactions with other users</li>
+      <li><strong>Usage data:</strong> logins, swipes, matches, and app activity</li>
+      <li><strong>Device info:</strong> browser, device type, IP address</li>
     </ul>
 
     <!-- Section 2 -->
-    <h2 class="text-2xl font-semibold text-pink-500 mt-8 mb-3">2. How We Use Your Information</h2>
-    <ul class="list-disc list-inside space-y-1 pl-2 text-gray-700">
-      <li>To provide matching and messaging functionality</li>
-      <li>To improve our service and user experience</li>
+    <h2 class="text-2xl font-semibold text-pink-400 mt-8 mb-3 flex items-center gap-2"><i class="fas fa-cogs"></i> 2. How We Use Your Information</h2>
+    <ul class="list-disc list-inside space-y-1 pl-2 text-gray-300">
+      <li>To provide matching, messaging, and premium features</li>
+      <li>To personalize your experience and show relevant profiles</li>
+      <li>To improve our service and develop new features</li>
       <li>To enforce our terms and community guidelines</li>
+      <li>To communicate important updates and offers</li>
     </ul>
 
     <!-- Section 3 -->
-    <h2 class="text-2xl font-semibold text-pink-500 mt-8 mb-3">3. Sharing Your Data</h2>
-    <p class="mb-4 leading-relaxed">
-      We do not sell or rent your data. We may share it with trusted service providers for essential operations (e.g., cloud hosting) or if required by law.
+    <h2 class="text-2xl font-semibold text-pink-400 mt-8 mb-3 flex items-center gap-2"><i class="fas fa-share-alt"></i> 3. Sharing Your Data</h2>
+    <p class="mb-4 leading-relaxed text-gray-200">
+      We <span class="font-bold text-pink-300">never sell or rent</span> your data. We may share it with trusted service providers for essential operations (e.g., cloud hosting, analytics) or if required by law.
     </p>
 
     <!-- Section 4 -->
-    <h2 class="text-2xl font-semibold text-pink-500 mt-8 mb-3">4. Data Security</h2>
-    <p class="mb-4 leading-relaxed">
-      We use encryption, secure databases, and access controls to protect your information. However, no online service can guarantee complete security.
+    <h2 class="text-2xl font-semibold text-pink-400 mt-8 mb-3 flex items-center gap-2"><i class="fas fa-lock"></i> 4. Data Security</h2>
+    <p class="mb-4 leading-relaxed text-gray-200">
+      We use encryption, secure databases, and strict access controls to protect your information. However, no online service can guarantee complete security.
     </p>
 
     <!-- Section 5 -->
-    <h2 class="text-2xl font-semibold text-pink-500 mt-8 mb-3">5. Your Rights</h2>
-    <p class="mb-4 leading-relaxed">
+    <h2 class="text-2xl font-semibold text-pink-400 mt-8 mb-3 flex items-center gap-2"><i class="fas fa-user-cog"></i> 5. Your Rights</h2>
+    <p class="mb-4 leading-relaxed text-gray-200">
       You can request to delete or update your data by contacting our support team at 
-      <a href="mailto: pakonaMeet@gmail.com" class="text-pink-600 font-medium hover:underline">pakonaMeet@gmail.com</a>.
+      <a href="mailto:pakonaMeet@gmail.com" class="text-pink-300 font-medium hover:underline">pakonaMeet@gmail.com</a>.
     </p>
 
     <!-- Section 6 -->
-    <h2 class="text-2xl font-semibold text-pink-500 mt-8 mb-3">6. Changes to This Policy</h2>
-    <p class="mb-6 leading-relaxed">
+    <h2 class="text-2xl font-semibold text-pink-400 mt-8 mb-3 flex items-center gap-2"><i class="fas fa-sync-alt"></i> 6. Changes to This Policy</h2>
+    <p class="mb-6 leading-relaxed text-gray-200">
       We may update this Privacy Policy from time to time. We’ll notify you of significant changes via your dashboard or email.
     </p>
 
     <!-- Footer -->
-    <div class="mt-10 text-center text-sm text-gray-500">
-      © <%= new Date().getFullYear() %> PaKoNa Meet. All rights reserved.
+    <div class="mt-10 text-center text-sm text-gray-400">
+      <i class="fas fa-heart text-pink-400"></i> © <%= new Date().getFullYear() %> PaKoNa Meet. All rights reserved.
     </div>
 
   </div>

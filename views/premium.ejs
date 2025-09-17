@@ -2,12 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Premium | SoulSwipe</title>
-  <link rel="stylesheet" href="/css/premium.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    .card-hover {
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
+    }
+  </style>
 </head>
-<body>
-  <h2>Go Premium</h2>
-  <p>Get unlimited swipes, see who liked you, and more!</p>
-  <button onclick="window.location.href='/subscribe'">Subscribe Now</button>
+<body class="bg-gradient-to-b from-purple-900 via-gray-900 to-black text-white min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-purple-600 p-4 flex justify-between items-center shadow-lg">
+    <div class="text-2xl font-extrabold tracking-wider">Premium</div>
+    <a href="/dashboard" class="text-yellow-300 hover:text-white font-semibold">Dashboard</a>
+  </nav>
+
+
+  <!-- Container -->
+  <div class="max-w-3xl mx-auto px-6 py-12">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-extrabold text-pink-300 flex items-center justify-center gap-2">
+        <i class="fas fa-crown text-yellow-300"></i> Premium Membership
+      </h1>
+      <p class="text-gray-300 mt-2">Unlock the best of SoulSwipe</p>
+      <div class="mt-4 border-b border-gray-700"></div>
+    </div>
+
+    <p class="mb-6 text-lg leading-relaxed text-gray-200 text-center">
+      Upgrade to <span class="font-semibold text-pink-400">Premium</span> and enjoy exclusive features, more matches, and a VIP experience!
+    </p>
+
+    <h2 class="text-2xl font-semibold text-pink-400 mt-8 mb-3 flex items-center gap-2"><i class="fas fa-gem"></i> Premium Features</h2>
+    <ul class="list-disc list-inside space-y-2 pl-2 text-gray-300 mb-8">
+      <li><i class="fas fa-infinity text-pink-400 mr-2"></i> <strong>Unlimited Swipes</strong> – Never miss a match</li>
+      <li><i class="fas fa-eye text-pink-400 mr-2"></i> <strong>See Who Liked You</strong> – Instantly know your admirers</li>
+      <li><i class="fas fa-bolt text-pink-400 mr-2"></i> <strong>Priority Matching</strong> – Get seen by more people</li>
+      <li><i class="fas fa-star text-pink-400 mr-2"></i> <strong>Premium Badge</strong> – Stand out in the crowd</li>
+      <li><i class="fas fa-user-shield text-pink-400 mr-2"></i> <strong>Enhanced Privacy</strong> – More control over your profile</li>
+      <li><i class="fas fa-rocket text-pink-400 mr-2"></i> <strong>Boosts & Super Likes</strong> – Get noticed faster</li>
+      <li><i class="fas fa-headset text-pink-400 mr-2"></i> <strong>Priority Support</strong> – Get help when you need it</li>
+    </ul>
+
+    <div class="flex justify-center">
+      <button onclick="window.location.href='/subscribe'" class="bg-pink-500 hover:bg-pink-400 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transition flex items-center gap-2 justify-center mx-auto">
+        <i class="fas fa-gem"></i> Subscribe Now
+      </button>
+    </div>
+
+    <p class="mt-8 text-gray-400 text-sm flex items-center justify-center gap-2">
+      <i class="fas fa-lock"></i> 100% secure payment & cancel anytime
+    </p>
+
+    <div class="mt-10 text-center text-sm text-gray-400">
+      <i class="fas fa-heart text-pink-400"></i> © <script>document.write(new Date().getFullYear())</script> SoulSwipe. All rights reserved.
+    </div>
+  </div>
+
 </body>
 </html>

@@ -6,12 +6,12 @@ const User = require('../models/User');
 router.get('/', async (req, res) => {
   try {
     if (!req.session.userId) {
-      return res.render('dashboard');
+      return res.render('dashboard', { users: [] });
     }
 
     const user = await User.findById(req.session.userId);
     if (!user) {
-      return res.render('dashboard');
+      return res.render('dashboard', { users: [] });
     }
 
     // Parse location as number (assuming it's stored as a string of km)
@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
       return a.distance - b.distance;
     });
 
-    res.render('matches', { matches: candidates });
+  res.render('matches', { matches: candidates });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');

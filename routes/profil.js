@@ -6,12 +6,12 @@ const User = require('../models/User');
 router.get('/profile1', async (req, res) => {
   try {
     if (!req.session.userId) {
-      return res.render('dashboard');
+  return res.render('dashboard', { users: [] });
     }
 
     const user = await User.findById(req.session.userId);
     if (!user) {
-      return res.render('dashboard');
+  return res.render('dashboard', { users: [] });
     }
 
     res.render('profile1');

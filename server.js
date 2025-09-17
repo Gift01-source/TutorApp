@@ -15,7 +15,7 @@ const messageRouter = require('./routes/messages');
 const {getUserChats}=require('./utils/chatService');
 
 const resetPasswordRoutes = require('./routes/reset-password');
-const chatRoutes = require('./routes/chatList');
+// Removed unused chatRoutes variable
 const profileRoutes = require('./routes/profile');
 const profilRoutes = require('./routes/profil');
 const likeRoutes = require('./routes/like');
@@ -67,9 +67,12 @@ app.use('/', settingsRoutes);
 app.use('/matches', matchRoutes);
 app.use('/likes', likeRoutes);
 // Place chat list route before /chat/:otherUserId to avoid CastError
-app.use('/chat/list', chatRoutes); // handles /chat/list
-app.use('/chat', require('./routes/chat')); // handles /chat/:otherUserId
+// Removed commented out chatRoutes mounting
+//app.use('/chat', require('./routes/chat')); // handles /chat/:otherUserId
 app.use('/', resetPasswordRoutes);
+
+app.use('/chat/list', require('./routes/chatList'));
+app.use('/chat', require('./routes/chat'));
 //app.use('/',require ('./routes/profilee));
 app.use('/',profileRoutes);
 app.use('/',profilRoutes);
@@ -619,8 +622,11 @@ app.post('/message/:id/delete', async (req, res) => {
 });
 
 app.get('/likes', async (req, res) => {
-    const likes = await getUsersWhoLikedMe(req.session.user._id); // Implement as needed
-    res.render('likes', { likes });
+  if (!req.session.user || !req.session.user._id) {
+    return res.redirect('/login');
+  }
+  const likes = await getUsersWhoLikedMe(req.session.user._id); // Implement as needed
+  res.render('likes', { likes });
 });
 
 /*app.get('/settings',  async (req, res) => {
