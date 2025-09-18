@@ -36,9 +36,9 @@
     .overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(120deg, rgba(236,72,153,0.7) 0%, rgba(139,92,246,0.7) 100%);
+      background: linear-gradient(120deg, rgba(236,72,153,0.45) 0%, rgba(139,92,246,0.45) 100%);
       z-index: 0;
-      opacity: 0.85;
+      opacity: 0.7;
       animation: fadeIn 1.5s;
     }
 
@@ -61,6 +61,10 @@
       flex-direction: column;
       align-items: center;
       animation: slideDown 1.2s;
+      background: rgba(255,255,255,0.85);
+      border-radius: 18px;
+      margin: 32px 16px 0 16px;
+      box-shadow: 0 2px 24px 0 rgba(139,92,246,0.08);
     }
 
     @keyframes slideDown {
@@ -72,22 +76,22 @@
       font-size: 3.2rem;
       font-family: 'Playfair Display', serif;
       letter-spacing: 2px;
-      color: #fff;
-      text-shadow: 0 2px 16px rgba(236,72,153,0.3);
+      color: #ec4899;
+      text-shadow: none;
     }
 
     .header .subheadline {
       font-size: 1.5rem;
       margin-top: 18px;
-      color: #f9fafb;
+      color: #6d28d9;
       font-weight: 500;
-      text-shadow: 0 1px 8px rgba(139,92,246,0.2);
+      text-shadow: none;
     }
 
     .header p {
       font-size: 1.1rem;
       margin-top: 18px;
-      color: #f3f3f3;
+      color: #22223b;
       max-width: 500px;
     }
 
@@ -136,8 +140,7 @@
 
     .features {
       padding: 48px 20px 32px;
-      background: rgba(255, 255, 255, 0.13);
-      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,0.92);
       border-radius: 18px;
       margin: 0 20px;
       display: flex;
@@ -152,7 +155,7 @@
       flex: 1 1 220px;
       min-width: 220px;
       max-width: 300px;
-      background: rgba(255,255,255,0.07);
+      background: rgba(236,72,153,0.07);
       border-radius: 12px;
       padding: 24px 16px;
       box-shadow: 0 1px 8px 0 rgba(236,72,153,0.07);
@@ -160,31 +163,31 @@
     }
     .feature:hover {
       transform: translateY(-6px) scale(1.03);
-      background: rgba(255,255,255,0.18);
+      background: rgba(236,72,153,0.13);
     }
 
     .feature h3 {
       font-size: 1.3rem;
       margin-bottom: 8px;
-      color: #fff;
+      color: #ec4899;
       letter-spacing: 1px;
     }
 
     .feature p {
       font-size: 1rem;
-      color: #e5e5e5;
+      color: #22223b;
     }
 
 
     .testimonials {
       margin: 40px auto 0;
       max-width: 700px;
-      background: rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.95);
       border-radius: 16px;
       padding: 32px 20px 24px;
       box-shadow: 0 2px 16px 0 rgba(236,72,153,0.10);
       text-align: center;
-      color: #fff;
+      color: #22223b;
       position: relative;
       z-index: 1;
     }
@@ -193,6 +196,7 @@
       font-size: 1.1rem;
       margin-bottom: 18px;
       animation: fadeIn 2.5s;
+      color: #22223b;
     }
     .testimonial-author {
       font-weight: bold;
