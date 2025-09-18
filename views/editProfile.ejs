@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-b from-pink-100 via-pink-200 to-pink-300">
+  <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md text-center">
+    <h1 class="text-2xl font-bold text-pink-600 mb-4">Edit Profile</h1>
+    <form action="/profile1/edit" method="POST" enctype="multipart/form-data" class="space-y-4 text-left">
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="mb-4 text-red-600 bg-red-100 rounded p-2"><%= error %></div>
+      <% } %>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="name">Name</label>
+        <input type="text" name="name" id="name" value="<%= user.name %>" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="age">Age</label>
+        <input type="number" name="age" id="age" value="<%= user.age %>" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="gender">Gender</label>
+        <input type="text" name="gender" id="gender" value="<%= user.gender %>" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="bio">Bio</label>
+        <textarea name="bio" id="bio" rows="3" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none"><%= user.bio %></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="interests">Interests (comma separated)</label>
+        <input type="text" name="interests" id="interests" value="<%= Array.isArray(user.interests) ? user.interests.join(', ') : user.interests %>" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="hobbies">Hobbies (comma separated)</label>
+        <input type="text" name="hobbies" id="hobbies" value="<%= Array.isArray(user.hobbies) ? user.hobbies.join(', ') : user.hobbies %>" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="religion">Religion</label>
+        <input type="text" name="religion" id="religion" value="<%= user.religion %>" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="preferredGender">Preferred Gender</label>
+        <input type="text" name="preferredGender" id="preferredGender" value="<%= user.preferredGender %>" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="location">Location</label>
+        <input type="text" name="location" id="location" value="<%= user.location %>" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="phone">Phone</label>
+        <input type="text" name="phone" id="phone" value="<%= user.phone %>" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1" for="profilePicture">Profile Picture</label>
+        <input type="file" name="profilePicture" id="profilePicture" class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-400 focus:outline-none" />
+      </div>
+      <button type="submit" class="w-full bg-pink-500 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-pink-600 transition">Save Changes</button>
+    </form>
+    <a href="/profile1" class="block mt-4 text-pink-500 hover:text-pink-700">Back to Profile</a>
+  </div>
+</body>
+</html>

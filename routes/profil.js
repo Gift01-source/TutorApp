@@ -26,19 +26,50 @@ router.get('/profile1', async (req, res) => {
   }
 });
 
-router.get('edit',async(req,res)=>{
-    const user=await User.findById(req.session.userId);
-   res.render('editProfile',{user});
+const multer = require('multer');
+const path = require('path');
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, path.join(__dirname, '../public/uploads')),
+    filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+  })
 });
 
-router.get('edit',async(req,res)=>{
-    const {name,age,gender,bio,interests,profilePicture}=req.body;
-    await User.findByIdAndUpdate(req.session.userId,{
-        name,age,gender,bio,
-        interests:interests.split(',').map(i=>i.trim()),
-        profilePicture
-    });
-   res.render('profile1', { profileuser: user });
+// GET edit profile form
+router.get('/profile1/edit', async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  const user = await User.findById(req.session.userId);
+  res.render('editProfile', { user });
+});
+
+// POST edit profile
+router.post('/profile1/edit', upload.single('profilePicture'), async (req, res) => {
+  try {
+    if (!req.session.userId) return res.redirect('/login');
+    const { name, age, gender, bio, interests, hobbies, religion, preferredGender, location, phone } = req.body;
+    const update = {
+      name,
+      age,
+      gender,
+      bio,
+      interests: interests ? interests.split(',').map(i => i.trim()) : [],
+      hobbies: hobbies ? hobbies.split(',').map(h => h.trim()) : [],
+      religion,
+      preferredGender,
+      location,
+      phone
+    };
+    if (req.file) {
+      update.image = '/uploads/' + req.file.filename;
+    }
+    await User.findByIdAndUpdate(req.session.userId, update);
+    const user = await User.findById(req.session.userId);
+    res.render('profile1', { profileuser: user });
+  } catch (err) {
+  console.error('Edit profile error:', err);
+  const user = await User.findById(req.session.userId);
+  res.render('editProfile', { user, error: 'Server error: ' + err.message });
+  }
 });
 
 module.exports=router;

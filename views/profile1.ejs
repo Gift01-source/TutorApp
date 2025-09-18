@@ -28,7 +28,7 @@
     <div class="bg-gray-800 rounded-2xl shadow-lg card-hover p-10 max-w-md w-full text-center">
       <div class="flex flex-col items-center mb-6">
         <div class="relative w-32 h-32 mb-3">
-          <img src="<%= (profileuser.profileImage && profileuser.profileImage !== '' ? (Array.isArray(profileuser.profileImage) ? (profileuser.profileImage[0] || '/uploads/default.jpg') : profileuser.profileImage) : '/uploads/default.jpg') %>" alt="<%= profileuser.name %>" class="w-32 h-32 rounded-full object-cover border-4 border-pink-400" />
+          <img src="<%= profileuser.image && profileuser.image !== '' ? profileuser.image : '/uploads/default.jpg' %>" alt="<%= profileuser.name %>" class="w-32 h-32 rounded-full object-cover border-4 border-pink-400" />
         </div>
         <h2 class="text-2xl font-bold text-pink-300 mb-1 flex items-center justify-center gap-2">
           <i class="fas fa-user-circle"></i> <%= profileuser.name || 'No name set' %>
@@ -41,8 +41,14 @@
         <p><i class="fas fa-venus-mars text-pink-400 mr-2"></i> <strong>Gender:</strong> <%= profileuser.gender || 'Not specified' %></p>
         <p><i class="fas fa-birthday-cake text-pink-400 mr-2"></i> <strong>Age:</strong> <%= profileuser.age ? profileuser.age : 'Not specified' %></p>
         <p><i class="fas fa-heart text-pink-400 mr-2"></i> <strong>Interests:</strong> <%= Array.isArray(profileuser.interests) && profileuser.interests.length > 0 ? profileuser.interests.join(', ') : 'Not specified' %></p>
+        <p><i class="fas fa-star text-pink-400 mr-2"></i> <strong>Hobbies:</strong> <%= Array.isArray(profileuser.hobbies) && profileuser.hobbies.length > 0 ? profileuser.hobbies.join(', ') : 'Not specified' %></p>
+        <p><i class="fas fa-praying-hands text-pink-400 mr-2"></i> <strong>Religion:</strong> <%= profileuser.religion || 'Not specified' %></p>
+        <p><i class="fas fa-venus-mars text-pink-400 mr-2"></i> <strong>Preferred Gender:</strong> <%= profileuser.preferredGender || 'Not specified' %></p>
         <p><i class="fas fa-map-marker-alt text-pink-400 mr-2"></i> <strong>Location:</strong> <%= profileuser.location || 'Not specified' %></p>
+        <p><i class="fas fa-phone text-pink-400 mr-2"></i> <strong>Phone:</strong> <%= profileuser.phone || 'Not specified' %></p>
         <p><i class="fas fa-envelope text-pink-400 mr-2"></i> <strong>Email:</strong> <%= profileuser.email || 'Not specified' %></p>
+        <p><i class="fas fa-check-circle text-pink-400 mr-2"></i> <strong>Verified:</strong> <%= profileuser.isVerified ? 'Yes' : 'No' %></p>
+        <p><i class="fas fa-crown text-pink-400 mr-2"></i> <strong>Premium:</strong> <%= profileuser.isPremium ? 'Yes' : 'No' %></p>
       </div>
       <% if (!profileuser.name && !profileuser.bio && (!Array.isArray(profileuser.interests) || profileuser.interests.length === 0) && !profileuser.gender && !profileuser.age && !profileuser.location) { %>
         <div class="bg-yellow-100 text-yellow-800 rounded-lg px-4 py-3 mb-4 text-center">
