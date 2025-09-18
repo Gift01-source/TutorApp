@@ -69,7 +69,6 @@ router.post('/register-step1', async (req, res) => {
     const user=new User({
       email,
       phone:formattedPhone,
-      password,
       passwordHash,
       isVerified:false,
       verificationCode:code,
@@ -77,12 +76,11 @@ router.post('/register-step1', async (req, res) => {
     });
        
 
-    req.session.registrationData={
-        email,
-        password,
-        passwordHash,
-        isVerified: false,
-    };
+  req.session.registrationData={
+    email,
+    passwordHash,
+    isVerified: false,
+  };
 
     /* user = new User({
       email,
@@ -269,9 +267,13 @@ router.post('/register-step5', async (req, res) => {
   if (!req.session.userId) return res.redirect('/register-step1');
   try {
     const { preferredGender, name } = req.body;
-    await User.findByIdAndUpdate(req.session.userId, { preferredGender, name });
-    // registration complete
-    res.render('dashboard',{user});
+  await User.findByIdAndUpdate(req.session.userId, { preferredGender, name });
+  // registration complete
+  // Fetch user with latest data (including image)
+  const user = await User.findById(req.session.userId);
+  // Fetch all other users to show on dashboard
+  const users = await User.find({ _id: { $ne: req.session.userId } });
+  res.render('dashboard', { user, users });
   } catch (err) {
     console.error('Step5 error:', err);
     res.render('register-step5', { error: 'Could not save preferences' });

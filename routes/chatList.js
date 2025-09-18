@@ -5,7 +5,7 @@ const User = require('../models/User');
 const Message = require('../models/Message');
 
 function requireLogin(req, res, next) {
-  if (!req.session.user) {
+  if (!req.session.userId) {
     return res.redirect('/login');
   }
   next();
@@ -13,10 +13,7 @@ function requireLogin(req, res, next) {
 
 router.get('/', requireLogin, async (req, res) => {
   try {
-    let userId = req.session.user;
-    if (typeof userId === 'object' && userId !== null && userId._id) {
-      userId = userId._id;
-    }
+    const userId = req.session.userId;
     if (!userId) {
       return res.status(400).send('User ID not found in session');
     }

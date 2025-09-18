@@ -5,9 +5,9 @@ const User = require('../models/User');
 const Message = require('../models/Message');
 
 async function isLoggedIn(req, res, next) {
-  if (req.session && req.session.user) {
+  if (req.session && req.session.userId) {
     try {
-      const user = await User.findById(req.session.user);
+      const user = await User.findById(req.session.userId);
       if (!user) {
         return res.redirect('/login');
       }
@@ -93,22 +93,22 @@ const upload = multer({ storage });
 // GET message thread page (renders chat.ejs)
 router.get('/:id', async (req, res) => {
   try {
-    if (!req.session || !req.session.user) return res.redirect('/login');
+  if (!req.session || !req.session.userId) return res.redirect('/login');
     const otherUserId = req.params.id;
     const otherUser = await User.findById(otherUserId);
     if (!otherUser) return res.status(404).send('User not found');
 
     const messages = await Message.find({
       $or: [
-        { sender: req.session.user._id, receiver: otherUserId },
-        { sender: otherUserId, receiver: req.session.user._id }
+  { sender: req.session.userId, receiver: otherUserId },
+  { sender: otherUserId, receiver: req.session.userId }
       ]
     }).sort({ createdAt: 1 });
 
     res.render('chat', {
       otherUser,
       messages,
-      currentUser: req.session.user
+  currentUser: req.user
     });
   } catch (err) {
     console.error('Load thread error:', err);
@@ -119,7 +119,7 @@ router.get('/:id', async (req, res) => {
 // POST send message (text or image)
 router.post('/:id', upload.single('image'), async (req, res) => {
   try {
-    if (!req.session || !req.session.user) return res.redirect('/login');
+  if (!req.session || !req.session.userId) return res.redirect('/login');
     const receiverId = req.params.id;
     const content = req.body.content?.trim() || null;
     const imagePath = req.file ? '/uploads/${req.file.filename}' : null;
@@ -129,7 +129,7 @@ router.post('/:id', upload.single('image'), async (req, res) => {
     }
 
     await Message.create({
-      sender: req.session.user._id,
+  sender: req.session.userId,
       receiver: receiverId,
       content,
       image: imagePath
@@ -144,7 +144,7 @@ router.post('/:id', upload.single('image'), async (req, res) => {
 });
 
 router.post('/chat/:otherUserId', async (req, res) => {
-  const senderId = req.session.user._id;
+  const senderId = req.session.userId;
   const receiverId = req.params.otherUserId;
   const content = req.body.content;
 

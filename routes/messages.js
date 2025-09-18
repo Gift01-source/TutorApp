@@ -16,7 +16,7 @@ const upload = multer({ storage });
 // GET message thread page (renders chat.ejs)
 router.get('/:id', async (req, res) => {
   try {
-    if (!req.session || !req.session.user) return res.redirect('/login');
+  if (!req.session || !req.session.userId) return res.redirect('/login');
     const otherUserId = req.params.id;
     const otherUser = await User.findById(otherUserId);
     if (!otherUser) return res.status(404).send('User not found');
@@ -42,7 +42,7 @@ router.get('/:id', async (req, res) => {
 // POST send message (text or image)
 router.post('/:id', upload.single('image'), async (req, res) => {
   try {
-    if (!req.session || !req.session.user) return res.redirect('/login');
+  if (!req.session || !req.session.userId) return res.redirect('/login');
     const receiverId = req.params.id;
     const content = req.body.content?.trim() || null;
     const imagePath = req.file ? '/uploads/${req.file.filename}' : null;

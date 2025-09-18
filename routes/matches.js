@@ -6,12 +6,12 @@ const User = require('../models/User');
 router.get('/', async (req, res) => {
   try {
     if (!req.session.userId) {
-      return res.render('dashboard', { users: [] });
+  return res.render('dashboard', { user: null, users: [] });
     }
 
     const user = await User.findById(req.session.userId);
     if (!user) {
-      return res.render('dashboard', { users: [] });
+  return res.render('dashboard', { user: null, users: [] });
     }
 
     // Parse location as number (assuming it's stored as a string of km)

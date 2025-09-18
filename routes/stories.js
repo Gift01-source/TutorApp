@@ -2,12 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Story = require('../models/Story');
 const User = require('../models/User');
-const isLoggedIn = (req, res, next) => req.session.user ? next() : res.redirect('/login');
+const isLoggedIn = (req, res, next) => req.session.userId ? next() : res.redirect('/login');
 
 // GET all stories
 router.get('/', async (req, res) => {
   const stories = await Story.find().sort({ createdAt: -1 });
-  res.render('stories', { stories, error: null, success: null, user: req.session.user });
+  res.render('stories', { stories, error: null, success: null, user: req.session.userId });
 });
 
 // POST new story
@@ -16,8 +16,8 @@ router.post('/', isLoggedIn, async (req, res) => {
   await Story.create({
     title,
     content,
-    author: req.session.user._id,
-    authorName: req.session.user.name
+  author: req.session.userId,
+  authorName: req.session.userId // You may want to fetch the user object if needed
   });
   res.redirect('/stories');
 });

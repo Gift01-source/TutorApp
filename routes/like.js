@@ -3,7 +3,7 @@ const router = express.Router();
 const Like = require('../models/Like'); // Or however you're handling likes
 
 router.post('/like/:id', async (req, res) => {
-  const currentUserId = req.session.user;
+  const currentUserId = req.session.userId;
   const likedUserId = req.params.id;
 
   if (!currentUserId) {

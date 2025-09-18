@@ -1,3 +1,4 @@
+// ...existing code...
 const express = require('express');
 const http = require('http');
 const {Server} = require('socket.io');
@@ -27,6 +28,8 @@ const app = express();
 const PORT = 3000;
 const server = http.createServer(app);
 const io=socketIO(server);
+
+// ...existing code...
 //const io = new Server(server);
 
 //const io = new Server(server);
@@ -56,6 +59,10 @@ app.use(session({
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Login route (must be after body-parser)
+const loginRoutes = require('./routes/login');
+app.use('/', loginRoutes);
 app.set("view engine", "ejs");
 app.set('views',path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -74,8 +81,8 @@ app.use('/', resetPasswordRoutes);
 app.use('/chat/list', require('./routes/chatList'));
 app.use('/chat', require('./routes/chat'));
 //app.use('/',require ('./routes/profilee));
-app.use('/',profileRoutes);
 app.use('/',profilRoutes);
+app.use('/',profileRoutes);
 app.use('/stories', require('./routes/stories'));
 app.use('/notifications', require('./routes/notifications'));
 
