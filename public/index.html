@@ -20,8 +20,9 @@
       font-family: 'Inter', sans-serif;
     }
 
+
     .landing-container {
-      background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1470&q=80');
+      background-image: linear-gradient(120deg, rgba(236,72,153,0.7) 0%, rgba(139,92,246,0.7) 100%), url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1470&q=80');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -35,8 +36,15 @@
     .overlay {
       position: absolute;
       inset: 0;
-      background-color: rgba(0, 0, 0, 0.6);
+      background: linear-gradient(120deg, rgba(236,72,153,0.7) 0%, rgba(139,92,246,0.7) 100%);
       z-index: 0;
+      opacity: 0.85;
+      animation: fadeIn 1.5s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 0.85; }
     }
 
     .header, .features, .footer {
@@ -46,27 +54,51 @@
       color: #fff;
     }
 
+
     .header {
-      padding: 80px 20px 40px;
+      padding: 100px 20px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: slideDown 1.2s;
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .header h1 {
-      font-size: 3rem;
+      font-size: 3.2rem;
       font-family: 'Playfair Display', serif;
+      letter-spacing: 2px;
+      color: #fff;
+      text-shadow: 0 2px 16px rgba(236,72,153,0.3);
+    }
+
+    .header .subheadline {
+      font-size: 1.5rem;
+      margin-top: 18px;
+      color: #f9fafb;
+      font-weight: 500;
+      text-shadow: 0 1px 8px rgba(139,92,246,0.2);
     }
 
     .header p {
-      font-size: 1.25rem;
-      margin-top: 10px;
+      font-size: 1.1rem;
+      margin-top: 18px;
       color: #f3f3f3;
+      max-width: 500px;
     }
 
+
     .buttons {
-      margin-top: 30px;
+      margin-top: 38px;
       display: flex;
       justify-content: center;
-      gap: 1rem;
+      gap: 1.2rem;
       flex-wrap: wrap;
+      animation: fadeIn 2s;
     }
 
     .btn {
@@ -80,13 +112,16 @@
       transition: background 0.3s ease;
     }
 
+
     .btn.primary {
-      background-color: #ec4899;
+      background: linear-gradient(90deg, #ec4899 0%, #8b5cf6 100%);
       color: white;
+      box-shadow: 0 4px 24px 0 rgba(236,72,153,0.15);
     }
 
     .btn.primary:hover {
-      background-color: #db2777;
+      background: linear-gradient(90deg, #db2777 0%, #7c3aed 100%);
+      transform: scale(1.05);
     }
 
     .btn.secondary {
@@ -98,32 +133,78 @@
       background-color: #f3f4f6;
     }
 
+
     .features {
-      padding: 40px 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(6px);
-      border-radius: 12px;
+      padding: 48px 20px 32px;
+      background: rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(8px);
+      border-radius: 18px;
       margin: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      box-shadow: 0 2px 24px 0 rgba(139,92,246,0.08);
     }
 
     .feature {
-      margin-bottom: 20px;
+      margin-bottom: 0;
+      flex: 1 1 220px;
+      min-width: 220px;
+      max-width: 300px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 24px 16px;
+      box-shadow: 0 1px 8px 0 rgba(236,72,153,0.07);
+      transition: transform 0.2s;
+    }
+    .feature:hover {
+      transform: translateY(-6px) scale(1.03);
+      background: rgba(255,255,255,0.18);
     }
 
     .feature h3 {
-      font-size: 1.2rem;
-      margin-bottom: 5px;
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      color: #fff;
+      letter-spacing: 1px;
     }
 
     .feature p {
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: #e5e5e5;
+    }
+
+
+    .testimonials {
+      margin: 40px auto 0;
+      max-width: 700px;
+      background: rgba(255,255,255,0.10);
+      border-radius: 16px;
+      padding: 32px 20px 24px;
+      box-shadow: 0 2px 16px 0 rgba(236,72,153,0.10);
+      text-align: center;
+      color: #fff;
+      position: relative;
+      z-index: 1;
+    }
+    .testimonial {
+      font-style: italic;
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+      animation: fadeIn 2.5s;
+    }
+    .testimonial-author {
+      font-weight: bold;
+      color: #ec4899;
+      font-size: 1rem;
     }
 
     .footer {
       padding: 20px;
       font-size: 0.9rem;
       background-color: rgba(0, 0, 0, 0.4);
+      letter-spacing: 1px;
     }
 
     .toggle-btn {
@@ -142,13 +223,21 @@
       .header h1 {
         font-size: 2rem;
       }
-
+      .header .subheadline {
+        font-size: 1.1rem;
+      }
       .header p {
         font-size: 1rem;
       }
-
       .btn {
         padding: 10px 20px;
+      }
+      .features {
+        flex-direction: column;
+        gap: 18px;
+      }
+      .testimonials {
+        padding: 18px 8px 12px;
       }
     }
   </style>
@@ -160,28 +249,41 @@
   <div class="landing-container">
     <div class="overlay"></div>
 
+
     <header class="header">
       <h1>PaKoNa Meet</h1>
-      <p>Find your perfect match today 💘</p>
+      <div class="subheadline">Where Real Connections Begin</div>
+      <p>Discover love, friendship, and meaningful relationships. Join thousands who have found their match on PaKoNa. Your story starts here! 💘</p>
       <div class="buttons">
         <a href="/register-step1" class="btn primary">Get Started</a>
         <a href="/login" class="btn secondary">Login</a>
       </div>
     </header>
 
+
     <section class="features">
       <div class="feature">
         <h3>💖 Smart Matching</h3>
-        <p>Your perfect match based on shared interests!</p>
+        <p>Our intelligent algorithm connects you with people who share your interests and values.</p>
       </div>
       <div class="feature">
         <h3>📍 Nearby Connections</h3>
-        <p>Meet people near you instantly.</p>
+        <p>Find and meet amazing people in your area, instantly and safely.</p>
       </div>
       <div class="feature">
         <h3>🔐 Secure & Private</h3>
-        <p>Your safety is our top priority.</p>
+        <p>Your privacy and safety are our top priorities. Enjoy worry-free dating.</p>
       </div>
+      <div class="feature">
+        <h3>🌟 Real Stories</h3>
+        <p>Read success stories from couples who met on PaKoNa and started their journey together.</p>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <div class="testimonial">“I never thought I’d find my soulmate online, but PaKoNa made it possible. We’re getting married next year!”<br><span class="testimonial-author">– Sarah & Mike</span></div>
+      <div class="testimonial">“The matching system is so accurate! I met wonderful friends and even found love.”<br><span class="testimonial-author">– Alex</span></div>
+      <div class="testimonial">“I felt safe and supported every step of the way. Highly recommend!”<br><span class="testimonial-author">– Priya</span></div>
     </section>
 
     <footer class="footer">
