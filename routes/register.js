@@ -1,4 +1,4 @@
-// routes/register.js
+//check this. make sure after step 1 it directs to veriffy // routes/register.js
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -41,7 +41,13 @@ function formatPhoneNumber(number){
 }
 // --- Step 1: show registration form
 router.get('/register-step1', (req, res) => {
-  res.render('register-step1', { error: null, email: '', phone: '' });
+  // Prefill with session or partial user data if available
+  let email = '', phone = '';
+  if (req.session.registrationData) {
+    email = req.session.registrationData.email || '';
+    phone = req.session.registrationData.phone || '';
+  }
+  res.render('register-step1', { error: null, email, phone });
 });
 
 // Step 1: submit email/password (+ optional phone) -> create user (pending) and send code via email and SMS
@@ -54,47 +60,61 @@ router.post('/register-step1', async (req, res) => {
 
   try {
     const existing = await User.findOne({ email });
-    if (existing) return res.render('register-step1', { error: 'Email already registered', email, phone });
+    if (existing) {
+      if (existing.isComplete) {
+        // User is fully registered, block
+        return res.render('register-step1', { error: 'Email already registered', email, phone });
+      } else {
+        // User is incomplete, allow resume: update password if changed, update phone if provided
+        const formattedPhone = phone ? formatPhoneNumber(phone) : existing.phone;
+        const passwordHash = await bcrypt.hash(password, 10);
+        existing.passwordHash = passwordHash;
+        if (phone) existing.phone = formattedPhone;
+        // Generate new code for verification
+        const code = makeCode();
+        const expires = Date.now() + 60 * 60 * 1000;
+        existing.verificationCode = code;
+        existing.codeExpires = expires;
+        await existing.save();
+        req.session.registrationData = {
+          email,
+          passwordHash,
+        };
+        req.session.pendingUserId = existing._id;
+        // Send code via email
+        const mailOptions = {
+          from: `bae23-gchimwaza@gmail.com`,
+          to: email,
+          subject: 'Your PaKoNa Meet verification code',
+          text: `Your code: ${code}`,
+          html:` <p>Your PaKoNa Meet verification code is <strong>${code}</strong></p>`
+        };
+        await transporter.sendMail(mailOptions).catch(err => console.error('Mail send error', err));
+        return res.redirect('/verify-code');
+      }
+    }
 
-   
-     //format phone for tolio
-    const formattedPhone=phone ?
-    formatPhoneNumber(phone):undefined;
-
-    const passwordHash= await bcrypt.hash(password, 10);
+    // No user exists, create new
+    const formattedPhone = phone ? formatPhoneNumber(phone) : undefined;
+    const passwordHash = await bcrypt.hash(password, 10);
     const code = makeCode();
     const expires = Date.now() + 60 * 60 * 1000; // 1 hour
 
-
-    const user=new User({
+    const user = new User({
       email,
-      phone:formattedPhone,
+      phone: formattedPhone,
       passwordHash,
-      isVerified:false,
-      verificationCode:code,
-      codeExpires:expires
-    });
-       
-
-  req.session.registrationData={
-    email,
-    passwordHash,
-    isVerified: false,
-  };
-
-    /* user = new User({
-      email,
-      phone: phone ? phone.trim() : undefined,
-      passwordHash: hash,
       isVerified: false,
       verificationCode: code,
-      codeExpires: expires
-    });*/
-
-    
-    
-
+      codeExpires: expires,
+      isComplete: false
+    });
     await user.save();
+    req.session.registrationData = {
+      email,
+      passwordHash,
+      isVerified: false,
+    };
     req.session.pendingUserId = user._id;
 
     // Send email
@@ -106,9 +126,6 @@ router.post('/register-step1', async (req, res) => {
       html:` <p>Your PaKoNa Meet verification code is <strong>${code}</strong></p>`
     };
     await transporter.sendMail(mailOptions).catch(err => console.error('Mail send error', err));
-
-    // Send SMS if phone provided
-    
 
     res.redirect('/verify-code');
   } catch (err) {
@@ -267,13 +284,13 @@ router.post('/register-step5', async (req, res) => {
   if (!req.session.userId) return res.redirect('/register-step1');
   try {
     const { preferredGender, name } = req.body;
-  await User.findByIdAndUpdate(req.session.userId, { preferredGender, name });
-  // registration complete
-  // Fetch user with latest data (including image)
-  const user = await User.findById(req.session.userId);
-  // Fetch all other users to show on dashboard
-  const users = await User.find({ _id: { $ne: req.session.userId } });
-  res.render('dashboard', { user, users });
+    await User.findByIdAndUpdate(req.session.userId, { preferredGender, name, isComplete: true });
+    // registration complete
+    // Fetch user with latest data (including image)
+    const user = await User.findById(req.session.userId);
+    // Fetch all other users to show on dashboard
+    const users = await User.find({ _id: { $ne: req.session.userId } });
+    res.render('dashboard', { user, users });
   } catch (err) {
     console.error('Step5 error:', err);
     res.render('register-step5', { error: 'Could not save preferences' });

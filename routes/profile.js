@@ -70,7 +70,7 @@ router.post('/report/:id', async (req, res) => {
       reason: req.body.reason,
       details: req.body.details
     });
-    res.send('<div style="max-width:400px;margin:50px auto;padding:20px;border:2px solid #4CAF50;border-radius:8px;background-color:#dff0d8;color:#3c763d;font-family:Arial,sans-serif"><h2>Report Submitted</h2><p>Thank you for helping keep the community safe.</p><a href="/dashboard" style="color:#4CAF50;text-decoration:none;font-weight:bold;">Back to Dashboard</a></div>');
+    res.send('<div style="max-width:400px;margin:50px auto;padding:20px;border:2px solid #4CAF50;border-radius:8px;background-color:#dff0d8;color:#3c763d;font-family:Arial,sans-serif"><h2>Report Submitted</h2><p>Thank you for helping keep the community safe.</p><a href="/dashboard" style="color:#4CAF50;text-decoration:none;font-weight:bold;"></a></div>');
   } catch (err) {
     res.status(500).send('Could not submit report.');
   }

@@ -101,6 +101,12 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+
+  // Registration completion flag
+  isComplete: {
+    type: Boolean,
+    default: false
+  },
   emailNotification: { type: Boolean, default: true },
   pushNotification: { type: Boolean, default: true },
 
