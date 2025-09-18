@@ -142,14 +142,17 @@ app.post('/upload-image',upload.single('image'),async(req,res)=>{
 });
 
 function isLoggedIn(req, res, next) {
-    if (req.session && req.session.user && req.session.user_id) {
-      req.user=req.session.user;
-
-        next();
-    } else {
-        res.render('dashboard');
-    }
-    
+  if (req.session && req.session.user && req.session.user._id) {
+    req.user = req.session.user;
+    return next();
+  }
+  // Not logged in: render dashboard with empty users array and defaults
+  res.render('dashboard', {
+    user: null,
+    users: [],
+    likedBy: [],
+    query: ''
+  });
 }
 
 //routes

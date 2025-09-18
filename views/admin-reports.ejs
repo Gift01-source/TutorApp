@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - User Reports</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center py-10">
+  <div class="bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-3xl text-center">
+    <h1 class="text-2xl font-bold text-pink-300 mb-6">User Reports</h1>
+    <% if (reports.length === 0) { %>
+      <p class="text-gray-400">No reports found.</p>
+    <% } else { %>
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-700">
+            <th class="p-2">Date</th>
+            <th class="p-2">Reported User</th>
+            <th class="p-2">Reporter</th>
+            <th class="p-2">Reason</th>
+            <th class="p-2">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% reports.forEach(report => { %>
+            <tr class="border-b border-gray-700 hover:bg-gray-700">
+              <td class="p-2 text-xs"><%= new Date(report.date).toLocaleString() %></td>
+              <td class="p-2 font-semibold text-pink-400"><%= report.reportedUser ? report.reportedUser.name : 'N/A' %></td>
+              <td class="p-2 text-blue-300"><%= report.reporter ? report.reporter.name : 'N/A' %></td>
+              <td class="p-2"><%= report.reason %></td>
+              <td class="p-2"><%= report.details %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+    <a href="/dashboard" class="block mt-6 text-indigo-400 hover:underline text-sm">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

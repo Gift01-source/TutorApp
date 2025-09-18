@@ -27,7 +27,13 @@ router.post('/login', async (req, res) => {
       return res.render('login', { error: 'Please verify your email before logging in.' });
     }
   req.session.userId = user._id;
-  // Optionally, set req.session.user = user; (not recommended for large objects)
+  req.session.user = {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    image: user.image || '',
+    isPremium: user.isPremium || false
+  };
   // Fetch all other users to show on dashboard
   const users = await User.find({ _id: { $ne: user._id } });
   res.render('dashboard', { user, users });
