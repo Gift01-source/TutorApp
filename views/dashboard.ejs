@@ -56,6 +56,7 @@
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden bg-gray-800 p-4 md:hidden space-y-3 rounded-b-lg shadow-lg">
     <a href="/profile1" class="block hover:text-pink-400">Profile</a>
+    <a href="/likes" class="hover:text-yellow-300 transition">Likes</a>
     <a href="/premium" class="block hover:text-pink-400">Premium</a>
     <a href="/privacy" class="block hover:text-pink-400">Privacy</a>
     <a href="/logout" class="block text-red-400 hover:text-red-300">Logout</a>
@@ -93,7 +94,33 @@
           <div class="flex-1 flex flex-col justify-between px-4 py-3">
             <div>
               <h2 class="text-xl font-bold text-pink-300"><%= user.name %></h2>
+              <div class="flex items-center justify-center gap-2 mt-1">
+                <% if (user.online) { %>
+                  <span class="text-green-400 font-semibold text-xs">Online</span>
+                <% } else { %>
+                  <span class="text-gray-400 font-semibold text-xs">Offline</span>
+                <% } %>
+              </div>
               <p class="text-sm text-gray-300 mt-1 italic"><%= user.bio %></p>
+  <script>
+    // Like button AJAX handler
+    function likeUser(userId, btn) {
+      btn.disabled = true;
+      fetch(`/likes/like/${userId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(res => res.json())
+      .then(data => {
+        btn.innerText = '❤️ Liked';
+        btn.classList.add('bg-pink-700');
+      })
+      .catch(() => {
+        btn.disabled = false;
+        alert('Error sending like.');
+      });
+    }
+  </script>
               <div class="mt-2 text-sm text-gray-200 space-y-1">
                 <p><strong>Gender:</strong> <%= user.gender %></p>
                 <p><strong>Age:</strong> <%= user.age %></p>
