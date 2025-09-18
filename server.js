@@ -1,4 +1,6 @@
 // ...existing code...
+// (Move API route mounting after app is defined)
+// ...existing code...
 const express = require('express');
 const http = require('http');
 const {Server} = require('socket.io');
@@ -28,6 +30,10 @@ const app = express();
 const PORT = 3000;
 const server = http.createServer(app);
 const io=socketIO(server);
+
+// Mount API routes for AJAX calls (location, etc.)
+const apiRoutes = require('./routes/api');
+app.use('/api', apiRoutes);
 
 // ...existing code...
 //const io = new Server(server);
@@ -322,19 +328,71 @@ app.get('/dashboard', isLoggedIn, async (req, res) => {
       return res.redirect('/login');
     }
 
-    // Fetch users and include profileImage
+    // Only match if user has location set
+    const userLocation = loggedInUser.location && loggedInUser.location.coordinates && loggedInUser.location.coordinates.length === 2
+      ? loggedInUser.location.coordinates
+      : null;
+
+    // Build geospatial query if location is available
+    let geoQuery = {};
+    if (userLocation) {
+      geoQuery = {
+        location: {
+          $near: {
+            $geometry: { type: 'Point', coordinates: userLocation },
+            $maxDistance: 50000 // 50km in meters
+          }
+        }
+      };
+    }
+
+    // Filter by shared interests if user has any
+    let interestQuery = {};
+    if (Array.isArray(loggedInUser.interests) && loggedInUser.interests.length > 0) {
+      interestQuery = { interests: { $in: loggedInUser.interests } };
+    }
+
+    // Combine all queries
     const users = await User.find({
       _id: { $ne: req.session.user._id },
-      $or: [{ name: regex }, { email: regex }]
-    }).select('name email profileImage isOnline interests location');
+      $or: [{ name: regex }, { email: regex }],
+      ...geoQuery,
+      ...interestQuery
+    }).select('name email profileImage isOnline interests location city');
+
+    // Calculate distance for each user
+    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+      function deg2rad(deg) { return deg * (Math.PI/180); }
+      const R = 6371; // Radius of the earth in km
+      const dLat = deg2rad(lat2-lat1);
+      const dLon = deg2rad(lon2-lon1);
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    let usersWithDistance = users.map(u => {
+      let distance = null;
+      if (userLocation && u.location && u.location.coordinates && u.location.coordinates.length === 2) {
+        distance = getDistanceFromLatLonInKm(
+          userLocation[1], userLocation[0],
+          u.location.coordinates[1], u.location.coordinates[0]
+        );
+      }
+      return {
+        ...u.toObject(),
+        distance: distance ? distance.toFixed(1) : null
+      };
+    });
 
     // Fetch users who liked the logged-in user
     const likedBy = await User.find({ likes: req.session.user._id }).select('name profileImage');
 
-    // Pass users array to dashboard view
     res.render('dashboard', {
       user: loggedInUser,
-      users,//:users,
+      users: usersWithDistance,
       likedBy: likedBy,
       query: query
     });

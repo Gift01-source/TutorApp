@@ -55,7 +55,21 @@ const userSchema = new mongoose.Schema({
     type: [String],
     default: []
   },
-  location:String,//{type:{type:String},coordinates:[Number]},
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      default: [0, 0]
+    }
+  },
+  city: {
+    type: String,
+    default: ''
+  },
   profileImage:[String],
   isOnline:Boolean,
   //likes:[ObjectId],
@@ -103,7 +117,7 @@ const userSchema = new mongoose.Schema({
   notifications: [notificationSchema]
 });
 
-// Optional geospatial location (commented out, can add later)
- userSchema.index({ location: '2dsphere' });
+// Geospatial index for location
+userSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('User', userSchema);

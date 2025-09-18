@@ -4,8 +4,28 @@
   <title>Edit Profile - <%= profileuser.name %></title>
   <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
-  <h1>Edit Profile</h1>
+  <script src="/js/location.js"></script>
+  <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+      if (navigator.geolocation) {
+        e.preventDefault();
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          fetch('/api/location', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ latitude: lat, longitude: lng })
+          }).finally(() => {
+            e.target.submit();
+          });
+        }, function() {
+          e.target.submit();
+        });
+      }
+    });
+  </script>
+</body>
 
   <form action="/profile/edit" method="POST" enctype="multipart/form-data">
     <label>Name:</label><br />

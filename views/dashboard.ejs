@@ -127,7 +127,17 @@
                 <p><strong>Gender:</strong> <%= user.gender %></p>
                 <p><strong>Age:</strong> <%= user.age %></p>
                 <p><strong>Interests:</strong> <%= Array.isArray(user.interests) ? user.interests.join(', ') : user.interests %></p>
-                <p><strong>Location:</strong> <%= user.location ? user.location : 'Not specified' %></p>
+                <p>
+                  <strong>Location:</strong>
+                  <% if (user.city && user.city.trim() !== '') { %>
+                    <%= user.city %>
+                  <% } else { %>
+                    Not specified
+                  <% } %>
+                  <% if (user.distance) { %>
+                    <span class="ml-2 text-xs text-pink-300">(~<%= user.distance %> km away)</span>
+                  <% } %>
+                </p>
               </div>
             </div>
             <div class="flex justify-center gap-3 mt-4">

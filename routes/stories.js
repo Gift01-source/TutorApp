@@ -24,10 +24,13 @@ router.post('/', isLoggedIn, async (req, res) => {
 
 // POST comment
 router.post('/:id/comment', isLoggedIn, async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  const user = await User.findById(req.session.userId);
   const story = await Story.findById(req.params.id);
+  if (!user || !story) return res.redirect('/stories');
   story.comments.push({
-    author: req.session.user._id,
-    authorName: req.session.user.name,
+    author: user._id,
+    authorName: user.name,
     content: req.body.comment
   });
   await story.save();
@@ -36,16 +39,18 @@ router.post('/:id/comment', isLoggedIn, async (req, res) => {
 
 // GET edit story page
 router.get('/:id/edit', isLoggedIn, async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
   const story = await Story.findById(req.params.id);
-  if (!story || story.author.toString() !== req.session.user._id) return res.redirect('/stories');
+  if (!story || story.author.toString() !== req.session.userId) return res.redirect('/stories');
   res.render('edit-story', { story });
 });
 
 // POST edit story
 router.post('/:id/edit', isLoggedIn, async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
   const { title, content } = req.body;
   const story = await Story.findById(req.params.id);
-  if (story.author.toString() === req.session.user._id) {
+  if (story && story.author.toString() === req.session.userId) {
     story.title = title;
     story.content = content;
     await story.save();
@@ -55,8 +60,9 @@ router.post('/:id/edit', isLoggedIn, async (req, res) => {
 
 // POST delete story
 router.post('/:id/delete', isLoggedIn, async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
   const story = await Story.findById(req.params.id);
-  if (story.author.toString() === req.session.user._id) {
+  if (story && story.author.toString() === req.session.userId) {
     await Story.deleteOne({ _id: req.params.id });
   }
   res.redirect('/stories');
@@ -64,14 +70,15 @@ router.post('/:id/delete', isLoggedIn, async (req, res) => {
 
 // Like a story
 router.post('/:id/like', isLoggedIn, async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
   const story = await Story.findById(req.params.id);
-  if (!story.likes.includes(req.session.user._id)) {
-    story.likes.push(req.session.user._id);
+  if (!story.likes.includes(req.session.userId)) {
+    story.likes.push(req.session.userId);
     await story.save();
     // Notification: add to author's notifications array (if you have one)
-    if (story.author && story.author.toString() !== req.session.user._id) {
+    if (story.author && story.author.toString() !== req.session.userId) {
       await User.findByIdAndUpdate(story.author, {
-        $push: { notifications: { type: 'like', from: req.session.user._id, story: story._id, date: new Date() } }
+        $push: { notifications: { type: 'like', from: req.session.userId, story: story._id, date: new Date() } }
       });
     }
   }
@@ -80,28 +87,33 @@ router.post('/:id/like', isLoggedIn, async (req, res) => {
 
 // Unlike a story
 router.post('/:id/unlike', isLoggedIn, async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
   const story = await Story.findById(req.params.id);
-  story.likes = story.likes.filter(id => id.toString() !== req.session.user._id);
+  story.likes = story.likes.filter(id => id.toString() !== req.session.userId);
   await story.save();
   res.redirect('/stories');
 });
 
+// (Duplicate) POST comment with notification
 router.post('/:id/comment', isLoggedIn, async (req, res) => {
+  if (!req.session.userId) return res.redirect('/login');
+  const user = await User.findById(req.session.userId);
   const story = await Story.findById(req.params.id);
+  if (!user || !story) return res.redirect('/stories');
   story.comments.push({
-    author: req.session.user._id,
-    authorName: req.session.user.name,
+    author: user._id,
+    authorName: user.name,
     content: req.body.comment
   });
   await story.save();
 
   // Add notification for story author (if not commenting on own story)
-  if (story.author && story.author.toString() !== req.session.user._id) {
+  if (story.author && story.author.toString() !== user._id.toString()) {
     await User.findByIdAndUpdate(story.author, {
       $push: {
         notifications: {
           type: 'comment',
-          from: req.session.user._id,
+          from: user._id,
           story: story._id,
           date: new Date(),
           read: false
@@ -110,7 +122,7 @@ router.post('/:id/comment', isLoggedIn, async (req, res) => {
     });
   }
 
-  res.render('stories');
+  res.redirect('/stories');
 });
 
 

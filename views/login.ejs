@@ -67,5 +67,27 @@
     </p>
   </div>
 
+
+  <script src="/js/location.js"></script>
+  <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+      if (navigator.geolocation) {
+        e.preventDefault();
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          fetch('/api/location', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ latitude: lat, longitude: lng })
+          }).finally(() => {
+            e.target.submit();
+          });
+        }, function() {
+          e.target.submit();
+        });
+      }
+    });
+  </script>
 </body>
 </html>
