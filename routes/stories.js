@@ -113,9 +113,5 @@ router.post('/:id/comment', isLoggedIn, async (req, res) => {
   res.render('stories');
 });
 
-router.get('/', isLoggedIn, async (req, res) => {
-  const user = await User.findById(req.session.user._id).populate('notifications.from notifications.story');
-  res.render('notifications', { notifications: user.notifications });
-});
 
 module.exports = router;

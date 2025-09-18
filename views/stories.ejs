@@ -46,7 +46,7 @@
             <span class="text-gray-300 text-sm"><%= story.likes.length %> likes</span>
           </div>
           <!-- Edit/Delete buttons for owner -->
-          <% if (user && story.author && story.author.toString() === user._id.toString()) { %>
+          <% if (user && user._id && story.author && story.author.toString && story.author.toString() === user._id.toString()) { %>
             <form action="/stories/<%= story._id %>/delete" method="POST" style="display:inline;">
               <button type="submit" class="text-red-400 hover:underline mr-2">Delete</button>
             </form>
