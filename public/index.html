@@ -1,1 +1,176 @@
-<!DOCTYPE html> <html lang="en" data-theme="light"> <head>   <meta charset="UTF-8" />   <meta name="viewport" content="width=device-width, initial-scale=1.0" />   <title>PaKoNa - Find Your Match</title>   <link rel="preconnect" href="https://fonts.googleapis.com">   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet">    <!-- Google AdSense Script -->   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4804673329014740"       crossorigin="anonymous"></script>    <style>     * { margin:0; padding:0; box-sizing:border-box; }     body, html { height:100%; font-family: 'Inter', sans-serif; }      .landing-container {       background-image: linear-gradient(120deg, rgba(236,72,153,0.7) 0%, rgba(139,92,246,0.7) 100%), url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1470&q=80');       background-size: cover; background-position: center; background-repeat: no-repeat;       height: 100%; display: flex; flex-direction: column; justify-content: space-between; position: relative;     }      .overlay {       position: absolute; inset:0;       background: linear-gradient(120deg, rgba(236,72,153,0.45) 0%, rgba(139,92,246,0.45) 100%);       z-index:0; opacity:0.7; animation: fadeIn 1.5s;     }      @keyframes fadeIn { from{opacity:0;} to{opacity:0.85;} }      .header, .features, .footer { position: relative; z-index:1; text-align:center; color:#fff; }      .header {       padding:100px 20px 40px;       display:flex; flex-direction:column; align-items:center;       animation: slideDown 1.2s; background: rgba(255,255,255,0.85);       border-radius:18px; margin:32px 16px 0 16px; box-shadow:0 2px 24px 0 rgba(139,92,246,0.08);     }      @keyframes slideDown { from{ transform:translateY(-40px); opacity:0;} to{transform:translateY(0); opacity:1;} }      .header h1 { font-size:3.2rem; font-family:'Playfair Display', serif; letter-spacing:2px; color:#ec4899; text-shadow:none; }     .header .subheadline { font-size:1.5rem; margin-top:18px; color:#6d28d9; font-weight:500; text-shadow:none; }     .header p { font-size:1.1rem; margin-top:18px; color:#22223b; max-width:500px; }      .buttons { margin-top:38px; display:flex; justify-content:center; gap:1.2rem; flex-wrap:wrap; animation:fadeIn 2s; }     .btn { padding:12px 24px; border:none; border-radius:25px; font-size:1rem; font-weight:bold; cursor:pointer; text-decoration:none; transition:background 0.3s ease; }     .btn.primary { background:linear-gradient(90deg, #ec4899 0%, #8b5cf6 100%); color:white; box-shadow:0 4px 24px 0 rgba(236,72,153,0.15); }     .btn.primary:hover { background:linear-gradient(90deg, #db2777 0%, #7c3aed 100%); transform: scale(1.05); }     .btn.secondary { background-color:white; color:#111827; }     .btn.secondary:hover { background-color:#f3f4f6; }      .features { padding:48px 20px 32px; background: rgba(255,255,255,0.92); border-radius:18px; margin:0 20px; display:flex; flex-wrap:wrap; justify-content:center; gap:32px; box-shadow:0 2px 24px 0 rgba(139,92,246,0.08); }     .feature { margin-bottom:0; flex:1 1 220px; min-width:220px; max-width:300px; background: rgba(236,72,153,0.07); border-radius:12px; padding:24px 16px; box-shadow:0 1px 8px 0 rgba(236,72,153,0.07); transition: transform 0.2s; }     .feature:hover { transform:translateY(-6px) scale(1.03); background: rgba(236,72,153,0.13); }     .feature h3 { font-size:1.3rem; margin-bottom:8px; color:#ec4899; letter-spacing:1px; }     .feature p { font-size:1rem; color:#22223b; }      .testimonials { margin:40px auto 0; max-width:700px; background: rgba(255,255,255,0.95); border-radius:16px; padding:32px 20px 24px; box-shadow:0 2px 16px 0 rgba(236,72,153,0.10); text-align:center; color:#22223b; position:relative; z-index:1; }     .testimonial { font-style:italic; font-size:1.1rem; margin-bottom:18px; animation:fadeIn 2.5s; color:#22223b; }     .testimonial-author { font-weight:bold; color:#ec4899; font-size:1rem; }      .footer { padding:20px; font-size:0.9rem; background-color:rgba(0,0,0,0.4); letter-spacing:1px; }      .toggle-btn { position:absolute; top:10px; right:10px; z-index:2; background:none; border:none; font-size:1.5rem; color:white; cursor:pointer; }      @media(max-width:600px){ .header h1{font-size:2rem;} .header .subheadline{font-size:1.1rem;} .header p{font-size:1rem;} .btn{padding:10px 20px;} .features{flex-direction:column; gap:18px;} .testimonials{padding:18px 8px 12px;} }   </style> </head>  <body>   <button class="toggle-btn" id="theme-toggle" aria-label="Toggle theme">🌓</button>    <div class="landing-container">     <div class="overlay"></div>      <!-- Header Section -->     <header class="header">       <h1>PaKoNa Meet</h1>       <div class="subheadline">Where Real Connections Begin</div>       <p>Discover love, friendship, and meaningful relationships. Join thousands who have found their match on PaKoNa. Your story starts here! 💘</p>       <div class="buttons">         <a href="/register-step1" class="btn primary">Get Started</a>         <a href="/login" class="btn secondary">Login</a>       </div>     </header>      <!-- First Ad Unit -->     <div style="margin: 20px 0; text-align:center;">       <ins class="adsbygoogle"            style="display:block"            data-ad-client="ca-pub-4804673329014740"            data-ad-slot="1289869276"            data-ad-format="auto"            data-full-width-responsive="true"></ins>       <script>            (adsbygoogle = window.adsbygoogle || []).push({});       </script>     </div>      <!-- Features Section -->     <section class="features">       <div class="feature">         <h3>💖 Smart Matching</h3>         <p>Our intelligent algorithm connects you with people who share your interests and values.</p>       </div>       <div class="feature">         <h3>📍 Nearby Connections</h3>         <p>Find and meet amazing people in your area, instantly and safely.</p>       </div>       <div class="feature">         <h3>🔐 Secure & Private</h3>         <p>Your privacy and safety are our top priorities. Enjoy worry-free dating.</p>       </div>       <div class="feature">         <h3>🌟 Real Stories</h3>         <p>Read success stories from couples who met on PaKoNa and started their journey together.</p>       </div>     </section>      <!-- Second Ad Unit -->     <div style="margin: 20px 0; text-align:center;">       <ins class="adsbygoogle"            style="display:block"            data-ad-client="ca-pub-4804673329014740"            data-ad-slot="1289869277"            data-ad-format="auto"            data-full-width-responsive="true"></ins>       <script>            (adsbygoogle = window.adsbygoogle || []).push({});       </script>     </div>      <!-- Testimonials Section -->     <section class="testimonials">       <div class="testimonial">“I never thought I’d find my soulmate online, but PaKoNa made it possible. We’re getting married next year!”<br><span class="testimonial-author">– Sarah & Mike</span></div>       <div class="testimonial">“The matching system is so accurate! I met wonderful friends and even found love.”<br><span class="testimonial-author">– Alex</span></div>       <div class="testimonial">“I felt safe and supported every step of the way. Highly recommend!”<br><span class="testimonial-author">– Priya</span></div>     </section>      <!-- Third Ad Unit -->     <div style="margin: 20px 0; text-align:center;">       <ins class="adsbygoogle"            style="display:block"            data-ad-client="ca-pub-4804673329014740"            data-ad-slot="1289869278"            data-ad-format="auto"            data-full-width-responsive="true"></ins>       <script>            (adsbygoogle = window.adsbygoogle || []).push({});       </script>     </div>      <!-- Footer Section -->     <footer class="footer">       <p>© 2025 PaKoNa. All rights reserved.</p>     </footer>   </div>    <script>     const toggle = document.getElementById('theme-toggle');     const html = document.documentElement;     const saved = localStorage.getItem('theme') || 'light';     html.setAttribute('data-theme', saved);      toggle.addEventListener('click', () => {       const current = html.getAttribute('data-theme');       const next = current === 'light' ? 'dark' : 'light';       html.setAttribute('data-theme', next);       localStorage.setItem('theme', next);     });   </script> </body> </html> 
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PaKoNa - Find Your Match</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter&display=swap" rel="stylesheet">
+  
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4804673329014740"
+      crossorigin="anonymous"></script>
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body, html { height:100%; font-family: 'Inter', sans-serif; }
+    
+    .landing-container {
+      background-image: linear-gradient(120deg, rgba(236,72,153,0.7) 0%, rgba(139,92,246,0.7) 100%), url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1470&q=80');
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      height: 100%; display: flex; flex-direction: column; justify-content: space-between; position: relative;
+    }
+    
+    .overlay {
+      position: absolute; inset:0;
+      background: linear-gradient(120deg, rgba(236,72,153,0.45) 0%, rgba(139,92,246,0.45) 100%);
+      z-index:0; opacity:0.7; animation: fadeIn 1.5s;
+    }
+    
+    @keyframes fadeIn { from{opacity:0;} to{opacity:0.85;} }
+    
+    .header, .features, .footer { position: relative; z-index:1; text-align:center; color:#fff; }
+    
+    .header {
+      padding:100px 20px 40px;
+      display:flex; flex-direction:column; align-items:center;
+      animation: slideDown 1.2s; background: rgba(255,255,255,0.85);
+      border-radius:18px; margin:32px 16px 0 16px; box-shadow:0 2px 24px 0 rgba(139,92,246,0.08);
+    }
+    
+    @keyframes slideDown { from{ transform:translateY(-40px); opacity:0;} to{transform:translateY(0); opacity:1;} }
+    
+    .header h1 { font-size:3.2rem; font-family:'Playfair Display', serif; letter-spacing:2px; color:#ec4899; text-shadow:none; }
+    .header .subheadline { font-size:1.5rem; margin-top:18px; color:#6d28d9; font-weight:500; text-shadow:none; }
+    .header p { font-size:1.1rem; margin-top:18px; color:#22223b; max-width:500px; }
+    
+    .buttons { margin-top:38px; display:flex; justify-content:center; gap:1.2rem; flex-wrap:wrap; animation:fadeIn 2s; }
+    .btn { padding:12px 24px; border:none; border-radius:25px; font-size:1rem; font-weight:bold; cursor:pointer; text-decoration:none; transition:background 0.3s ease; }
+    .btn.primary { background:linear-gradient(90deg, #ec4899 0%, #8b5cf6 100%); color:white; box-shadow:0 4px 24px 0 rgba(236,72,153,0.15); }
+    .btn.primary:hover { background:linear-gradient(90deg, #db2777 0%, #7c3aed 100%); transform: scale(1.05); }
+    .btn.secondary { background-color:white; color:#111827; }
+    .btn.secondary:hover { background-color:#f3f4f6; }
+    
+    .features { padding:48px 20px 32px; background: rgba(255,255,255,0.92); border-radius:18px; margin:0 20px; display:flex; flex-wrap:wrap; justify-content:center; gap:32px; box-shadow:0 2px 24px 0 rgba(139,92,246,0.08); }
+    .feature { margin-bottom:0; flex:1 1 220px; min-width:220px; max-width:300px; background: rgba(236,72,153,0.07); border-radius:12px; padding:24px 16px; box-shadow:0 1px 8px 0 rgba(236,72,153,0.07); transition: transform 0.2s; }
+    .feature:hover { transform:translateY(-6px) scale(1.03); background: rgba(236,72,153,0.13); }
+    .feature h3 { font-size:1.3rem; margin-bottom:8px; color:#ec4899; letter-spacing:1px; }
+    .feature p { font-size:1rem; color:#22223b; }
+    
+    .testimonials { margin:40px auto 0; max-width:700px; background: rgba(255,255,255,0.95); border-radius:16px; padding:32px 20px 24px; box-shadow:0 2px 16px 0 rgba(236,72,153,0.10); text-align:center; color:#22223b; position:relative; z-index:1; }
+    .testimonial { font-style:italic; font-size:1.1rem; margin-bottom:18px; animation:fadeIn 2.5s; color:#22223b; }
+    .testimonial-author { font-weight:bold; color:#ec4899; font-size:1rem; }
+    
+    .footer { padding:20px; font-size:0.9rem; background-color:rgba(0,0,0,0.4); letter-spacing:1px; }
+    
+    .toggle-btn { position:absolute; top:10px; right:10px; z-index:2; background:none; border:none; font-size:1.5rem; color:white; cursor:pointer; }
+    
+    @media(max-width:600px){ .header h1{font-size:2rem;} .header .subheadline{font-size:1.1rem;} .header p{font-size:1rem;} .btn{padding:10px 20px;} .features{flex-direction:column; gap:18px;} .testimonials{padding:18px 8px 12px;} }
+  </style>
+</head>
+
+<body>
+  <button class="toggle-btn" id="theme-toggle" aria-label="Toggle theme">🌓</button>
+
+  <div class="landing-container">
+    <div class="overlay"></div>
+
+    <!-- Header Section -->
+    <header class="header">
+      <h1>PaKoNa Meet</h1>
+      <div class="subheadline">Where Real Connections Begin</div>
+      <p>Discover love, friendship, and meaningful relationships. Join thousands who have found their match on PaKoNa. Your story starts here! 💘</p>
+      <div class="buttons">
+        <a href="/register-step1" class="btn primary">Get Started</a>
+        <a href="/login" class="btn secondary">Login</a>
+      </div>
+    </header>
+
+    <!-- First Ad Unit -->
+    <div style="margin: 20px 0; text-align:center;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4804673329014740"
+           data-ad-slot="1289869276"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features">
+      <div class="feature">
+        <h3>💖 Smart Matching</h3>
+        <p>Our intelligent algorithm connects you with people who share your interests and values.</p>
+      </div>
+      <div class="feature">
+        <h3>📍 Nearby Connections</h3>
+        <p>Find and meet amazing people in your area, instantly and safely.</p>
+      </div>
+      <div class="feature">
+        <h3>🔐 Secure & Private</h3>
+        <p>Your privacy and safety are our top priorities. Enjoy worry-free dating.</p>
+      </div>
+      <div class="feature">
+        <h3>🌟 Real Stories</h3>
+        <p>Read success stories from couples who met on PaKoNa and started their journey together.</p>
+      </div>
+    </section>
+
+    <!-- Second Ad Unit -->
+    <div style="margin: 20px 0; text-align:center;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4804673329014740"
+           data-ad-slot="1289869277"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+      <div class="testimonial">"I never thought I'd find my soulmate online, but PaKoNa made it possible. We're getting married next year!"<br><span class="testimonial-author">– Sarah & Mike</span></div>
+      <div class="testimonial">"The matching system is so accurate! I met wonderful friends and even found love."<br><span class="testimonial-author">– Alex</span></div>
+      <div class="testimonial">"I felt safe and supported every step of the way. Highly recommend!"<br><span class="testimonial-author">– Priya</span></div>
+    </section>
+
+    <!-- Third Ad Unit -->
+    <div style="margin: 20px 0; text-align:center;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-4804673329014740"
+           data-ad-slot="1289869278"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <p>© 2025 PaKoNa. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    const saved = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', saved);
+
+    toggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  </script>
+</body>
+</html>
